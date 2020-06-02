@@ -1,0 +1,20 @@
+.cardContainer{
+    width: 250px;
+    height: auto;
+    box-shadow: 1px 2px 2px rgb(232, 233, 233);
+    margin: 1% 2%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: rgba(245,245,245,0.3);
+    cursor: pointer;
+}
+.renderCardsAds{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 2% 2% 2% 5%;
+}
+.cardBody{
+    background-color: rgb(245, 247, 248);
+    font-size: 120%;
+    padding:10px;
+}

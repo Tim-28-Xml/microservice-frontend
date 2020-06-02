@@ -1,0 +1,48 @@
+  
+.labelRegA{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: rgb(99, 99, 99);
+}
+
+.regAtitle{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 38px;
+    font-weight: 400;
+    color: rgb(99, 99, 99);
+}
+
+.formRowRegL{
+    margin-left: 2%;
+}
+
+.formRowRegR{
+    margin-right: 2%;
+}
+
+.modalBtnRegA{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 21px;
+    font-weight: 350;
+    color: rgb(247, 244, 244);
+    background-color: transparent;
+    border: none;
+    outline: none;
+    float: right;
+    height: 100%;
+    width: 180px;
+    
+}
+
+.modalBtnRegA:hover{
+    background-color: rgb(98, 114, 129);
+    outline: none;
+    border: none;
+}
+
+.legendPass{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 15px;
+    margin: 2px 0 0 4px;
+}
