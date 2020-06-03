@@ -25,9 +25,16 @@ class LoginPage extends React.Component{
     }
 
     Login(e) {
-        /*e.preventDefault();
+        e.preventDefault();
 
-        axios.post(`${serviceConfig.baseURL}/auth/login`,this.state).then(
+        console.log(this.state);
+
+        const options = {
+            headers: {'Access-Control-Allow-Origin':'*'}
+        };
+        
+
+        axios.post(`https://localhost:8443/authenticationservice/api/auth/login`,this.state).then(
             (resp) => { 
                 let self = this;
                 localStorage.setItem('token', resp.data.accessToken)
@@ -36,11 +43,11 @@ class LoginPage extends React.Component{
                     headers: { 'token': resp.data.accessToken}
                 };
 
-                window.location.href = "http://localhost:3000/"
-                //alert('success') 
+                //window.location.href = "http://localhost:3000/"
+                alert('success') 
             },
             (resp) => { alert('Username or password is incorrect!') }
-        );*/
+        );
 
     }
 
