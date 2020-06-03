@@ -85,7 +85,7 @@ class Header extends React.Component{
                 { !this.state.isLoggedIn &&
                     <div className="headerButtons2">
                     <a className="btnHeaderHome" href="https://localhost:3000/">Home</a>
-                    <RegistrationRolePage/>                
+                    <a className="btnHeaderHome" href="https://localhost:3000/register/user">Register</a>           
                     <a className="btnLogin" href="https://localhost:3000/login">| Have an account? Login</a>
                     </div>
                 }
@@ -94,8 +94,8 @@ class Header extends React.Component{
                     this.state.roles.includes('ROLE_ADMIN') &&
                     <div className="headerButtonsAdmin">
                     <a href="https://localhost:3000/" className="btnHeaderHome">Home</a>
-                   
-                    <a href="https://localhost:3000/codebook" className="btnHeaderHome">Codebook</a>
+                    <a className="btnRegAgent" href="https://localhost:3000/register/agent">Register agent</a>
+                    <a href="https://localhost:3000/codebook" className="btnCodebook">Codebook</a>
                     <a href="https://localhost:3000/profile/admin" className="btnHeaderHome">Profile</a>          
                     <button className="logoutBtnAdmin" onClick={this.logout}>Log out</button>
                     </div>
