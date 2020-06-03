@@ -11,8 +11,12 @@ class Header extends React.Component{
 
         this.state = {
 
+            isLoggedIn: false,
+            roles: [],
+
         }
     }
+
 
     render(){
         return(
