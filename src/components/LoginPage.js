@@ -3,6 +3,7 @@ import { Form, Button, FormGroup, FormControl, ControlLabel,Col, Modal, Card } f
 import '../css/LoginPage.css'
 import axios from 'axios'
 import Header from '../components/Header.js';
+import {serviceConfig} from '../appSettings.js'
 
 class LoginPage extends React.Component{
     constructor(props){
@@ -34,8 +35,9 @@ class LoginPage extends React.Component{
         };
         
 
-        axios.post(`https://localhost:8443/authenticationservice/api/auth/login`,this.state).then(
+        axios.post(`${serviceConfig.baseURL}/authenticationservice/api/auth/login`,this.state).then(
             (resp) => { 
+
                 let self = this;
                 localStorage.setItem('token', resp.data.accessToken)
 
@@ -43,7 +45,7 @@ class LoginPage extends React.Component{
                     headers: { 'token': resp.data.accessToken}
                 };
 
-                //window.location.href = "http://localhost:3000/"
+                window.location.href = "https://localhost:3000/"
                 alert('success') 
             },
             (resp) => { alert('Username or password is incorrect!') }

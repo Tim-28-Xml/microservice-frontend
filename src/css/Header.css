@@ -21,15 +21,11 @@
     outline: none;
     border: none;
     margin-top: 0px;
+    margin: 2% 4%;
 }
 
 .btnHeaderUR{
     float: right;
-}
-
-.btnHeaderHome{
-    margin-left: 20%;
-    
 }
 
 .btnHeaderHome:hover, .btnHeaderUR:hover{
@@ -40,9 +36,69 @@
 
 .borderLabel{
     height: 100%;
+    width: 100%;
     font-size: 20px;
     font-weight: 100;
     margin-top: 1.5px;
     margin-left:10px;
     color: rgb(168, 185, 185);
+}
+
+.headerButtonsAdmin{
+    display: flex;
+    flex-direction: row;
+    margin-left: 26%;
+}
+
+.logoutBtnAdmin, .logoutBtn{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 21px;
+    font-weight: 350;
+    color: rgb(98, 114, 129);
+    background-color: rgb(208, 214, 216);
+    border: none;
+    outline: none;
+    margin-top: 1%;
+    margin-left: 5px;
+    height: 82%;
+    width: 168px;
+    border-radius: 10%;
+}
+
+.logoutBtn{
+    width: 100px;
+}
+
+.logoutBtnAdmin:hover {
+    background-color: rgb(184, 193, 197);
+}
+
+.headerButtons2{
+    display: flex;
+    flex-direction: row;
+    margin-left: 23%;
+}
+
+.btnLogin{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 21px;
+    font-weight: 350;
+    color: #1C78C0;
+    margin: 2% 4%;
+    width:280px;
+
+}
+
+.headerButtonsUser{
+    display: flex;
+    flex-direction: row;
+    margin-left: 39%;
+    margin-top: 0.2%;
+}
+
+.headerButtonsAgent{
+    display: flex;
+    flex-direction: row;
+    margin-left: 39%;
+    margin-top: 0.2%;
 }

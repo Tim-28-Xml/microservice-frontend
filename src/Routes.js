@@ -3,7 +3,6 @@ import {Route, withRouter, Switch } from "react-router-dom";
 import Header from './components/Header.js'
 import HomePage from './components/HomePage.js'
 import SingleAdPage from './components/SingleAdPage.js';
-import Nesto from './components/Nesto.js'
 import LoginPage from './components/LoginPage.js';
 import RegisterPageUser from './components/RegisterPageUser.js';
 import RegistrationRolePage from './components/RegistrationRolePage.js';
