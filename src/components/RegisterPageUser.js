@@ -3,7 +3,7 @@ import { Form, Button, FormGroup, FormControl, ControlLabel,Col, Card } from "re
 import '../css/RegisterPageUser.css'
 import axios from 'axios'
 import Header from '../components/Header.js';
-
+import {serviceConfig} from '../appSettings.js'
 
 class RegisterPageUser extends React.Component{
     constructor(props){
@@ -29,13 +29,13 @@ class RegisterPageUser extends React.Component{
     }
 
     handleChange(e) {
-       /* this.setState({...this.state, [e.target.name]: e.target.value});*/
+        this.setState({...this.state, [e.target.name]: e.target.value});
     }
 
 
 
     SendRegisterRequest(e) {
-        /*e.preventDefault();
+        e.preventDefault();
 
         if(this.state.password.length < 8){
 
@@ -48,12 +48,12 @@ class RegisterPageUser extends React.Component{
             return;
         } else {
 
-            axios.post(`${serviceConfig.baseURL}/auth/register/user`,this.state).then(
-                (resp) => { window.location.href = "http://localhost:3000/" },
+            axios.post(`${serviceConfig.baseURL}/authenticationservice/api/auth/register/user`,this.state).then(
+                (resp) => { window.location.href = "https://localhost:3000/" },
                 (resp) => { alert('error') }
             );
 
-        }*/
+        }
     }
 
     render(){
@@ -65,7 +65,7 @@ class RegisterPageUser extends React.Component{
                     size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
                     centered = "true"
-                    style={{height:'auto',width:'50%',marginTop:'5%',marginLeft:'25%',backgroundColor:'rgba(142, 213, 250,0.3)'}}
+                    style={{height:'auto',width:'50%',marginTop:'3%',marginLeft:'25%',marginBottom:'2%',backgroundColor:'rgba(142, 213, 250,0.3)'}}
                 >
             <Card.Title style={{padding:'10px'}}>
                 <h2 className="regAtitle">User registration</h2>

@@ -7,7 +7,9 @@ import LoginPage from './components/LoginPage.js';
 import RegisterPageUser from './components/RegisterPageUser.js';
 import RegistrationRolePage from './components/RegistrationRolePage.js';
 import RegisterPageAgent from './components/RegisterPageAgent.js';
-
+import AdminProfile from './components/AdminProfile'
+import ActivatedAccount from './components/ActivatedAccount'
+import Codebbok from './components/Codebook'
 
 
 class Routes extends React.Component {
@@ -29,9 +31,24 @@ class Routes extends React.Component {
 
             <Route path='/ad/:id'  component = {SingleAdPage}/>
             <Route path="/login"  component={LoginPage}></Route>
-            <Route path="/registeruser"  component={RegisterPageUser}></Route>
+            <Route path="/register/user"  component={RegisterPageUser}></Route>
             <Route path="/registrationrole" component={RegistrationRolePage}></Route>
-            <Route path="/registeragent" component={RegisterPageAgent}></Route>
+            <Route path="/register/agent" component={RegisterPageAgent}></Route>
+            <Route path="/codebook" component={Codebbok}></Route>
+            <Route path='/profile/admin' render={props =>
+                    <div>
+                        <Header />
+                        <AdminProfile />
+                    </div>
+                
+                    } />
+            <Route path='/activated-account' render={props =>
+                    <div>
+                        <Header />
+                        <ActivatedAccount />
+                    </div>
+                
+                    } />        
             </Switch>
         );
     }

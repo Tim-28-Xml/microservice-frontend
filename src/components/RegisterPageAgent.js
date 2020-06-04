@@ -3,8 +3,7 @@ import { Form, Button, FormGroup, FormControl, ControlLabel,Col, Card } from "re
 import '../css/RegisterPageAgent.css'
 import axios from 'axios';
 import Header from '../components/Header.js';
-
-
+import {serviceConfig} from '../appSettings.js'
 
 class RegisterPageAgent extends React.Component{
     constructor(props){
@@ -35,7 +34,7 @@ class RegisterPageAgent extends React.Component{
     }
 
     SendRegisterRequest(e) {
-        /*e.preventDefault();
+        e.preventDefault();
 
         if(this.state.password.length < 8){
 
@@ -48,12 +47,12 @@ class RegisterPageAgent extends React.Component{
             return;
         } else {
 
-            axios.post(`${serviceConfig.baseURL}/auth/register/agent`,this.state).then(
-                (resp) => { window.location.href = "http://localhost:3000/" },
+            axios.post(`${serviceConfig.baseURL}/authenticationservice/api/auth/register/agent`,this.state).then(
+                (resp) => { window.location.href = "https://localhost:3000/" },
                 (resp) => { alert('error') }
             );
 
-        }*/
+        }
     }
 
    
@@ -64,7 +63,7 @@ class RegisterPageAgent extends React.Component{
 
             <Header/>
             
-                <Card style={{height:'auto',width:'50%',marginTop:'5%',marginLeft:'25%',backgroundColor:'rgba(142, 213, 250,0.3)'}}>
+                <Card style={{height:'auto',width:'50%',marginTop:'3%',marginLeft:'25%',marginBottom:'2%',backgroundColor:'rgba(142, 213, 250,0.3)'}}>
             <Card.Title style={{padding:'10px', fontFamily: 'Gill Sans,Gill Sans MT, Calibri, Trebuchet MS,sans-serif',fontSize: '21px',fontWeight: '350'}}>
                 <h2 className="regAtitle">Business/agent registration</h2>
             </Card.Title>

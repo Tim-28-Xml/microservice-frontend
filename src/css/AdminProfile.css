@@ -1,0 +1,27 @@
+.endUsersTable{
+    margin: 2% 11%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 120%;
+    color: rgb(139, 145, 146);
+}
+
+.tableTitle1users{
+    color: rgb(85, 93, 95);
+    font-size: 37px;
+    margin: 0 0 7px 3%;
+}
+
+.blockedPermTitle{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgb(89, 96, 97);
+    margin: 5% 2%;
+   
+}
+
+.tabsAdmin{
+    margin: 3% 10%;
+}
+
+.tabEnd{
+    background-color: gray;
+}
