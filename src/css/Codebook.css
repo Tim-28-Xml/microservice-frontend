@@ -1,0 +1,12 @@
+.container-fluid {
+    margin: 15px;
+    padding: 15px;
+}
+
+.row {
+    margin-top: 15px;
+}
+
+.col, .col-8 {
+    padding: 10px;
+}

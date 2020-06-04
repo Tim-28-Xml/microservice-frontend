@@ -1,0 +1,17 @@
+h4 {
+    margin: 0px 15px;
+}
+
+.container {
+    margin: 25px;
+    padding: 10px;
+}
+
+.accordion {
+    padding: 5px;
+}
+
+.list-group {
+    text-align: center;
+    margin-top: 5px;
+}
