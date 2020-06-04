@@ -28,6 +28,8 @@ class Header extends React.Component{
 
     getRole(){
 
+        if(this.state.isLoggedIn == true){
+
         let token = localStorage.getItem('token');
         let self = this;
 
@@ -42,6 +44,7 @@ class Header extends React.Component{
                     (response) => {alert('Please log in.')}
             );
         }
+    }
 
     }
 

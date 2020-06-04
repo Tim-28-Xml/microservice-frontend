@@ -29,6 +29,7 @@ class HomePage extends React.Component{
             maxTime:'',
             now:'',
             endDate:'',
+            ads: [],
 
         }
     }
@@ -43,8 +44,53 @@ class HomePage extends React.Component{
           this.state.startDate=new Date(this.state.today.getFullYear(), this.state.today.getMonth(), (this.state.today.getDate() + 2),8,0,0,0); 
           this.state.endDate=new Date(this.state.startDate.getFullYear(), this.state.startDate.getMonth(), (this.state.startDate.getDate() + 1),8,0,0,0);         
           
-          
       }
+
+      componentDidMount() {
+
+        this.getAds();
+        //this.getRole();
+        
+    }
+
+
+      getAds() {
+        let token = localStorage.getItem('token');
+
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token }
+        };
+
+        axios.get(`https://localhost:8443/adservice/api/all`).then(
+            (resp) => {
+                console.log(resp.data)
+                this.setState({
+                    ads: resp.data
+                })
+
+            },
+            (resp) => { alert('error ads') }
+        );
+    }
+
+    /*getRole(){
+
+        let token = localStorage.getItem('token');
+        let self = this;
+
+        if(token !== null){
+  
+            const options = {
+                headers: { 'Authorization': 'Bearer ' + token}
+            };
+
+            axios.get(`https://localhost:8443/authenticationservice/api/auth/role`, options).then(
+                    (response) => { self.changeState(response) },
+                    (response) => {alert('Please log in.')}
+            );
+        }
+
+    }*/
 
 
     test = event => {
@@ -64,7 +110,7 @@ class HomePage extends React.Component{
      }
 
     render(){
-        var ads = [];
+        /*var ads = [];
         console.log(this.state.endDate);
 
         var car1= {id:1,brand:"Mercedes", fuel:"diesel",class:"sedan",transmission:"manual",model:'C class'}
@@ -78,7 +124,7 @@ class HomePage extends React.Component{
         ads.push(car2);
         ads.push(car3);
         ads.push(car4);
-        ads.push(car5);
+        ads.push(car5);*/
 
 
 
@@ -135,7 +181,7 @@ class HomePage extends React.Component{
                     </div>
                 </Card>
                 <Card className="backgroundCard">
-                <RenderAd ads={ads}/>
+                <RenderAd ads={this.state.ads}/>
                 </Card>
 
             </div>

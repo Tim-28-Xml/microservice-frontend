@@ -1,52 +1,106 @@
-import React,{Component} from 'react'
-import { Modal, Button, Card , Carousel} from "react-bootstrap";
+import React, { Component } from 'react'
+import { Modal, Button, Card, Carousel } from "react-bootstrap";
 import axios from 'axios';
 import Header from '../components/Header.js';
 import car1 from '../icons/slika1.jpeg';
 import car2 from '../icons/slika2.jpeg';
 import comments from '../icons/review (1).svg'
+import { serviceConfig } from '../appSettings.js'
+import '../css/SingleAdPage.css'
+import { Calendar, momentLocalizer } from 'react-big-calendar'
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import moment from 'moment'
+
+const localizer = momentLocalizer(moment)
 
 
-class SingleAdPage  extends React.Component{
+class SingleAdPage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state ={
+        this.state = {
 
-        
+            car: '',
+            userid: '',
+            creator: '',
+            myEventsList:[],
+
+
         }
 
-        console.log(this.props.match.params)
-       
+
+
+
+    }
+
+    componentWillMount() {
+        this.getAd();
+
+
+    }
+
+    getAd() {
+        let token = localStorage.getItem('token');
+
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token }
+        };
+
+        axios.get(`${serviceConfig.baseURL}/adservice/api/one/${this.props.match.params.id}`).then(
+            (resp) => {
+
+                this.setState({
+                    car: resp.data.carDTO,
+                    userid: resp.data.userId,
+                })
+
+                axios.get(`${serviceConfig.baseURL}/authenticationservice/api/auth/one/${resp.data.userId}`, options).then(
+                    (resp) => {
+                        console.log(resp.data);
+
+                        this.setState({
+                            creator: resp.data.username,
+                        })
+
+                    },
+                    (resp) => { alert('error user ') }
+                );
+
+
+
+
+            },
+            (resp) => { alert('error add') }
+        );
+
+        console.log(this.state);
+
+
+
+    }
+
+    getUser() {
+
+        let token = localStorage.getItem('token');
+
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token }
+        };
+
+        alert(this.state.userid);
+
+
+
+    }
+
+    componentDidMount() {
+        //this.getUser();
     }
 
 
-    
 
-    render() {
-        return (
-            <div>
-                <Header/>
-                
-
-                <Card style={{backgroundColor:'rgba(245,245,245,0.8)',width:'50%',height:'30%',marginLeft:'24%',marginTop:'6%'}}>
-                    <Card.Title style={{padding:'10px',textAlign:'center',fontSize:'30px'}}>
-                        Ad
-                    </Card.Title>
-
-                    <Card.Body>
-
-                        <Carousel>
-                            <Carousel.Item>
-                                <img
-                                    className="d-block w-100"
-                                    src={car1}
-                                    alt="First slide"
-                                    style={{height:'500px',width:'300px'}}
-                                />
-                               
-                            </Carousel.Item>
-                            <Carousel.Item>
+    renderPhotos() {
+        /*<Carousel.Item>
                                 <img
                                     className="d-block w-100"
                                     src={car2}
@@ -55,35 +109,124 @@ class SingleAdPage  extends React.Component{
                                 />
 
                                 
-                            </Carousel.Item>
-                            
-                        </Carousel>
-                        <Card.Text style={{textAlign:'left',padding:'15px'}}>
+                            </Carousel.Item>*/
+    }
 
-                            <p>Class:</p>
-                            <p>Fuel type:</p>
-                            <p>Transmission</p>
-                            <p>Kilometers traveled:</p>
-                            <p>Kilometers limit:</p>
-                            <p>Number of child seats:</p>
-                            
-                            <p>Collision damage waiver </p>
+
+
+    render() {
+
+
+        return (
+
+            <div>
+                <Header />
+
+
+                <Card style={{ backgroundColor: 'rgba(245,245,245,0.8)', width: '45%', height: '30%', marginLeft: '3%', marginTop: '6%'}}>
+                    <Card.Title style={{ padding: '10px', textAlign: 'center', fontSize: '30px' }}>
+                    {this.state.car.brand} {this.state.car.model}
+                    </Card.Title>
+
+                    <Card.Body>
+
+                       
+                        <Card.Text>
+
+                            <div className="middleAdPart">
+
+                                <div className="leftAdPart">
+                                    <div className="leftTitle">
+                                        <p>Class:</p>
+                                        <p>Fuel type:</p>
+                                        <p>Transmission</p>
+                                        <p>Kilometers traveled:</p>
+                                        <p>Kilometers limit:</p>
+                                        <p>Number of child seats:</p>
+                                        <p>Price</p>
+                                        <p>Owner:</p>
+
+                                        {
+                                            this.state.car.cdw &&
+                                            <p>Collision damage waiver </p>
+                                        }
+                                        {
+                                            !this.state.car.cdw &&
+                                            <p style={{ textDecoration: 'line-through' }}>Collision damage waiver </p>
+                                        }
+                                    </div>
+                                    <div style={{marginTop:'9px'}}>
+
+
+                                       
+                                        <p>{this.state.car.carClass}</p>
+                                        <p>{this.state.car.fuel}</p>
+                                        <p>{this.state.car.transmission}</p>
+                                        <p style={{marginTop:'33px'}}>{this.state.car.km}</p>
+                                        <p style={{marginTop:'20px'}}>{this.state.car.kmLimit}</p>
+                                        <p style={{marginTop:'43px'}}>{this.state.car.childSeats}</p>
+                                        <p style={{marginTop:'40px'}}>{this.state.creator}</p>
+                                        
+
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+
+                            <div>
+
+                                <Calendar
+                                    localizer={localizer}
+                                    events={this.state.myEventsList}
+                                    startAccessor="start"
+                                    endAccessor="end"
+                                    style={{ height: 300 ,width: '650px',marginLeft:'0px',marginTop:'27px',backgroundColor:'rgba(255,255,255,0.5'}}
+                                />
+
+                            </div>
 
                         </Card.Text>
                     </Card.Body>
 
                 </Card>
 
-                <div style={{marginLeft:"24%",marginTop:'3%'}}>
-                    <div style={{marginTop:'10px',marginBottom:'10px',padding:'15px'}}>
-                    <img src={comments} style={{height:'50px',width:'50px'}}></img>
-                    <h2>REVIEWS &amp; RATINGS</h2>
-                    </div>
-                    <Card style={{width:'50%',height:'auto',padding:'15px'}}>
-                        
-                    </Card>
+                <div style={{ marginLeft: "53%", marginTop: '-55.5%' ,height:'30%', backgroundColor:'white',width:'40%'}}>
+
+                    
+
+                    <Carousel>
+
+                    <Carousel.Item>
+                                <img
+                                    className="d-block w-100"
+                                    src={car2}
+                                    alt="Third slide"
+                                    style={{height:'400px',width:'300px'}}
+                                />
+
+                                
+                            </Carousel.Item>
+    }
+
+                    </Carousel>
+                    
+                    
                 </div>
-            
+
+                <div style={{ marginLeft: "53%", marginTop: '5%' , backgroundColor:'white',width:'40%',borderStyle:'solid',borderWidth:'1px'}}>
+
+                <div style={{ marginTop: '10px', marginBottom: '10px', padding: '15px' }}>
+                        <img src={comments} style={{ height: '50px', width: '50px' }}></img>
+                        <h2>REVIEWS &amp; RATINGS</h2>
+                    </div>
+
+                </div>
+
+                
+
 
             </div>
         )

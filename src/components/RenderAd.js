@@ -21,27 +21,57 @@ class RenderAd extends React.Component{
 
 
     renderAdCards() {
+       
         return this.props.ads.map((ad, index) => {
+            console.log(ad);
+            
             
             return (
                 <Card key={ad.id} className="cardContainer" onClick={this.view.bind(this,ad.id)}>
                     <Card.Body className = "cardBody">
-                        <Card.Title className="cardTitle" style={{textAlign:"center"}}>{ad.brand} {ad.model}</Card.Title>
+                        <Card.Title className="cardTitle" style={{textAlign:"center"}}>{ad.carDTO.brand} {ad.carDTO.model}</Card.Title>
                         <Card>
-                        <Card.Img src={caricon} style={{height:"auto",width:'200px',position:'center'}}></Card.Img>
+                            {this.checkPhoto(ad)}
                         </Card>
                         <Card.Text className='cardText' style={{padding:'3px'}} >
-                               fuel: &nbsp; {ad.fuel}
+                               fuel: &nbsp; {ad.carDTO.fuel}
                                <br/>
-                                class: &nbsp; {ad.class}
+                                class: &nbsp; {ad.carDTO.carClass}
                                 <br/>
-                                transmission: &nbsp; {ad.transmission}
+                                transmission: &nbsp; {ad.carDTO.transmission}
                         </Card.Text>       
                     </Card.Body>
                 </Card>
             )
         })
     }
+
+
+    checkPhoto(ad){
+
+        console.log(ad.carDTO.files);
+        
+
+        if(ad.carDTO.files.lenght == undefined){
+
+            
+            return ( 
+
+            <Card.Img src={caricon} style={{height:"auto",width:'200px',position:'center'}}></Card.Img>
+            
+            )
+        }else{
+            return ad.carDTO.files.map((file, index) => {
+            
+                return (
+
+                    <Card.Img src={file} style={{height:"auto",width:'200px',position:'center'}}></Card.Img>
+                    
+                )
+            })
+    }
+
+}
 
     render() {
         return (
