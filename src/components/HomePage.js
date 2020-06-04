@@ -61,7 +61,7 @@ class HomePage extends React.Component{
             headers: { 'Authorization': 'Bearer ' + token }
         };
 
-        axios.get(`https://localhost:8443/adservice/api/all`).then(
+        axios.get(`https://localhost:8443/adservice/api/ads/all`).then(
             (resp) => {
                 console.log(resp.data)
                 this.setState({

@@ -46,7 +46,7 @@ class LoginPage extends React.Component{
                 };
 
                 window.location.href = "https://localhost:3000/"
-                alert('success') 
+
             },
             (resp) => { alert('Username or password is incorrect!') }
         );
@@ -66,7 +66,7 @@ class LoginPage extends React.Component{
         return(
             <div>
                 <Header/>
-               <Card style={{marginTop:"10%",width:'40%',marginLeft:"30%",backgroundColor:'rgba(142, 213, 250,0.3)'}}>
+               <Card style={{marginTop:"6.5%",width:'40%',marginLeft:"30%",backgroundColor:'rgba(142, 213, 250,0.3)'}}>
                 <Card.Title style={{padding:'10px'}}>
                     <h2 className="regAtitle">Log in</h2>
                 </Card.Title>

@@ -54,3 +54,20 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: rgb(117, 120, 143);
 }
+
+.imgCartAdView{
+    height: 47px;
+    width: auto;
+    float: left;
+    margin: 0 2%;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 18%;
+    background-color: rgba(216, 226, 231,0.5);
+    box-shadow: 1px 1px 1px rgb(198, 209, 212);
+}
+
+.imgCartAdView:hover{
+    background-color: rgb(220, 242, 245);
+
+}

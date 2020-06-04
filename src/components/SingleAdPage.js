@@ -10,6 +10,8 @@ import '../css/SingleAdPage.css'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment'
+import cart from '../icons/cart.svg'
+
 
 const localizer = momentLocalizer(moment)
 
@@ -46,7 +48,7 @@ class SingleAdPage extends React.Component {
             headers: { 'Authorization': 'Bearer ' + token }
         };
 
-        axios.get(`${serviceConfig.baseURL}/adservice/api/one/${this.props.match.params.id}`).then(
+        axios.get(`${serviceConfig.baseURL}/adservice/api/ads/one/${this.props.match.params.id}`).then(
             (resp) => {
 
                 this.setState({
@@ -112,6 +114,9 @@ class SingleAdPage extends React.Component {
                             </Carousel.Item>*/
     }
 
+    addToCart(id){
+        alert('hola')
+    }
 
 
     render() {
@@ -125,8 +130,9 @@ class SingleAdPage extends React.Component {
 
                 <Card style={{ backgroundColor: 'rgba(245,245,245,0.8)', width: '45%', height: '30%', marginLeft: '3%', marginTop: '6%'}}>
                     <Card.Title style={{ padding: '10px', textAlign: 'center', fontSize: '30px' }}>
+                    <img src={cart} className="imgCartAdView" title="Add to shopping cart" onClick={this.addToCart.bind(this,this.state.ad)}></img>
                     {this.state.car.brand} {this.state.car.model}
-                    </Card.Title>
+                </Card.Title>
 
                     <Card.Body>
 
