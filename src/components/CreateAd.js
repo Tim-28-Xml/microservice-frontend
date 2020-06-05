@@ -228,6 +228,10 @@ class CreateAd extends React.Component {
         var dateString = date.toISOString().substring(0, 10);
         console.log(dateString);
 
+        if(this.state.dates.indexOf(date) >= 0) {
+            return alert("Date already exists");
+        }
+
         this.setState({
             startDate: date,
             dateStringStart: dateString,
@@ -239,7 +243,9 @@ class CreateAd extends React.Component {
         var dateString = date.toISOString().substring(0, 10);
         console.log(dateString);
 
-        //var edate = moment(dateString).format('YYYY-MM-DD');
+        if(this.state.dates.indexOf(date) >= 0) {
+            return alert("Date already exists");
+        }
 
         this.state.endDate = date;
         this.state.dateStringEnd = dateString;
