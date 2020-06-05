@@ -47,10 +47,7 @@ class HomePage extends React.Component{
       }
 
       componentDidMount() {
-
         this.getAds();
-        //this.getRole();
-        
     }
 
 
