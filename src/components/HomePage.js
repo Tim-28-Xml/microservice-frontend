@@ -9,7 +9,10 @@ import es from 'date-fns/locale/es';
 import { registerLocale, setDefaultLocale } from  "react-datepicker";
 import moment from 'moment'
 import search from '../icons/search.svg';
- 
+import Select from 'react-select';
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
+import chroma from 'chroma-js';
 
 
 
@@ -19,32 +22,53 @@ class HomePage extends React.Component{
         super(props);
         
         this.test = this.test.bind(this);
+        this.handleChangeSelect = this.handleChangeSelect.bind(this);
 
 
         this.state = {
 
             today: new Date(),
-            startDate:'',
-            minTime:'',
-            maxTime:'',
+            startDate: new Date((new Date()).getFullYear(), (new Date()).getMonth(), ((new Date()).getDate() + 2),8,0,0,0),
+            selectedPickupTime: new Date((new Date()).getFullYear(), (new Date()).getMonth(), ((new Date()).getDate() + 2),8,0,0,0),
+            minTime: moment('08:00', 'HH:mm'),
+            maxTime: moment('20:00', 'HH:mm'),
             now:'',
             endDate:'',
             ads: [],
+            cities:[],
+            selectedCity:'',
+            selectedReturnTime:'',
+            allads:[],
+            allcities:[],
 
         }
+
+
+
+        
     }
 
     handleChange = date => {
+
         this.setState({
-          startDate: date
+          selectedPickupTime: date
+        });
+
+      };
+
+      handleChangeReturnTime = date => {
+        this.setState({
+          selectedReturnTime: date
         });
       };
 
       componentWillMount(){
-          this.state.startDate=new Date(this.state.today.getFullYear(), this.state.today.getMonth(), (this.state.today.getDate() + 2),8,0,0,0); 
-          this.state.endDate=new Date(this.state.startDate.getFullYear(), this.state.startDate.getMonth(), (this.state.startDate.getDate() + 1),8,0,0,0);         
           
-      }
+          /*this.state.startDate=new Date(this.state.today.getFullYear(), this.state.today.getMonth(), (this.state.today.getDate() + 2),8,0,0,0); 
+          this.state.selectedPickupTime = this.state.startDate;*/
+          //this.state.endDate=new Date(this.state.selectedPickupTime.getFullYear(), this.state.selectedPickupTime.getMonth(), (this.state.selectedPickupTime.getDate() + 1),8,0,0,0);  
+
+        }
 
       componentDidMount() {
         this.getAds();
@@ -60,10 +84,20 @@ class HomePage extends React.Component{
 
         axios.get(`https://localhost:8443/adservice/api/ads/all`).then(
             (resp) => {
-                console.log(resp.data)
+
+                var cities = [];
+
+                resp.data.forEach(ad => {
+                    cities.push(ad.city);
+                });
+            
                 this.setState({
-                    ads: resp.data
+                    ads: resp.data,
+                    allads: resp.data,
+                    cities: cities,
                 })
+
+                
 
             },
             (resp) => { alert('error ads') }
@@ -89,6 +123,137 @@ class HomePage extends React.Component{
 
     }*/
 
+    clearFilters(){
+        this.setState({
+            ads: this.state.allads, 
+            startDate: new Date((new Date()).getFullYear(), (new Date()).getMonth(), ((new Date()).getDate() + 2),8,0,0,0),
+            selectedPickupTime: new Date((new Date()).getFullYear(), (new Date()).getMonth(), ((new Date()).getDate() + 2),8,0,0,0),
+            selectedReturnTime:'',   
+            selectedCity:'',
+                
+        })
+
+        
+    }
+
+  
+
+
+    filterAds(){
+
+        if(this.state.selectedPickupTime == '' || this.state.selectedReturnTime == '' || this.state.selectedCity == ''){
+            alert("You didnt enter all the fields");
+            return;
+        }
+
+        var returnads = [];
+
+        Date.prototype.addDays = function(days) {
+            this.setDate( this.getDate()  + days);
+            return this;
+          };
+        
+
+        var dateArray = [];
+        var currentDate = new Date(this.state.selectedPickupTime.getFullYear(),this.state.selectedPickupTime.getMonth(),this.state.selectedPickupTime.getDate());
+        //alert('pocetak'+currentDate); 
+        var endDate = new Date(this.state.selectedReturnTime.getFullYear(),this.state.selectedReturnTime.getMonth(),this.state.selectedReturnTime.getDate());
+        //alert('kraj'+endDate); 
+        while (currentDate <= endDate) {
+                           
+        dateArray.push((new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate()+1)).toISOString().substring(0,10));
+        //alert(currentDate.toISOString().substring(0,10))
+        currentDate = currentDate.addDays(1);
+        }
+
+      
+        
+        //alert(this.state.selectedPickupTime.toString().substring(0,10));
+        //alert(this.state.selectedPickupTime);
+        var acutalpickup = new Date (this.state.selectedPickupTime.getFullYear(),this.state.selectedPickupTime.getMonth(),this.state.selectedPickupTime.getDate()+1);
+        var acutalreturn = new Date (this.state.selectedReturnTime.getFullYear(),this.state.selectedReturnTime.getMonth(),this.state.selectedReturnTime.getDate()+1);
+        //alert('take:'+this.state.selectedPickupTime.toISOString().substring(0,10) + ' and return: ' +this.state.selectedReturnTime.toISOString().substring(0,10));
+
+        
+        
+    
+
+        this.state.allads.forEach(ad => {
+
+            
+            console.log('od selekta' +this.state.selectedCity);
+            console.log(this.state.cities);
+            
+
+
+            if(ad.city == this.state.selectedCity){
+
+                ad.rentDates.forEach(period => {
+                    
+                    var periodDateArray = [];
+
+                    period.dates.forEach(el => {
+
+                        periodDateArray.push(el.date);
+                        
+                    });
+
+                    
+
+                    console.log("datumi za "+ ad.carDTO.brand+ad.carDTO.model);                  
+                    console.log(periodDateArray);
+                    console.log(acutalpickup.toISOString().substring(0,10));
+                    
+                    
+                   //alert(periodDateArray.indexOf(acutalpickup.toISOString().substring(0,10)));
+                   //alert(periodDateArray[0]);
+                   //alert(periodDateArray.indexOf(acutalpickup.toISOString().substring(0,10)) !== -1);
+
+                    if (periodDateArray.indexOf(acutalpickup.toISOString().substring(0,10),0) !== -1) {
+
+                        if(periodDateArray.indexOf(acutalreturn.toISOString().substring(0,10),0) !== -1) {
+
+                        
+
+                            dateArray.forEach(date => {
+                                
+                                if(periodDateArray.indexOf(date) == -1){
+                                
+                                    
+                                    return;
+                                }
+                                
+                            });
+                            
+                            
+                        returnads.push(ad);
+
+                        }
+                    }
+
+                });
+        }
+            
+        });
+
+        this.setState({
+            ads : returnads,
+        })
+    
+
+    }
+
+    handleChangeSelect(e){
+
+        console.log("e"+e.value);
+        
+
+        this.setState({ selectedCity: e.value });
+
+    }
+
+
+
 
     test = event => {
 
@@ -107,23 +272,32 @@ class HomePage extends React.Component{
      }
 
     render(){
-        /*var ads = [];
-        console.log(this.state.endDate);
 
-        var car1= {id:1,brand:"Mercedes", fuel:"diesel",class:"sedan",transmission:"manual",model:'C class'}
-        var car2= {id:2,brand:"Mazda", fuel:"diesel",class:"hatchback",transmission:"manual",model:'cx-50'}
-        var car3= {id:3,brand:"Audi", fuel:"gas",class:"sedan",transmission:"automatic",model:'A6'}
-        var car4= {id:4,brand:"Fiat", fuel:"diesel",class:"hatchback",transmission:"automatic",model:'500'}
-        var car5= {id:5,brand:"Opel", fuel:"diesel",class:"hatchbakc",transmission:"manual",model:'astra'}
+        const customStyles = {
+            option: (provided, state) => ({
+              ...provided,
+              borderBottom: '1px dotted black',
+              color: state.isSelected ? 'black' : 'black',
+              padding: 5,
+              
+            }),
+            control: () => ({
+              // none of react-select's styles are passed to <Control />
+              width: 300,
+              backgroundColor:'rgba(142, 213, 250,0.3)',
+              height:65,
+              
+            }),
+            singleValue: (provided, state) => {
+              const opacity = state.isDisabled ? 0.5 : 1;
+              const transition = 'opacity 300ms';
+              
+          
+              return { ...provided, opacity, transition };
+            }
+          }
 
-
-        ads.push(car1);
-        ads.push(car2);
-        ads.push(car3);
-        ads.push(car4);
-        ads.push(car5);*/
-
-
+   
 
         return(
             <div>
@@ -137,42 +311,59 @@ class HomePage extends React.Component{
                 <Card className="searchCard" inline>
                     <div inline>
                         <InputGroup>
-                    <Form.Control style={{width:'29%',position:'absolute',marginLeft:'1%',height:'31px'}} placeholder="Pickup location"></Form.Control>
+                    <Select 
+                    onChange={this.handleChangeSelect}
+                    styles={customStyles}
+                    selected={this.state.selectedCity}
+                    placeholder="Pickup location"
+                    class="select"
+                    options={
+                        this.state.cities.map((city, index) => {
+        
+                        return {id:city,value:city, label:city};
+                         })
+                       }
+                    >
+
+
+                    </Select>
 
                     
-                            <div style={{marginTop:'0.5px',marginLeft:'32%'}}>
+                            <div style={{marginTop:'15px',marginLeft:'3%'}}>
                             <label style={{marginRight:'6px'}}>Pickup date:</label>
-                            <DatePicker
-                                selected={this.state.startDate}
-                                onChange={this.handleChange}
-                                dateFormat="hh:mm MM-dd-yyyy "
-                                showTimeSelect
-                                timeFormat="HH:mm"
-                                minDate={this.state.startDate}
-                                
-                                
-                                
-                            />
+                           
+                                <DatePicker
+                                    selected={this.state.selectedPickupTime}
+                                    onChange={this.handleChange}
+                                    showTimeSelect
+                                    minDate={this.state.startDate}
+                                    minTime={setHours(setMinutes(this.state.startDate.getFullYear(), this.state.startDate.getMonth(), (this.state.startDate.getDate() + 2), 0), 8)}
+                                    maxTime={setHours(setMinutes(new Date(), 0), 20)}
+                                    dateFormat="MMMM d, yyyy h:mm aa"
+                                    timeCaption="Time"
+                                />
                             </div>
 
 
 
-                            <div style={{marginTop:'0.5px',marginLeft:'2%'}}>
+                            <div style={{marginTop:'15px',marginLeft:'2%'}}>
                             <label style={{marginRight:'6px'}}>Return date:</label>
                             <DatePicker
-                                selected={this.state.endDate}
-                                onChange={this.handleChange}
-                                dateFormat="hh:mm MM-dd-yyyy "
-                                showTimeSelect
-                                timeFormat="HH:mm"
-                                minDate={this.state.endDate}
-                                
-                                
-                                
-                            />
+                                    id="returndate"
+                                    selected={this.state.selectedReturnTime}
+                                    onChange={this.handleChangeReturnTime}
+                                    showTimeSelect
+                                    minDate={new Date(this.state.selectedPickupTime.getFullYear(), this.state.selectedPickupTime.getMonth(), (this.state.selectedPickupTime.getDate() + 1),8,0,0,0)}
+                                    minTime={setHours(setMinutes(this.state.selectedPickupTime.getFullYear(), this.state.selectedPickupTime.getMonth(), (this.state.selectedPickupTime.getDate() + 2), 0), 8)}
+                                    maxTime={setHours(setMinutes(new Date(), 0), 20)}
+                                    dateFormat="MMMM d, yyyy h:mm aa"
+                                    timeCaption="Time"
+                                />
                             </div>
 
-                            <Button variant="outline-primary" style={{marginLeft:'2%',marginTop:'-0.5px',height:'30px',width:'60px',padding:'2px'}}>Find</Button>
+                            <Button variant="outline-primary" style={{marginLeft:'2%',marginTop:'13px',height:'30px',width:'60px',padding:'2px'}} 
+                            onClick={this.filterAds.bind(this)}>Find</Button>
+                            <Button onClick={this.clearFilters.bind(this)} variant="outline-danger" style={{marginLeft:'2%',marginTop:'13px',height:'30px',width:'100px',padding:'2px'}}>Clear filters</Button>
 
                     </InputGroup>
                     </div>

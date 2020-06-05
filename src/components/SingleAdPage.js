@@ -102,7 +102,7 @@ class SingleAdPage extends React.Component {
         let self = this;
 
         if(token !== null){
-  
+
             const options = {
                 headers: { 'Authorization': 'Bearer ' + token}
             };
@@ -123,9 +123,9 @@ class SingleAdPage extends React.Component {
         resp.data.forEach(element => {
             permissons.push(element.authority);
         });
-        
-        
-        this.setState({ 
+
+
+        this.setState({
             isLoggedIn: true,
             permissions: permissons,
          })
@@ -141,7 +141,7 @@ class SingleAdPage extends React.Component {
                                     style={{height:'500px',width:'300px'}}
                                 />
 
-                                
+
                             </Carousel.Item>*/
     }
 
@@ -161,7 +161,7 @@ class SingleAdPage extends React.Component {
 
                 <Card style={{ backgroundColor: 'rgba(245,245,245,0.8)', width: '45%', height: '30%', marginLeft: '3%', marginTop: '6%'}}>
                     <Card.Title style={{ padding: '10px', textAlign: 'center', fontSize: '30px' }}>
-                    {  
+                    {
                         this.state.permissions.includes('CREATE_AD') &&
                         <img src={cart} className="imgCartAdView" title="Add to shopping cart" onClick={this.addToCart.bind(this,this.state.ad)}></img>
                     }
@@ -170,7 +170,7 @@ class SingleAdPage extends React.Component {
 
                     <Card.Body>
 
-                       
+
                         <Card.Text>
 
                             <div className="middleAdPart">
@@ -183,8 +183,8 @@ class SingleAdPage extends React.Component {
                                         <p>Kilometers traveled:</p>
                                         <p>Kilometers limit:</p>
                                         <p>Number of child seats:</p>
-                                        <p>Price</p>
                                         <p>Owner:</p>
+                                        <p>Price</p>
 
                                         {
                                             this.state.car.cdw &&
@@ -198,15 +198,15 @@ class SingleAdPage extends React.Component {
                                     <div style={{marginTop:'9px'}}>
 
 
-                                       
+
                                         <p>{this.state.car.carClass}</p>
                                         <p>{this.state.car.fuel}</p>
                                         <p>{this.state.car.transmission}</p>
                                         <p style={{marginTop:'33px'}}>{this.state.car.km}</p>
                                         <p style={{marginTop:'20px'}}>{this.state.car.kmLimit}</p>
                                         <p style={{marginTop:'43px'}}>{this.state.car.childSeats}</p>
-                                        <p style={{marginTop:'40px'}}>{this.state.creator}</p>
-                                        
+                                        <p style={{marginTop:'20px'}}>{this.state.creator}</p>
+
 
                                     </div>
                                 </div>
@@ -235,7 +235,7 @@ class SingleAdPage extends React.Component {
 
                 <div style={{ marginLeft: "53%", marginTop: '-55.5%' ,height:'30%', backgroundColor:'white',width:'40%'}}>
 
-                    
+
 
                     <Carousel>
 
@@ -247,13 +247,13 @@ class SingleAdPage extends React.Component {
                                     style={{height:'400px',width:'300px'}}
                                 />
 
-                                
+
                             </Carousel.Item>
     }
 
                     </Carousel>
-                    
-                    
+
+
                 </div>
 
                 <div style={{ marginLeft: "53%", marginTop: '5%' , backgroundColor:'white',width:'40%',borderStyle:'solid',borderWidth:'1px'}}>
@@ -265,7 +265,7 @@ class SingleAdPage extends React.Component {
 
                 </div>
 
-                
+
 
 
             </div>

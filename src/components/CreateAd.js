@@ -136,6 +136,10 @@ class CreateAd extends React.Component {
         else if (isNaN(this.state.childSeats))
             return alert("Please enter a number for child seats!");
 
+            console.log("objekat pred bekend");
+            console.log(this.state);
+            
+            
 
         axios.post(`${serviceConfig.baseURL}/adservice/api/ads/save`, this.state, options).then(
             (resp) => this.onSuccessHandler(resp),
