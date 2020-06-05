@@ -33,6 +33,7 @@ class CreateAd extends React.Component {
         this.handleChangeEndDateAnother = this.handleChangeEndDateAnother.bind(this);
         this.handleChangeChecked = this.handleChangeChecked.bind(this);
         this.fileSelectedHandler = this.fileSelectedHandler.bind(this);
+        this.getId = this.getId.bind(this);
 
 
         this.state = {
@@ -67,7 +68,9 @@ class CreateAd extends React.Component {
             dateStringStartAnother: '',
             dateStringEndAnother: '',
             minEndDateAnother: new Date(),
-            city: ''
+            city: '',
+            role: '',
+            userId: 0
 
         }
     }
@@ -77,6 +80,8 @@ class CreateAd extends React.Component {
         const options = {
             headers: { 'Authorization': 'Bearer ' + token }
         };
+
+        this.getId();
 
         this.state.minEndDate = this.addDays(this.state.startDate, 1);
         this.state.endDate = this.state.minEndDate;
@@ -132,7 +137,7 @@ class CreateAd extends React.Component {
             return alert("Please enter a number for child seats!");
 
 
-        axios.post(`${serviceConfig.baseURL}/adservice/api/save`, this.state, options).then(
+        axios.post(`${serviceConfig.baseURL}/adservice/api/ads/save`, this.state, options).then(
             (resp) => this.onSuccessHandler(resp),
             (resp) => this.onErrorHandler(resp)
         );
@@ -146,6 +151,8 @@ class CreateAd extends React.Component {
             button: true
         });
 
+        console.log(resp.data);
+
     }
 
     onSuccessHandler(resp) {
@@ -154,6 +161,8 @@ class CreateAd extends React.Component {
             text: "",
             type: "success",
         });
+
+        console.log(resp.data);
 
         this.setState({ redirect: this.state.redirect === false });
         window.location.reload();
@@ -231,7 +240,7 @@ class CreateAd extends React.Component {
         this.state.endDate = date;
         this.state.dateStringEnd = dateString;
 
-        var obj = { startDateA: this.state.startDate, endDateA: this.state.endDate }
+        var obj = { startDate: this.state.startDate, endDate: this.state.endDate }
         var list = [];
         list.push(obj);
         this.state.dates.push.apply(this.state.dates, list);
@@ -272,21 +281,21 @@ class CreateAd extends React.Component {
             firstNew = false;
         } else {
             var j;
-            for(j = 0; j < this.state.dates.length; j++) {
+            for (j = 0; j < this.state.dates.length; j++) {
                 console.log("---------FOR----------");
                 console.log("j" + moment(this.state.dates[j]));
                 console.log("startAnother" + this.state.dateStringStartAnother);
-                console.log("start" + moment(this.state.dates[j].startDateA));
-                console.log("end" + moment(this.state.dates[j].startEndA));
+                console.log("start" + moment(this.state.dates[j].startDate));
+                console.log("end" + moment(this.state.dates[j].startEnd));
                 console.log("---------END----------");
 
-                if(moment(this.state.dateStringStartAnother).isBetween(moment(this.state.dates[j].startDateA), moment(this.state.dates[j].endDateA))) {
+                if (moment(this.state.dateStringStartAnother).isBetween(moment(this.state.dates[j].startDate), moment(this.state.dates[j].endDate))) {
                     return alert("Dates overlap");
                 }
             }
         }
 
-        var obj = { startDateA: this.state.startDateAnother, endDateA: this.state.endDateAnother }
+        var obj = { startDate: this.state.startDateAnother, endDateA: this.state.endDateAnother }
         var list = [];
         list.push(obj);
         this.state.dates.push.apply(this.state.dates, list);
@@ -369,6 +378,39 @@ class CreateAd extends React.Component {
         }
     }
 
+    getId() {
+
+
+        let token = localStorage.getItem('token');
+        let self = this;
+
+        if (token !== null) {
+
+            const options = {
+                headers: { 'Authorization': 'Bearer ' + token }
+            };
+
+            axios.get(`${serviceConfig.baseURL}/authenticationservice/api/users/get-id`, options).then(
+                (response) => this.onGetId(response.data),
+                (response) => { }
+            );
+        }
+
+    }
+
+    onGetId(id) {
+        let token = localStorage.getItem('token');
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token }
+        };
+
+        this.state.userId = id;
+
+        axios.get(`${serviceConfig.baseURL}/authenticationservice/api/auth/one/${id}`, options).then(
+            (resp) => { this.setState({ role: resp.data.authorities[0].authority }) },
+            (resp) => this.onErrorHandler(resp),
+        );
+    }
 
 
     render() {
@@ -402,7 +444,6 @@ class CreateAd extends React.Component {
                             className="selectoptions"
                             style={{ width: "70%", marginBottom: "10px" }}
                             onChange={this.handleSelectModel}
-                            value={this.state.model.value}
                             options={
                                 this.state.modelList.map((type, i) => {
                                     return { value: type, label: type };
