@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
+import RenderAd from './RenderAd.js'
 import "react-datepicker/dist/react-datepicker.css";
 import '../css/CreateAd.css'
 const moment = require('moment');
@@ -17,7 +18,8 @@ class PhysicalRent extends React.Component {
 
         this.state = {
             userId: 0,
-            role: ''
+            role: '',
+            ads: [],
 
 
         }
@@ -30,6 +32,7 @@ class PhysicalRent extends React.Component {
         };
 
         this.getId();
+        
     }
 
     getId() {
@@ -59,6 +62,7 @@ class PhysicalRent extends React.Component {
         };
 
         this.state.userId = id;
+        this.getAds(id);
 
         axios.get(`${serviceConfig.baseURL}/authenticationservice/api/auth/one/${id}`, options).then(
             (resp) => { this.setState({ role: resp.data.authorities[0].authority }) },
@@ -78,11 +82,30 @@ class PhysicalRent extends React.Component {
 
     }
 
+    getAds(userId) {
+        let token = localStorage.getItem('token');
+
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token }
+        };
+
+        axios.get(`https://localhost:8443/adservice/api/ads/my-ads/${userId}`).then(
+            (resp) => {
+                console.log(resp.data)
+                this.setState({
+                    ads: resp.data
+                })
+
+            },
+            (resp) => { alert('error ads') }
+        );
+    }
+
     render() {
         console.log(this.state)
         return (
             <div>
-                <h1>caos</h1>
+                <RenderAd ads={this.state.ads}/>
             </div>
         )
     }
