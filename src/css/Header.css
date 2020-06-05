@@ -34,9 +34,9 @@
     outline: none;
     border: none;
     margin-top: 0px;
-    margin: 2% 4%;
+    margin: 2% 1%;
     height: 82%;
-    width: 119px;
+    width: 129px;
 }
 
 .btnRegAgent{
@@ -135,19 +135,19 @@
 .headerButtonsUser{
     display: flex;
     flex-direction: row;
-    margin-left: 27.2%;
-    margin-top: 0.2%;
+    margin-left: 20%;
+    margin-top: 0;
 }
 
 .headerButtonsAgent{
     display: flex;
     flex-direction: row;
-    margin-left: 32.5%;
+    margin-left: 24%;
     margin-top: 0.2%;
 }
 
 .basketIcon{
-    margin:0 20px 0 10px;
+    margin: 5px 20px 0 -2px;
     height: 33px;
     width: auto;
     cursor: pointer;
@@ -164,7 +164,7 @@
     outline: none;
     border: none;
     margin-top: 0px;
-    margin: 2% 4%;
+    margin: 2% 0%;
     height: 82%;
     width: 111px;
 
