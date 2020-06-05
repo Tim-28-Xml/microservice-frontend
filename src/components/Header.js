@@ -113,7 +113,6 @@ class Header extends React.Component{
                     this.state.roles.includes('ROLE_USER') &&
                     <div className="headerButtonsUser">
                     <a title="Home" className="btnHeaderHome" href="https://localhost:3000/"><img src={house} style={{height:'30px',width:'30px',marginTop:'-5px'}}></img></a>
-                    <a className="btnHeaderHome" href="https://localhost:3000/">Home</a>
                     <a className="createAd" href="https://localhost:3000/create-ad">Create Ad</a>
                     <a className="physical" href="https://localhost:3000/physical-rent">My ads</a>
                     <ShoppingBasket />
