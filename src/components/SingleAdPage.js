@@ -162,7 +162,7 @@ class SingleAdPage extends React.Component {
                 <Card style={{ backgroundColor: 'rgba(245,245,245,0.8)', width: '45%', height: '30%', marginLeft: '3%', marginTop: '6%'}}>
                     <Card.Title style={{ padding: '10px', textAlign: 'center', fontSize: '30px' }}>
                     {
-                        this.state.permissions.includes('CREATE_AD') &&
+                        this.state.permissions.includes('ORDER') &&
                         <img src={cart} className="imgCartAdView" title="Add to shopping cart" onClick={this.addToCart.bind(this,this.state.ad)}></img>
                     }
                     {this.state.car.brand} {this.state.car.model}
