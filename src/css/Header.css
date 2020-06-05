@@ -135,7 +135,7 @@
 .headerButtonsUser{
     display: flex;
     flex-direction: row;
-    margin-left: 39%;
+    margin-left: 36%;
     margin-top: 0.2%;
 }
 
@@ -144,4 +144,12 @@
     flex-direction: row;
     margin-left: 39%;
     margin-top: 0.2%;
+}
+
+.basketIcon{
+    margin:0 10px 0 10px;
+    height: 33px;
+    width: auto;
+    cursor: pointer;
+
 }

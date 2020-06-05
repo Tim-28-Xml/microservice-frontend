@@ -6,6 +6,8 @@ import Login  from '../components/LoginPage.js';
 import RegistrationRolePage from './RegistrationRolePage';
 import {serviceConfig} from '../appSettings.js'
 import axios from 'axios'
+import cart from '../icons/basket.svg'
+import ShoppingBasket from './ShoppingBasket'
 
 class Header extends React.Component{
     constructor(props){
@@ -28,6 +30,7 @@ class Header extends React.Component{
 
     getRole(){
 
+
         let token = localStorage.getItem('token');
         let self = this;
 
@@ -39,9 +42,9 @@ class Header extends React.Component{
 
             axios.get(`${serviceConfig.baseURL}/authenticationservice/api/auth/role`, options).then(
                     (response) => { self.changeState(response) },
-                    (response) => {alert('Please log in.')}
+                    (response) => { }
             );
-        }
+    }
 
     }
 
@@ -107,6 +110,7 @@ class Header extends React.Component{
                     <div className="headerButtonsUser">
                     <a className="btnHeaderHome" href="https://localhost:3000/">Home</a>
                     <a className="createAd" href="https://localhost:3000/create-ad">Create Ad</a>
+                    <ShoppingBasket />
                     <button className="logoutBtn" onClick={this.logout}>Log out</button>
                     </div>
                 }
