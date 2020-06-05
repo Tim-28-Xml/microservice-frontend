@@ -10,6 +10,7 @@ import RegisterPageAgent from './components/RegisterPageAgent.js';
 import AdminProfile from './components/AdminProfile'
 import ActivatedAccount from './components/ActivatedAccount'
 import Codebbok from './components/Codebook'
+import CreateAd from './components/CreateAd.js';
 
 
 class Routes extends React.Component {
@@ -48,7 +49,14 @@ class Routes extends React.Component {
                         <ActivatedAccount />
                     </div>
                 
-                    } />        
+                    } />
+            <Route path='/create-ad' render={props =>
+                    <div>
+                        <Header />
+                        <CreateAd/>
+                    </div>
+                
+                    } />       
             </Switch>
         );
     }

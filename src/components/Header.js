@@ -106,6 +106,7 @@ class Header extends React.Component{
                     this.state.roles.includes('ROLE_USER') &&
                     <div className="headerButtonsUser">
                     <a className="btnHeaderHome" href="https://localhost:3000/">Home</a>
+                    <a className="createAd" href="https://localhost:3000/create-ad">Create Ad</a>
                     <button className="logoutBtn" onClick={this.logout}>Log out</button>
                     </div>
                 }
@@ -114,6 +115,7 @@ class Header extends React.Component{
                     this.state.roles.includes('ROLE_AGENT') &&
                     <div className="headerButtonsAgent">
                     <a className="btnHeaderHome" href="https://localhost:3000/">Home</a>
+                    <a className="createAd" href="https://localhost:3000/create-ad">Create Ad</a>
                     <button className="logoutBtn" onClick={this.logout}>Log out</button>
                     </div>
                 }
