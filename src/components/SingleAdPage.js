@@ -26,6 +26,7 @@ class SingleAdPage extends React.Component {
             userid: '',
             creator: '',
             myEventsList:[],
+            
 
 
         }
@@ -149,8 +150,8 @@ class SingleAdPage extends React.Component {
                                         <p>Kilometers traveled:</p>
                                         <p>Kilometers limit:</p>
                                         <p>Number of child seats:</p>
-                                        <p>Price</p>
                                         <p>Owner:</p>
+                                        <p>Price</p>
 
                                         {
                                             this.state.car.cdw &&
@@ -171,7 +172,7 @@ class SingleAdPage extends React.Component {
                                         <p style={{marginTop:'33px'}}>{this.state.car.km}</p>
                                         <p style={{marginTop:'20px'}}>{this.state.car.kmLimit}</p>
                                         <p style={{marginTop:'43px'}}>{this.state.car.childSeats}</p>
-                                        <p style={{marginTop:'40px'}}>{this.state.creator}</p>
+                                        <p style={{marginTop:'20px'}}>{this.state.creator}</p>
                                         
 
                                     </div>
