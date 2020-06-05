@@ -27,7 +27,7 @@ class ShoppingBasket  extends React.Component{
             <div>
                 
 
-                <img src={basketicon} className="basketIcon" onClick={this.handleShow}>
+                <img src={basketicon} className="basketIcon" onClick={this.handleShow} style={{marginLeft:'-23px'}}>
                     
                 </img>
 
