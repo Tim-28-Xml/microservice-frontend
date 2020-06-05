@@ -120,6 +120,7 @@ class Header extends React.Component{
                     <div className="headerButtonsAgent">
                     <a className="btnHeaderHome" href="https://localhost:3000/">Home</a>
                     <a className="createAd" href="https://localhost:3000/create-ad">Create Ad</a>
+                    <a className="physical" href="https://localhost:3000/physical-rent">Physical rent</a>
                     <button className="logoutBtn" onClick={this.logout}>Log out</button>
                     </div>
                 }
