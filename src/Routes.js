@@ -9,7 +9,7 @@ import RegistrationRolePage from './components/RegistrationRolePage.js';
 import RegisterPageAgent from './components/RegisterPageAgent.js';
 import AdminProfile from './components/AdminProfile'
 import ActivatedAccount from './components/ActivatedAccount'
-import Codebbok from './components/Codebook'
+import Codebook from './components/Codebook'
 
 
 class Routes extends React.Component {
@@ -34,7 +34,6 @@ class Routes extends React.Component {
             <Route path="/register/user"  component={RegisterPageUser}></Route>
             <Route path="/registrationrole" component={RegistrationRolePage}></Route>
             <Route path="/register/agent" component={RegisterPageAgent}></Route>
-            <Route path="/codebook" component={Codebbok}></Route>
             <Route path='/profile/admin' render={props =>
                     <div>
                         <Header />
@@ -49,6 +48,13 @@ class Routes extends React.Component {
                     </div>
                 
                     } />        
+            <Route path='/codebook' render={props =>
+                <div>
+                    <Header />
+                    <Codebook />
+                </div>
+            
+            } />
             </Switch>
         );
     }
