@@ -11,7 +11,7 @@ import AdminProfile from './components/AdminProfile'
 import ActivatedAccount from './components/ActivatedAccount'
 import CreateAd from './components/CreateAd.js';
 import Codebook from './components/Codebook'
-
+import PhysicalRent from './components/PhysicalRent'
 
 class Routes extends React.Component {
 
@@ -61,6 +61,13 @@ class Routes extends React.Component {
                 <div>
                     <Header />
                     <Codebook />
+                </div>
+            
+            } />
+            <Route path='/physical-rent' render={props =>
+                <div>
+                    <Header />
+                    <PhysicalRent/>
                 </div>
             
             } />
