@@ -113,20 +113,20 @@ class Header extends React.Component{
                     this.state.roles.includes('ROLE_USER') &&
                     <div className="headerButtonsUser">
                     <a title="Home" className="btnHeaderHome" href="https://localhost:3000/"><img src={house} style={{height:'30px',width:'30px',marginTop:'-5px'}}></img></a>
-                    <a className="createAd" href="https://localhost:3000/create-ad">Create Ad</a>
-                    <a className="physical" href="https://localhost:3000/physical-rent">My ads</a>
-                    <ShoppingBasket />
-                    <Button title="Logout" variant="outline-light"  style={{width:'60px',marginLeft:'0px'}} onClick={this.logout}><img src={logout} style={{height:'30px',width:'30px',marginTop:'-5px'}}></img></Button>
+                    <a style={{width:'120px',margin:'2%'}} href="https://localhost:3000/create-ad">Create Ad</a>
+                    <a style={{width:'120px',margin:'2%'}} href="https://localhost:3000/physical-rent">My ads</a>
+                    <ShoppingBasket/>
+                    <Button title="Logout" variant="outline-light"  style={{width:'60px',marginLeft:'4px'}} onClick={this.logout}><img src={logout} style={{height:'30px',width:'30px',marginTop:'-5px'}}></img></Button>
                     </div>
                 }
 
                 {
                     this.state.roles.includes('ROLE_AGENT') &&
                     <div className="headerButtonsAgent">
-                    <a  title="Home" style={{margin:'3% 7%'}} href="https://localhost:3000/"><img src={house} style={{height:'30px',width:'30px',marginTop:'0px'}}></img></a>
+                    <a  title="Home" style={{margin:'2% 7%'}} href="https://localhost:3000/"><img src={house} style={{height:'30px',width:'30px',marginTop:'0px'}}></img></a>
                     <a className="createAd" href="https://localhost:3000/create-ad">Create Ad</a>
                     <a className="physical" href="https://localhost:3000/physical-rent">My ads</a>
-                    <Button title="Logout" variant="outline-light" style={{margin:'1% 7%'}} onClick={this.logout}><img src={logout} style={{height:'30px',width:'30px',marginTop:'-5px'}}></img></Button>
+                    <Button title="Logout" variant="outline-light" style={{margin:'1% 7%',height:'40px',width:'40px'}} onClick={this.logout}><img src={logout} style={{height:'30px',width:'30px',marginTop:'-1%'}}></img></Button>
 
 
                     </div>
