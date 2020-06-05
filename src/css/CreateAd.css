@@ -1,0 +1,149 @@
+.adCard {
+    width: 18rem;
+    margin-left: 5%;
+    margin-top: 5%;
+    color: rgb(57, 153, 177);
+}
+
+
+.carMegaphoneIcon {
+    width: 30px;
+    margin-left: 10px;
+}
+
+.createAdBtn {
+    color: rgb(26, 201, 3);
+}
+
+.submitAd {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 21px;
+    font-weight: 350;
+    background-color: rgb(231, 221, 231);
+    border: none;
+    outline: none;
+    margin-top: 1%;
+    margin-left: 5px;
+    height: 80%;
+    border-radius: 10%;
+    color: rgb(26, 201, 3);
+}
+
+.closeModal {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 21px;
+    font-weight: 350;
+    color: rgb(230, 41, 41);
+    background-color: rgb(231, 221, 231);;
+    border: none;
+    outline: none;
+    margin-top: 1%;
+    margin-left: 5px;
+    height: 80%;
+    border-radius: 10%;
+}
+
+.selectValue {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 21px;
+    font-weight: 350;
+    background-color: rgb(234, 239, 240);
+    border: none;
+    outline: none;
+    margin-top: 1%;
+    margin-left: 5px;
+    height: 80%;
+    border-radius: 5%;
+    color: rgb(57, 153, 177);
+}
+
+option {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 21px;
+    font-weight: 350;
+    background-color: rgb(234, 239, 240);
+    border: none;
+    outline: none;
+    margin-top: 1%;
+    margin-left: 5px;
+    height: 80%;
+    border-radius: 5%;
+    color: rgb(57, 153, 177);
+}
+
+.modalAd {
+    height: 500px;
+}
+
+.moreDatesBtn {
+    color: rgb(57, 153, 177);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 21px;
+    font-weight: 350;
+    background-color: rgb(234, 239, 240);
+    border: none;
+    outline: none;
+    margin-top: 1%;
+    margin-left: 5px;
+    height: 80%;
+    border-radius: 10%;
+}
+
+.moreIcon {
+    width: 30px;
+    margin-left: 10px;
+}
+
+.images {
+    color: rgb(57, 153, 177);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    content: 'Select some files';
+    display: inline-block;
+    background: linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: none;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+
+}
+
+.images:hover::before {
+    border-color: black;
+}
+  
+.images:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+.images::-webkit-file-upload-button {
+    color: lightseagreen;
+}
+
+.moreDatesBtn {
+    color: rgb(57, 153, 177);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 21px;
+    font-weight: 350;
+    background-color: rgb(234, 239, 240);
+    border: none;
+    outline: none;
+    margin-left: 15px;
+    height: 80%;
+    border-radius: 10%;
+
+}
+
+#moredatesdiv {
+    display: none;
+}
+
+.mainDiv {
+    background-color: rgb(228, 236, 219);
+    margin: 5% 10% 10% 10%;
+}

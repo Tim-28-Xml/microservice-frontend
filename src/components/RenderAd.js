@@ -3,13 +3,17 @@ import { Modal, Button, Card } from "react-bootstrap";
 import caricon from '../icons/carphoto.jpg'
 import '../css/RenderAd.css'
 import cart from '../icons/cart.svg'
-
+import {serviceConfig} from '../appSettings.js'
+import axios from 'axios'
 
 
 class RenderAd extends React.Component{
     constructor(props) {
         super(props);
 
+        this.state = {
+            permissions: [],
+        }
 
         this.renderAdCards = this.renderAdCards.bind(this);
     }
@@ -23,10 +27,49 @@ class RenderAd extends React.Component{
     }
 
 
+    componentDidMount(){
+        this.getRole();
+    }
+
+    getRole(){
+
+        let token = localStorage.getItem('token');
+        let self = this;
+
+        if(token !== null){
+  
+            const options = {
+                headers: { 'Authorization': 'Bearer ' + token}
+            };
+
+            axios.get(`${serviceConfig.baseURL}/authenticationservice/api/auth/role`, options).then(
+                    (response) => { self.changeState(response) },
+                    (response) => { }
+            );
+        }
+
+    }
+
+    changeState(resp) {
+        //console.log(resp);
+
+        var permissons = [];
+
+        resp.data.forEach(element => {
+            permissons.push(element.authority);
+        });
+        
+        
+        this.setState({ 
+            isLoggedIn: true,
+            permissions: permissons,
+         })
+    }
+
+
 
 
     renderAdCards() {
-       
         return this.props.ads.map((ad, index) => {
             console.log(ad);
             
@@ -37,7 +80,10 @@ class RenderAd extends React.Component{
                     <Card.Body className = "cardBody">
 
                         <Card.Title className="cardTitle" style={{textAlign:"left"}}>{ad.carDTO.brand} {ad.carDTO.model}
-                            <img src={cart} className="imgCart" title="Add to shopping cart" onClick={this.addToCart.bind(this,ad.id)}></img>
+                            {  this.state.permissions.includes("ORDER") && 
+                                <img src={cart} className="imgCart" title="Add to shopping cart" onClick={this.addToCart.bind(this,ad.id)}></img> 
+                            }
+
                         </Card.Title>
 
                         <Card onClick={this.view.bind(this,ad.id)} style={{cursor: 'pointer', marginTop:'6%'}}>
@@ -84,6 +130,7 @@ class RenderAd extends React.Component{
 }
 
     render() {
+        console.log(this.state.permissions)
         return (
             <div className="renderCardsAds">
                 {this.renderAdCards()}

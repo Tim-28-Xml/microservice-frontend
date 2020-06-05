@@ -26,7 +26,7 @@ class SingleAdPage extends React.Component {
             userid: '',
             creator: '',
             myEventsList:[],
-            
+            permissions: [],
 
 
         }
@@ -38,8 +38,7 @@ class SingleAdPage extends React.Component {
 
     componentWillMount() {
         this.getAd();
-
-
+        this.getRole();
     }
 
     getAd() {
@@ -96,10 +95,41 @@ class SingleAdPage extends React.Component {
 
     }
 
-    componentDidMount() {
-        //this.getUser();
+    getRole(){
+
+
+        let token = localStorage.getItem('token');
+        let self = this;
+
+        if(token !== null){
+
+            const options = {
+                headers: { 'Authorization': 'Bearer ' + token}
+            };
+
+            axios.get(`${serviceConfig.baseURL}/authenticationservice/api/auth/role`, options).then(
+                    (response) => { self.changeState(response) },
+                    (response) => { }
+            );
     }
 
+    }
+
+    changeState(resp) {
+        console.log(resp);
+
+        var permissons = [];
+
+        resp.data.forEach(element => {
+            permissons.push(element.authority);
+        });
+
+
+        this.setState({
+            isLoggedIn: true,
+            permissions: permissons,
+         })
+    }
 
 
     renderPhotos() {
@@ -111,7 +141,7 @@ class SingleAdPage extends React.Component {
                                     style={{height:'500px',width:'300px'}}
                                 />
 
-                                
+
                             </Carousel.Item>*/
     }
 
@@ -131,13 +161,16 @@ class SingleAdPage extends React.Component {
 
                 <Card style={{ backgroundColor: 'rgba(245,245,245,0.8)', width: '45%', height: '30%', marginLeft: '3%', marginTop: '6%'}}>
                     <Card.Title style={{ padding: '10px', textAlign: 'center', fontSize: '30px' }}>
-                    <img src={cart} className="imgCartAdView" title="Add to shopping cart" onClick={this.addToCart.bind(this,this.state.ad)}></img>
+                    {
+                        this.state.permissions.includes('CREATE_AD') &&
+                        <img src={cart} className="imgCartAdView" title="Add to shopping cart" onClick={this.addToCart.bind(this,this.state.ad)}></img>
+                    }
                     {this.state.car.brand} {this.state.car.model}
                 </Card.Title>
 
                     <Card.Body>
 
-                       
+
                         <Card.Text>
 
                             <div className="middleAdPart">
@@ -165,7 +198,7 @@ class SingleAdPage extends React.Component {
                                     <div style={{marginTop:'9px'}}>
 
 
-                                       
+
                                         <p>{this.state.car.carClass}</p>
                                         <p>{this.state.car.fuel}</p>
                                         <p>{this.state.car.transmission}</p>
@@ -173,7 +206,7 @@ class SingleAdPage extends React.Component {
                                         <p style={{marginTop:'20px'}}>{this.state.car.kmLimit}</p>
                                         <p style={{marginTop:'43px'}}>{this.state.car.childSeats}</p>
                                         <p style={{marginTop:'20px'}}>{this.state.creator}</p>
-                                        
+
 
                                     </div>
                                 </div>
@@ -202,7 +235,7 @@ class SingleAdPage extends React.Component {
 
                 <div style={{ marginLeft: "53%", marginTop: '-55.5%' ,height:'30%', backgroundColor:'white',width:'40%'}}>
 
-                    
+
 
                     <Carousel>
 
@@ -214,13 +247,13 @@ class SingleAdPage extends React.Component {
                                     style={{height:'400px',width:'300px'}}
                                 />
 
-                                
+
                             </Carousel.Item>
     }
 
                     </Carousel>
-                    
-                    
+
+
                 </div>
 
                 <div style={{ marginLeft: "53%", marginTop: '5%' , backgroundColor:'white',width:'40%',borderStyle:'solid',borderWidth:'1px'}}>
@@ -232,7 +265,7 @@ class SingleAdPage extends React.Component {
 
                 </div>
 
-                
+
 
 
             </div>

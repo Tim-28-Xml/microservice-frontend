@@ -9,8 +9,9 @@ import RegistrationRolePage from './components/RegistrationRolePage.js';
 import RegisterPageAgent from './components/RegisterPageAgent.js';
 import AdminProfile from './components/AdminProfile'
 import ActivatedAccount from './components/ActivatedAccount'
+import CreateAd from './components/CreateAd.js';
 import Codebook from './components/Codebook'
-
+import PhysicalRent from './components/PhysicalRent'
 
 class Routes extends React.Component {
 
@@ -47,11 +48,26 @@ class Routes extends React.Component {
                         <ActivatedAccount />
                     </div>
                 
+                    } />
+            <Route path='/create-ad' render={props =>
+                    <div>
+                        <Header />
+                        <CreateAd/>
+                    </div>
+                
+                    } />       
                     } />        
             <Route path='/codebook' render={props =>
                 <div>
                     <Header />
                     <Codebook />
+                </div>
+            
+            } />
+            <Route path='/physical-rent' render={props =>
+                <div>
+                    <Header />
+                    <PhysicalRent/>
                 </div>
             
             } />
