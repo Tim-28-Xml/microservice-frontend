@@ -4,6 +4,7 @@ import '../css/LoginPage.css'
 import axios from 'axios'
 import Header from '../components/Header.js';
 import {serviceConfig} from '../appSettings.js'
+import { store } from 'react-notifications-component'
 
 class LoginPage extends React.Component{
     constructor(props){
@@ -48,7 +49,22 @@ class LoginPage extends React.Component{
                 window.location.href = "https://localhost:3000/"
 
             },
-            (resp) => { alert('Username or password is incorrect!') }
+            (resp) => { 
+                store.addNotification({
+                    title: "Error",
+                    message: "Password or username is incorrect!",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      }
+                    
+                  })
+             }
         );
 
     }

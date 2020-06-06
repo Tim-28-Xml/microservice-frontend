@@ -11,6 +11,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment'
 import cart from '../icons/cart.svg'
+import { store } from 'react-notifications-component';
 
 
 const localizer = momentLocalizer(moment)
@@ -146,8 +147,23 @@ class SingleAdPage extends React.Component {
     }
 
     addToCart(id){
-        alert('hola')
+        store.addNotification({
+            title: "Hola!",
+            message: "hola",
+            type: "success",
+            insert: "top",
+            container: "top-center",
+            animationIn: ["animated", "fadeIn"],
+            animationOut: ["animated", "fadeOut"],
+            dismiss: {
+                duration: 1000,
+                pauseOnHover: true
+              }
+            
+          });
     }
+
+
 
 
     render() {

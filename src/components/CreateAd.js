@@ -8,9 +8,9 @@ import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import '../css/CreateAd.css'
+import { store } from 'react-notifications-component'
 
 const moment = require('moment');
-const AdCreationAlert = withReactContent(Swal)
 class CreateAd extends React.Component {
 
     constructor(props) {
@@ -129,13 +129,6 @@ class CreateAd extends React.Component {
             headers: { 'Authorization': 'Bearer ' + token }
         };
 
-        if (isNaN(this.state.km)) {
-            return alert("Please enter a number for Km!");
-        } else if (isNaN(this.state.kmLimit))
-            return alert("Please enter a number for Km Limit!")
-        else if (isNaN(this.state.childSeats))
-            return alert("Please enter a number for child seats!");
-
             console.log("objekat pred bekend");
             console.log(this.state);
             
@@ -148,23 +141,39 @@ class CreateAd extends React.Component {
     }
 
     onErrorHandler(resp) {
-        AdCreationAlert.fire({
-            title: "Error occured",
-            text: '',
-            type: "error",
-            button: true
-        });
+        store.addNotification({
+            title: "",
+            message: "There is an error.",
+            type: "danger",
+            insert: "top",
+            container: "top-center",
+            animationIn: ["animated", "fadeIn"],
+            animationOut: ["animated", "fadeOut"],
+            dismiss: {
+                duration: 2000,
+                pauseOnHover: true
+              },
 
-        console.log(resp.data);
+            
+          })
 
     }
 
     onSuccessHandler(resp) {
-        AdCreationAlert.fire({
-            title: "Ad successfully created",
-            text: "",
+        store.addNotification({
+            title: "",
+            message: "Ad is successfully created!",
             type: "success",
-        });
+            insert: "top",
+            container: "top-center",
+            animationIn: ["animated", "fadeIn"],
+            animationOut: ["animated", "fadeOut"],
+            dismiss: {
+                duration: 2000,
+                pauseOnHover: true
+              },
+            
+          })
 
         console.log(resp.data);
 
@@ -229,7 +238,20 @@ class CreateAd extends React.Component {
         console.log(dateString);
 
         if(this.state.dates.indexOf(date) >= 0) {
-            return alert("Date already exists");
+            store.addNotification({
+                title: "",
+                message: "Date already exists!",
+                type: "warning",
+                insert: "top",
+                container: "top-center",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 2000,
+                    pauseOnHover: true
+                  },
+                
+              })
         }
 
         this.setState({
@@ -244,7 +266,20 @@ class CreateAd extends React.Component {
         console.log(dateString);
 
         if(this.state.dates.indexOf(date) >= 0) {
-            return alert("Date already exists");
+            store.addNotification({
+                title: "",
+                message: "Date already exists!",
+                type: "warning",
+                insert: "top",
+                container: "top-center",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 2000,
+                    pauseOnHover: true
+                  },
+                
+              })
         }
 
         this.state.endDate = date;
@@ -300,7 +335,20 @@ class CreateAd extends React.Component {
                 console.log("---------END----------");
 
                 if (moment(this.state.dateStringStartAnother).isBetween(moment(this.state.dates[j].startDate), moment(this.state.dates[j].endDate))) {
-                    return alert("Dates overlap");
+                    store.addNotification({
+                        title: "",
+                        message: "Dates overlap!",
+                        type: "warning",
+                        insert: "top",
+                        container: "top-center",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 2000,
+                            pauseOnHover: true
+                          },
+                        
+                      })
                 }
             }
         }
@@ -362,9 +410,35 @@ class CreateAd extends React.Component {
         if (firstNew) {
 
             if (moment(this.state.startDateAnother).isBetween(moment(this.state.startDate), moment(this.state.endDate))) {
-                return alert("Dates are not good!");
+                store.addNotification({
+                    title: "",
+                    message: "Dates are not good!",
+                    type: "warning",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                    
+                  })
             } else if (moment(this.state.endDateAnother).isBetween(moment(this.state.startDate), moment(this.state.endDate))) {
-                return alert("Dates are NOT good!");
+                store.addNotification({
+                    title: "",
+                    message: "Dates are not good!",
+                    type: "warning",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                    
+                  })
             }
         }
 
@@ -563,7 +637,7 @@ class CreateAd extends React.Component {
                         <br />
                         <br />
                         <label htmlFor="km">Km</label>
-                        <input type="text"
+                        <input type="number"
                             className="form-control form-control-sm"
                             id="km"
                             name="km"
@@ -573,7 +647,7 @@ class CreateAd extends React.Component {
                         />
                         <br />
                         <label htmlFor="kmLimit">Km Limit</label>
-                        <input type="text"
+                        <input type="number"
                             className="form-control form-control-sm"
                             id="kmLimit"
                             name="kmLimit"
@@ -587,7 +661,7 @@ class CreateAd extends React.Component {
                         <br />
                         <br />
                         <label htmlFor="childSeats">Child seats</label>
-                        <input type="text"
+                        <input type="number"
                             className="form-control form-control-sm"
                             id="childSeats"
                             name="childSeats"

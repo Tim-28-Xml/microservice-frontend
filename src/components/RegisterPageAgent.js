@@ -4,6 +4,7 @@ import '../css/RegisterPageAgent.css'
 import axios from 'axios';
 import Header from '../components/Header.js';
 import {serviceConfig} from '../appSettings.js'
+import { store } from 'react-notifications-component'
 
 class RegisterPageAgent extends React.Component{
     constructor(props){
@@ -38,18 +39,74 @@ class RegisterPageAgent extends React.Component{
 
         if(this.state.password.length < 8){
 
-            alert('Password is too short!');
-            return;
+            store.addNotification({
+                title: "Password is not long enough!",
+                message: "It must contain 8 characters minimum",
+                type: "danger",
+                insert: "top",
+                container: "top-center",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 2000,
+                    pauseOnHover: true
+                  }
+                
+              })
 
         } else if(this.state.password != this.state.repeatedPassword){
 
-            alert('Repeated password does not match!');
-            return;
+            store.addNotification({
+                title: "",
+                message: "Repeated password does not match",
+                type: "danger",
+                insert: "top",
+                container: "top-center",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 2000,
+                    pauseOnHover: true
+                  }
+                
+              })
         } else {
 
             axios.post(`${serviceConfig.baseURL}/authenticationservice/api/auth/register/agent`,this.state).then(
-                (resp) => { window.location.href = "https://localhost:3000/" },
-                (resp) => { alert('error') }
+                (resp) => { 
+                    store.addNotification({
+                        title: "Success!",
+                        message: "Agent profile is created.",
+                        type: "success",
+                        insert: "top",
+                        container: "top-center",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 2000,
+                            pauseOnHover: true
+                          },
+                          onRemoval: (id, removedBy) => {
+                            window.location.href = "https://localhost:3000/"
+                          }
+                        
+                      })
+                 },
+                (resp) => {             
+                    store.addNotification({
+                    title: "Error",
+                    message: "Registration is unsuccessful",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      }
+                    
+                  }) }
             );
 
         }
