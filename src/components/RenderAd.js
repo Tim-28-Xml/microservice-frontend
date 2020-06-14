@@ -23,7 +23,22 @@ class RenderAd extends React.Component{
     }
 
     addToCart(id){
-        alert('hola')
+        let token = localStorage.getItem('token');
+        let self = this;
+        let ad = { adId: id }
+
+        if(token !== null){
+  
+            const options = {
+                headers: { 'Authorization': 'Bearer ' + token},
+                body: JSON.stringify(ad)
+            };
+
+            axios.post(`${serviceConfig.baseURL}/adservice/api/shoppingcart`, options).then(
+                    (response) => { console.log('success') },
+                    (response) => { console.log('error') }
+            );
+        }
     }
 
 

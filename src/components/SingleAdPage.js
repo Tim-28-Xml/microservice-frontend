@@ -147,20 +147,22 @@ class SingleAdPage extends React.Component {
     }
 
     addToCart(id){
-        store.addNotification({
-            title: "Hola!",
-            message: "hola",
-            type: "success",
-            insert: "top",
-            container: "top-center",
-            animationIn: ["animated", "fadeIn"],
-            animationOut: ["animated", "fadeOut"],
-            dismiss: {
-                duration: 1000,
-                pauseOnHover: true
-              }
-            
-          });
+        let token = localStorage.getItem('token');
+        let self = this;
+        let ad = { adId: id }
+
+        if(token !== null){
+  
+            const options = {
+                headers: { 'Authorization': 'Bearer ' + token},
+                body: JSON.stringify(ad)
+            };
+
+            axios.post(`${serviceConfig.baseURL}/adservice/api/shoppingcart`, options).then(
+                    (response) => { console.log('success') },
+                    (response) => { console.log('error') }
+            );
+        }
     }
 
 
@@ -265,7 +267,7 @@ class SingleAdPage extends React.Component {
 
 
                             </Carousel.Item>
-    }
+    
 
                     </Carousel>
 
