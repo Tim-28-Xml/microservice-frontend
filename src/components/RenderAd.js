@@ -5,6 +5,7 @@ import '../css/RenderAd.css'
 import cart from '../icons/cart.svg'
 import {serviceConfig} from '../appSettings.js'
 import axios from 'axios'
+import { store } from 'react-notifications-component';
 
 
 class RenderAd extends React.Component{
@@ -37,8 +38,41 @@ class RenderAd extends React.Component{
             };
 
             axios.post(`${serviceConfig.baseURL}/adservice/shoppingcart`, ad, options).then(
-                    (response) => { console.log('success') },
-                    (response) => { console.log('error') }
+                    (response) => 
+                    { 
+                        store.addNotification({
+                            title: "Added to your cart!",
+                            message: "View your shopping cart content by clicking on its icon.",
+                            type: "success",
+                            insert: "top",
+                            container: "top-center",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 2000,
+                                pauseOnHover: true
+                              }
+                            })
+
+                     },
+                    (response) => 
+                    { 
+                        console.log(response.response)
+                        store.addNotification({
+                            title: "Already in!",
+                            message: "You have already ordered this car. Check your shopping cart.",
+                            type: "danger",
+                            insert: "top",
+                            container: "top-center",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 2000,
+                                pauseOnHover: true
+                              }
+                            })
+
+                     }
             );
         }
     }
