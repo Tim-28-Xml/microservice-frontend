@@ -37,11 +37,11 @@ class RegisterPageAgent extends React.Component{
     SendRegisterRequest(e) {
         e.preventDefault();
 
-        if(this.state.password.length < 8){
+        if(this.state.password.length < 10){
 
             store.addNotification({
                 title: "Password is not long enough!",
-                message: "It must contain 8 characters minimum",
+                message: "It must contain 10 characters minimum.",
                 type: "danger",
                 insert: "top",
                 container: "top-center",
@@ -58,7 +58,7 @@ class RegisterPageAgent extends React.Component{
 
             store.addNotification({
                 title: "",
-                message: "Repeated password does not match",
+                message: "Repeated password does not match.",
                 type: "danger",
                 insert: "top",
                 container: "top-center",
@@ -93,20 +93,39 @@ class RegisterPageAgent extends React.Component{
                       })
                  },
                 (resp) => {             
-                    store.addNotification({
-                    title: "Error",
-                    message: "Registration is unsuccessful",
-                    type: "danger",
-                    insert: "top",
-                    container: "top-center",
-                    animationIn: ["animated", "fadeIn"],
-                    animationOut: ["animated", "fadeOut"],
-                    dismiss: {
-                        duration: 2000,
-                        pauseOnHover: true
-                      }
-                    
-                  }) }
+                
+                        if(resp.response.data != null){
+                        store.addNotification({
+                            title: "",
+                            message: resp.response.data,
+                            type: "danger",
+                            insert: "top",
+                            container: "top-center",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 2000,
+                                pauseOnHover: true
+                              }
+                            
+                          })
+                        } else {
+                            store.addNotification({
+                                title: "Error",
+                                message: "Something went wrong",
+                                type: "danger",
+                                insert: "top",
+                                container: "top-center",
+                                animationIn: ["animated", "fadeIn"],
+                                animationOut: ["animated", "fadeOut"],
+                                dismiss: {
+                                    duration: 2000,
+                                    pauseOnHover: true
+                                  }
+                                
+                              })
+                        }
+                    }
             );
 
         }
@@ -160,7 +179,7 @@ class RegisterPageAgent extends React.Component{
                     <Form.Group as={Col} className="formRowRegL">
                     <Form.Label className="labelRegA">Password</Form.Label>
                     <Form.Control type="password" style={{background: "rgb(244, 245, 249)"}} placeholder="Password" id="password" name="password" onChange={this.handleChange} required/>
-                    <legend className="legendPass">Password should contain 8 characters minimum, at least one number and a special character.</legend>
+                    <legend className="legendPass">Password must contain 10 characters minimum, at least one uppercase and a lowercase letter and a number.</legend>
                 </Form.Group>
 
                     <Form.Group as={Col} className="formRowRegR">
