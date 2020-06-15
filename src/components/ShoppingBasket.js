@@ -147,9 +147,12 @@ class ShoppingBasket  extends React.Component{
                                 duration: 2000,
                                 pauseOnHover: true
                               },
+                            onRemoval: (id, removedBy) => {
+                                window.location.href = "https://localhost:3000/"
+                            }
                             
                           })
-                          window.location.reload();
+
                         },
                     (response) => { 
                         store.addNotification({
