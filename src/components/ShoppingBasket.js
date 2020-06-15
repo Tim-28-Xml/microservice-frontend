@@ -70,18 +70,16 @@ class ShoppingBasket  extends React.Component{
     removeAd(adId){
         let token = localStorage.getItem('token');
         let self = this;
-        let ad = JSON.stringify({ adId: adId })
 
         if(token !== null){
   
             const options = {
                 headers: { 
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
                 },
             };
 
-            axios.delete(`${serviceConfig.baseURL}/adservice/shoppingcart`, ad, options).then(
+            axios.delete(`${serviceConfig.baseURL}/adservice/shoppingcart/${adId}`, options).then(
                     (response) => {
                         store.addNotification({
                             title: "",
