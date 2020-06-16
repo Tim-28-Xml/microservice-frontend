@@ -12,6 +12,7 @@ import ActivatedAccount from './components/ActivatedAccount'
 import CreateAd from './components/CreateAd.js';
 import Codebook from './components/Codebook'
 import PhysicalRent from './components/PhysicalRent'
+import UserProfile from './components/UserProfile'
 
 class Routes extends React.Component {
 
@@ -68,6 +69,14 @@ class Routes extends React.Component {
                 <div>
                     <Header />
                     <PhysicalRent/>
+                </div>
+            
+            } />
+
+            <Route path='/profile/user' render={props =>
+                <div>
+                    <Header />
+                    <UserProfile/>
                 </div>
             
             } />

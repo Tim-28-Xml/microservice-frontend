@@ -116,6 +116,7 @@ class Header extends React.Component{
                     <a style={{width:'120px',margin:'2%'}} href="https://localhost:3000/create-ad">Create Ad</a>
                     <a style={{width:'120px',margin:'2%'}} href="https://localhost:3000/physical-rent">My ads</a>
                     <ShoppingBasket/>
+                    <a title="Profile" href="https://localhost:3000/profile/user" style={{margin:'2.5% 5%'}}><img src={user} style={{height:'30px',width:'30px',marginTop:'-10px'}}></img></a>
                     <Button title="Logout" variant="outline-light"  style={{width:'60px',marginLeft:'4px'}} onClick={this.logout}><img src={logout} style={{height:'30px',width:'30px',marginTop:'-5px'}}></img></Button>
                     </div>
                 }
