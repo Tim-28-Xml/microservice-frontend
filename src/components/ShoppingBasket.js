@@ -187,10 +187,10 @@ class ShoppingBasket  extends React.Component{
                     <Card.Body className = "cardBodyCart">
 
                         <Card.Title className="cardTitleCart" style={{textAlign:"center"}}>{ad.carDTO.brand} {ad.carDTO.model}
-                        <button onClick={this.removeAd.bind(this,ad.adId)} variant="outline-dark" className="removeBtnCart" title="Remove from cart" >x</button>
+                        <button onClick={this.removeAd.bind(this,ad.id)} variant="outline-dark" className="removeBtnCart" title="Remove from cart" >x</button>
                         </Card.Title>
 
-                        <Card.Text onClick={this.view.bind(this,ad.adId)} className='cardText' style={{padding:'3px', cursor: 'pointer'}} >
+                        <Card.Text onClick={this.view.bind(this,ad.id)} className='cardText' style={{padding:'3px', cursor: 'pointer'}} >
                             <Button onClick={this.createRequest.bind(this,ad.carDTO)} variant="outline-info"  style={{marginRight:"3%"}}>Create request</Button>                          
                         </Card.Text>       
                     </Card.Body>
