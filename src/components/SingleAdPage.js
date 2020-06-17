@@ -11,6 +11,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment'
 import cart from '../icons/cart.svg'
+import RenderReviews from '../components/RenderReviews.js';
 
 
 const localizer = momentLocalizer(moment)
@@ -27,6 +28,7 @@ class SingleAdPage extends React.Component {
             creator: '',
             myEventsList:[],
             permissions: [],
+            reviews: [],
 
 
         }
@@ -39,9 +41,41 @@ class SingleAdPage extends React.Component {
     componentWillMount() {
         this.getAd();
         this.getRole();
+        this.getReviews();
+    }
+
+    getReviews(){
+
+        let token = localStorage.getItem('token');
+
+        if(token !== null){
+
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token }
+        };
+
+        axios.get(`${serviceConfig.baseURL}/reviewservice/api/review/by-ad/${this.props.match.params.id}`, options).then(
+            (resp) => {
+                
+                console.log("REviews: ");
+                console.log(resp.data);
+
+                this.setState({
+                    reviews : resp.data,
+                })
+
+            },
+            (resp) => { alert('error reviews ') }
+        );
+
+        }
+
+
+
     }
 
     getAd() {
+
         let token = localStorage.getItem('token');
 
         const options = {
@@ -261,6 +295,9 @@ class SingleAdPage extends React.Component {
                 <div style={{ marginTop: '10px', marginBottom: '10px', padding: '15px' }}>
                         <img src={comments} style={{ height: '50px', width: '50px' }}></img>
                         <h2>REVIEWS &amp; RATINGS</h2>
+                        <div>
+                            <RenderReviews reviews={this.state.reviews}/>
+                        </div>
                     </div>
 
                 </div>
