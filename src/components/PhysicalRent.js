@@ -9,9 +9,10 @@ import DatePicker from 'react-datepicker';
 import RenderAd from './RenderAd.js'
 import "react-datepicker/dist/react-datepicker.css";
 import '../css/CreateAd.css'
+import { store } from 'react-notifications-component';
+
 const moment = require('moment');
 
-const DeclinedAlert = withReactContent(Swal)
 class PhysicalRent extends React.Component {
     constructor(props) {
         super(props);
@@ -80,14 +81,20 @@ class PhysicalRent extends React.Component {
     }
 
     onErrorHandler(resp) {
-        DeclinedAlert.fire({
-            title: "Something went wrong",
-            text: '',
-            type: "error",
-            button: true
-        });
-
-        console.log(resp.data);
+        store.addNotification({
+            title: "",
+            message: "Something went wrong!",
+            type: "danger",
+            insert: "top",
+            container: "top-center",
+            animationIn: ["animated", "fadeIn"],
+            animationOut: ["animated", "fadeOut"],
+            dismiss: {
+                duration: 2000,
+                pauseOnHover: true
+              },
+            
+          })
 
     }
 
@@ -106,7 +113,21 @@ class PhysicalRent extends React.Component {
                 })
 
             },
-            (resp) => { alert('error ads') }
+            (resp) => {                 
+                store.addNotification({
+                title: "",
+                message: "Error while loading ads!",
+                type: "danger",
+                insert: "top",
+                container: "top-center",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 2000,
+                    pauseOnHover: true
+                  },
+                
+              }) }
         );
     }
 
@@ -121,16 +142,40 @@ class PhysicalRent extends React.Component {
         console.log(obj)
         axios.post(`https://localhost:8443/adservice/api/ads/rent-creator`, obj, options).then(
             (resp) => this.onSuccessHandler(resp),
-            (resp) => { alert('error') }
+            (resp) => { 
+                store.addNotification({
+                    title: "",
+                    message: "Something went wrong with renting this car!",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                    
+                  })
+             }
         );
     }
 
     onSuccessHandler(resp) {
-        DeclinedAlert.fire({
-            title: "Successful",
-            text: "",
+        store.addNotification({
+            title: "Success",
+            message: "Car is rented successfully!",
             type: "success",
-        });
+            insert: "top",
+            container: "top-center",
+            animationIn: ["animated", "fadeIn"],
+            animationOut: ["animated", "fadeOut"],
+            dismiss: {
+                duration: 2000,
+                pauseOnHover: true
+              },
+            
+          })
 
         console.log(resp.data);
 

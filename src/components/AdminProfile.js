@@ -5,6 +5,7 @@ import '../css/AdminProfile.css'
 import {BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
 import { Button, Table, Tab, Tabs } from 'react-bootstrap';
 import ManagePermissions from './ManagePermissions'
+import { store } from 'react-notifications-component'
 
 class AdminProfile extends React.Component{
     constructor(props){
@@ -92,11 +93,43 @@ class AdminProfile extends React.Component{
         
         axios.get(`${serviceConfig.baseURL}/authenticationservice/api/users/remove/${username}`,options).then(
             (resp) => { 
-                
-                window.location.reload();
+
+                store.addNotification({
+                    title: "",
+                    message: "User is successfully removed!",
+                    type: "success",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 1000,
+                        pauseOnHover: true
+                      },
+                      onRemoval: (id, removedBy) => {
+                        window.location.reload();
+                       }
+                    
+                  })
+            
 
              },
-            (resp) => { alert('error') }
+            (resp) => { 
+                store.addNotification({
+                    title: "Error",
+                    message: "There's an error.",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      }
+                    
+                  })
+             }
         );
     }
 
@@ -108,11 +141,42 @@ class AdminProfile extends React.Component{
         console.log(username);
         axios.get(`${serviceConfig.baseURL}/authenticationservice/api/users/requests/accept/${username}`,options).then(
             (resp) => { 
+                store.addNotification({
+                    title: "",
+                    message: "Request is accepted successfully!",
+                    type: "success",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                      onRemoval: (id, removedBy) => {
+                       window.location.reload();
+                      }
+                    
+                  })
 
-                window.location.reload();
+                
 
              },
-            (resp) => { alert('error') }
+            (resp) => {                 
+                store.addNotification({
+                title: "Error",
+                message: "There's an error.",
+                type: "danger",
+                insert: "top",
+                container: "top-center",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 2000,
+                    pauseOnHover: true
+                  }
+                
+              }) }
         );
     }
 
@@ -125,10 +189,41 @@ class AdminProfile extends React.Component{
         axios.get(`${serviceConfig.baseURL}/authenticationservice/api/users/requests/decline/${username}`,options).then(
             (resp) => { 
 
-                window.location.reload();
+                store.addNotification({
+                    title: "",
+                    message: "Request is declined successfully!",
+                    type: "success",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                      onRemoval: (id, removedBy) => {
+                        window.location.reload();
+                      }
+                    
+                  })
 
              },
-            (resp) => { alert('error') }
+            (resp) => { 
+                store.addNotification({
+                    title: "Error",
+                    message: "There's an error.",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      }
+                    
+                  })
+             }
         );
     }
 

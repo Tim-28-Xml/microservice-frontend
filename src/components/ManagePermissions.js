@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Button, FormGroup, FormControl, ControlLabel,Col, Modal } from "react-bootstrap";
 import {serviceConfig} from '../appSettings.js'
 import axios from 'axios'
+import { store } from 'react-notifications-component';
 
 class ManagePermissions extends React.Component{
     constructor(props){
@@ -40,7 +41,22 @@ class ManagePermissions extends React.Component{
                 })
                 
              },
-            (resp) => { alert('error') }
+            (resp) => { 
+                store.addNotification({
+                    title: "",
+                    message: "Error while loading permissions!",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                    
+                  })
+             }
         );
     }
 
@@ -59,10 +75,40 @@ class ManagePermissions extends React.Component{
                     permissions: resp.data.permissions,
                     blockedPermissions: resp.data.blockedPermissions
                 })
+                store.addNotification({
+                    title: "",
+                    message: "Permission is successfully removed!",
+                    type: "success",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                    
+                  })
 
 
              },
-            (resp) => { alert('error') }
+            (resp) => { 
+                
+                store.addNotification({
+                    title: "",
+                    message: "Permission is not removed successfully!",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                    
+                  })
+            }
         );
     }
 
@@ -76,15 +122,43 @@ class ManagePermissions extends React.Component{
         console.log(perm)
         axios.get(`${serviceConfig.baseURL}/authenticationservice/api/users/add/permission/${username}/${perm}`,options).then(
             (resp) => { 
-                console.log(resp);
+                
                 this.setState({
                     permissions: resp.data.permissions,
                     blockedPermissions: resp.data.blockedPermissions
                 })
-                console.log(this.state)
+                store.addNotification({
+                    title: "",
+                    message: "Permission is successfully added!",
+                    type: "success",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                    
+                  })
 
              },
-            (resp) => { alert('error') }
+            (resp) => { 
+                store.addNotification({
+                    title: "",
+                    message: "Permission is not successfully added!",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                    
+                  })
+             }
         );
     }
     

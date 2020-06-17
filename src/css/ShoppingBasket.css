@@ -4,3 +4,35 @@
     width: auto;
     cursor: pointer;
 }
+
+.cardContainerCart{
+    margin-top: 2%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.cardBodyCart{
+    background-color: rgb(216, 226, 228);
+}
+
+.removeBtnCart{
+    outline: none;
+    border: none;
+    color: rgb(201, 28, 28);
+    background-color: transparent;
+    float: right;
+    font-size: 23px;
+    margin: -3% -2% 0 0;
+    font-weight: 500;
+}
+
+.removeBtnCart:hover{
+    color: black;
+    outline: none;
+    border: none;
+}
+
+.modalBodyCart{
+    max-height: 100%;
+    overflow-y: auto;
+
+}

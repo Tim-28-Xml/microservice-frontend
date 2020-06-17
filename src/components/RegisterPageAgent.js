@@ -4,6 +4,7 @@ import '../css/RegisterPageAgent.css'
 import axios from 'axios';
 import Header from '../components/Header.js';
 import {serviceConfig} from '../appSettings.js'
+import { store } from 'react-notifications-component'
 
 class RegisterPageAgent extends React.Component{
     constructor(props){
@@ -36,20 +37,95 @@ class RegisterPageAgent extends React.Component{
     SendRegisterRequest(e) {
         e.preventDefault();
 
-        if(this.state.password.length < 8){
+        if(this.state.password.length < 10){
 
-            alert('Password is too short!');
-            return;
+            store.addNotification({
+                title: "Password is not long enough!",
+                message: "It must contain 10 characters minimum.",
+                type: "danger",
+                insert: "top",
+                container: "top-center",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 2000,
+                    pauseOnHover: true
+                  }
+                
+              })
 
         } else if(this.state.password != this.state.repeatedPassword){
 
-            alert('Repeated password does not match!');
-            return;
+            store.addNotification({
+                title: "",
+                message: "Repeated password does not match.",
+                type: "danger",
+                insert: "top",
+                container: "top-center",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 2000,
+                    pauseOnHover: true
+                  }
+                
+              })
         } else {
 
             axios.post(`${serviceConfig.baseURL}/authenticationservice/api/auth/register/agent`,this.state).then(
-                (resp) => { window.location.href = "https://localhost:3000/" },
-                (resp) => { alert('error') }
+                (resp) => { 
+                    store.addNotification({
+                        title: "Success!",
+                        message: "Agent profile is created.",
+                        type: "success",
+                        insert: "top",
+                        container: "top-center",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 2000,
+                            pauseOnHover: true
+                          },
+                          onRemoval: (id, removedBy) => {
+                            window.location.href = "https://localhost:3000/"
+                          }
+                        
+                      })
+                 },
+                (resp) => {             
+                
+                        if(resp.response.data != null){
+                        store.addNotification({
+                            title: "",
+                            message: resp.response.data,
+                            type: "danger",
+                            insert: "top",
+                            container: "top-center",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 2000,
+                                pauseOnHover: true
+                              }
+                            
+                          })
+                        } else {
+                            store.addNotification({
+                                title: "Error",
+                                message: "Something went wrong",
+                                type: "danger",
+                                insert: "top",
+                                container: "top-center",
+                                animationIn: ["animated", "fadeIn"],
+                                animationOut: ["animated", "fadeOut"],
+                                dismiss: {
+                                    duration: 2000,
+                                    pauseOnHover: true
+                                  }
+                                
+                              })
+                        }
+                    }
             );
 
         }
@@ -103,7 +179,7 @@ class RegisterPageAgent extends React.Component{
                     <Form.Group as={Col} className="formRowRegL">
                     <Form.Label className="labelRegA">Password</Form.Label>
                     <Form.Control type="password" style={{background: "rgb(244, 245, 249)"}} placeholder="Password" id="password" name="password" onChange={this.handleChange} required/>
-                    <legend className="legendPass">Password should contain 8 characters minimum, at least one number and a special character.</legend>
+                    <legend className="legendPass">Password must contain 10 characters minimum, at least one uppercase and a lowercase letter and a number.</legend>
                 </Form.Group>
 
                     <Form.Group as={Col} className="formRowRegR">

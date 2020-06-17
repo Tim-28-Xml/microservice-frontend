@@ -13,6 +13,7 @@ import Select from 'react-select';
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import chroma from 'chroma-js';
+import { store } from 'react-notifications-component';
 
 
 
@@ -100,7 +101,22 @@ class HomePage extends React.Component{
                 
 
             },
-            (resp) => { alert('error ads') }
+            (resp) => { 
+                store.addNotification({
+                    title: "",
+                    message: "Error while loading ads!",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                    
+                  })
+             }
         );
     }
 
@@ -142,7 +158,20 @@ class HomePage extends React.Component{
     filterAds(){
 
         if(this.state.selectedPickupTime == '' || this.state.selectedReturnTime == '' || this.state.selectedCity == ''){
-            alert("You didnt enter all the fields");
+            store.addNotification({
+                title: "",
+                message: "You did not enter all the fields!",
+                type: "danger",
+                insert: "top",
+                container: "top-center",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 2000,
+                    pauseOnHover: true
+                  },
+                
+              })
             return;
         }
 
@@ -189,25 +218,16 @@ class HomePage extends React.Component{
 
         var dateArray = [];
         var currentDate = new Date(this.state.selectedPickupTime.getFullYear(),this.state.selectedPickupTime.getMonth(),this.state.selectedPickupTime.getDate());
-        //alert('pocetak'+currentDate); 
         var endDate = new Date(this.state.selectedReturnTime.getFullYear(),this.state.selectedReturnTime.getMonth(),this.state.selectedReturnTime.getDate());
-        //alert('kraj'+endDate); 
         while (currentDate <= endDate) {
                            
         dateArray.push((new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate()+1)).toISOString().substring(0,10));
-        //alert(currentDate.toISOString().substring(0,10))
         currentDate = currentDate.addDays(1);
         }
 
-      
-        
-        //alert(this.state.selectedPickupTime.toString().substring(0,10));
-        //alert(this.state.selectedPickupTime);
         var acutalpickup = new Date (this.state.selectedPickupTime.getFullYear(),this.state.selectedPickupTime.getMonth(),this.state.selectedPickupTime.getDate()+1);
         var acutalreturn = new Date (this.state.selectedReturnTime.getFullYear(),this.state.selectedReturnTime.getMonth(),this.state.selectedReturnTime.getDate()+1);
-        //alert('take:'+this.state.selectedPickupTime.toISOString().substring(0,10) + ' and return: ' +this.state.selectedReturnTime.toISOString().substring(0,10));
-
-        
+   
         
     
 
@@ -236,11 +256,7 @@ class HomePage extends React.Component{
                     console.log("datumi za "+ ad.carDTO.brand+ad.carDTO.model);                  
                     console.log(periodDateArray);
                     console.log(acutalpickup.toISOString().substring(0,10));
-                    
-                    
-                   //alert(periodDateArray.indexOf(acutalpickup.toISOString().substring(0,10)));
-                   //alert(periodDateArray[0]);
-                   //alert(periodDateArray.indexOf(acutalpickup.toISOString().substring(0,10)) !== -1);
+
 
                     if (periodDateArray.indexOf(acutalpickup.toISOString().substring(0,10),0) !== -1) {
 
