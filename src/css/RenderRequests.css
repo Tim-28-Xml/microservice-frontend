@@ -1,0 +1,53 @@
+.cardtoTitle{
+    font-size: 29px;
+}
+
+.cardTitleReq{
+    font-size: 12px;
+
+}
+
+.mainDivReq{
+    display: flex;
+    flex-direction: row;
+    font-size: large;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+}
+
+.firstDivReq{
+    display: flex;
+    flex-direction: column;
+    width: 13%;
+    margin-left: 5%;
+    
+}
+
+.secondDivReq{
+    display: flex;
+    flex-direction: column;
+    float: right;
+}
+
+.cardBodyReqsUser{
+    background-color: rgb(107, 125, 146);
+    color: rgb(224, 243, 247);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  
+}
+
+
+.cardBodyReqsUserAll{
+    background-color: rgb(210, 223, 226);
+    color: rgb(80, 94, 110);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 28px;
+    font-weight: 200;
+   
+    
+}
+
+.cardContainerReqsAll{
+    margin-bottom: 1.2%;
+    width: 60%;
+}

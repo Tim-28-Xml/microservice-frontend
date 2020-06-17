@@ -3,6 +3,7 @@ import {Button,Card,Row,Tab,Col,Nav} from "react-bootstrap"
 import axios from 'axios'
 import { store } from 'react-notifications-component';
 import {serviceConfig} from '../appSettings.js'
+import '../css/RenderRequests.css'
 
 class RenderRequests extends React.Component{
     constructor(props){
@@ -64,21 +65,52 @@ class RenderRequests extends React.Component{
             return this.state.requests.map((request, index) => {
                 
                 return(
-                    <Card key={request.id} className="cardContainerCart" >
+                    <Card key={request.id} className="cardContainerReqsAll" >
 
-                    <Card.Body className = "cardBodyCart">
+                    <Card.Body className = "cardBodyReqsUserAll">
 
-                        <Card.Title className="cardTitleCart" style={{textAlign:"center"}}> model brend
+                        <Card.Title className="cardTitleReq" style={{textAlign:"left"}}> Owner: {request.owner}
                         </Card.Title>
 
-                        <Card.Text onClick={this.view.bind(this,request.id)} className='cardText' style={{padding:'3px', cursor: 'pointer'}} >
-                            <Button variant="outline-info"  style={{marginRight:"3%"}}>Create request</Button>                          
-                        </Card.Text>       
+                        {this.renderAdsFromReqs(request)}
+
                     </Card.Body>
                 </Card>
                 )
                 
             })    
+        }
+
+        renderAdsFromReqs(request){
+            return request.ads.map((ad, index) => {
+                return(
+                    <Card key={request.id} className="cardContainerReqsUser" >
+
+                    <Card.Body className = "cardBodyReqsUser">
+
+                        <Card.Title className="cardTitleCart" style={{textAlign:"center"}}>
+                        {ad.carDTO.brand} {ad.carDTO.model}
+                        </Card.Title>
+
+                        <Card.Text onClick={this.view.bind(this,request.id)} className='cardText' style={{padding:'3px'}} >
+
+                            <div className="mainDivReq">
+                                <div className="firstDivReq">
+                                    <label>City: </label>
+                                    <label>Class: </label>
+                                    <label>Fuel: </label>
+                                </div> 
+                                <div className="secondDivReq">
+                                    <label> {ad.city} </label>
+                                    <label>{ad.carDTO.carClass} </label>
+                                    <label>{ad.carDTO.fuel} </label>
+                                </div>  
+                            </div>                 
+                        </Card.Text>       
+                    </Card.Body>
+                </Card>
+                )
+            })
         }
 
 
@@ -116,7 +148,7 @@ class RenderRequests extends React.Component{
                         <Tab.Pane eventKey="third">
                         {this.renderReqs()}
                         </Tab.Pane>
-                        <Tab.Pane eventKey="third">
+                        <Tab.Pane eventKey="fourth">
                         {this.renderReqs()}
                         </Tab.Pane>
                     </Tab.Content>

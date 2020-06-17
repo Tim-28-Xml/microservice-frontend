@@ -4,6 +4,7 @@ import axios from 'axios'
 import {serviceConfig} from '../appSettings.js'
 import { store } from 'react-notifications-component';
 import RenderRequests from './RenderRequests'
+import '../css/UserProfile.css'
 
 class UserProfile extends React.Component{
     constructor(props){
@@ -15,57 +16,15 @@ class UserProfile extends React.Component{
 
     }
 
-    /*
-    componentDidMount(){
-        this.getPendingRequests();
-    }
-
-
-    getPendingRequests(){
-        let token = localStorage.getItem('token');
-
-        const options = {
-            headers: { 'Authorization': 'Bearer ' + token }
-        };
-
-        axios.get(`${serviceConfig.baseURL}/user-requests`, options).then(
-            (resp) => {
-            
-                this.setState({
-                    requests: resp.data
-                })
-                console.log(this.state.requests)
-
-            },
-            (resp) => { 
-                store.addNotification({
-                    title: "",
-                    message: "Error while loading rent requests!",
-                    type: "danger",
-                    insert: "top",
-                    container: "top-center",
-                    animationIn: ["animated", "fadeIn"],
-                    animationOut: ["animated", "fadeOut"],
-                    dismiss: {
-                        duration: 2000,
-                        pauseOnHover: true
-                      },
-                    
-                  })
-             }
-        );
-    }
-
-*/
 
     render(){
         return(
             <div>
-                <h1>Hello user</h1>
+                <h3 className="legendReqs">You can view your rent requests based on their status here.</h3>
                 
-
-                <RenderRequests/>
-                
+                <div className="renderReqs">
+                    <RenderRequests/>
+                </div>            
             </div>
         )
     }
