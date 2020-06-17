@@ -11,6 +11,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment'
 import cart from '../icons/cart.svg'
+import RenderReviews from '../components/RenderReviews.js';
 import { store } from 'react-notifications-component';
 
 
@@ -28,6 +29,7 @@ class SingleAdPage extends React.Component {
             creator: '',
             myEventsList:[],
             permissions: [],
+            reviews: [],
 
 
         }
@@ -40,9 +42,41 @@ class SingleAdPage extends React.Component {
     componentWillMount() {
         this.getAd();
         this.getRole();
+        this.getReviews();
+    }
+
+    getReviews(){
+
+        let token = localStorage.getItem('token');
+
+        if(token !== null){
+
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token }
+        };
+
+        axios.get(`${serviceConfig.baseURL}/reviewservice/api/review/by-ad/${this.props.match.params.id}`, options).then(
+            (resp) => {
+
+                console.log("REviews: ");
+                console.log(resp.data);
+
+                this.setState({
+                    reviews : resp.data,
+                })
+
+            },
+            (resp) => { alert('error reviews ') }
+        );
+
+        }
+
+
+
     }
 
     getAd() {
+
         let token = localStorage.getItem('token');
 
         const options = {
@@ -54,24 +88,8 @@ class SingleAdPage extends React.Component {
 
                 this.setState({
                     car: resp.data.carDTO,
-                    userid: resp.data.userId,
+                    creator: resp.data.username
                 })
-
-                axios.get(`${serviceConfig.baseURL}/authenticationservice/api/auth/one/${resp.data.userId}`, options).then(
-                    (resp) => {
-                        console.log(resp.data);
-
-                        this.setState({
-                            creator: resp.data.username,
-                        })
-
-                    },
-                    (resp) => { alert('error user ') }
-                );
-
-
-
-
             },
             (resp) => { alert('error add') }
         );
@@ -146,21 +164,24 @@ class SingleAdPage extends React.Component {
                             </Carousel.Item>*/
     }
 
-    addToCart(id){
-        store.addNotification({
-            title: "Hola!",
-            message: "hola",
-            type: "success",
-            insert: "top",
-            container: "top-center",
-            animationIn: ["animated", "fadeIn"],
-            animationOut: ["animated", "fadeOut"],
-            dismiss: {
-                duration: 1000,
-                pauseOnHover: true
-              }
-            
-          });
+    addToCart(){
+        let token = localStorage.getItem('token');
+        let ad = JSON.stringify({ adId: this.props.match.params.id })
+
+        if(token !== null){
+
+            const options = {
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                },
+            };
+
+            axios.post(`${serviceConfig.baseURL}/adservice/shoppingcart`, ad, options).then(
+                    (response) => { console.log('success') },
+                    (response) => { console.log('error') }
+            );
+        }
     }
 
 
@@ -179,7 +200,7 @@ class SingleAdPage extends React.Component {
                     <Card.Title style={{ padding: '10px', textAlign: 'center', fontSize: '30px' }}>
                     {
                         this.state.permissions.includes('ORDER') &&
-                        <img src={cart} className="imgCartAdView" title="Add to shopping cart" onClick={this.addToCart.bind(this,this.state.ad)}></img>
+                        <img src={cart} className="imgCartAdView" title="Add to shopping cart" onClick={this.addToCart.bind(this)}></img>
                     }
                     {this.state.car.brand} {this.state.car.model}
                 </Card.Title>
@@ -265,7 +286,7 @@ class SingleAdPage extends React.Component {
 
 
                             </Carousel.Item>
-    }
+
 
                     </Carousel>
 
@@ -277,6 +298,9 @@ class SingleAdPage extends React.Component {
                 <div style={{ marginTop: '10px', marginBottom: '10px', padding: '15px' }}>
                         <img src={comments} style={{ height: '50px', width: '50px' }}></img>
                         <h2>REVIEWS &amp; RATINGS</h2>
+                        <div>
+                            <RenderReviews reviews={this.state.reviews}/>
+                        </div>
                     </div>
 
                 </div>

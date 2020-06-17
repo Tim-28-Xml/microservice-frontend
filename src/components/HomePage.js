@@ -175,7 +175,40 @@ class HomePage extends React.Component{
             return;
         }
 
-        var returnads = [];
+        var acutalpickup = new Date (this.state.selectedPickupTime.getFullYear(),this.state.selectedPickupTime.getMonth(),this.state.selectedPickupTime.getDate()+1);
+        var acutalreturn = new Date (this.state.selectedReturnTime.getFullYear(),this.state.selectedReturnTime.getMonth(),this.state.selectedReturnTime.getDate()+1);
+
+        var filterObject = {
+
+            startDate: acutalpickup.toISOString().substring(0,10),
+            endDate: acutalreturn.toISOString().substring(0,10),
+            city: this.state.selectedCity
+
+        }
+
+        console.log(filterObject);
+        
+
+        axios.post(`https://localhost:8443/adservice/api/ads/filter`,filterObject).then(
+            (resp) => {
+
+                console.log(resp.data);
+                
+
+                this.setState({
+
+                    ads : resp.data,
+
+                });
+                
+
+            },
+            (resp) => { alert('error filter') }
+        );
+
+
+
+        /*var returnads = [];
 
         Date.prototype.addDays = function(days) {
             this.setDate( this.getDate()  + days);
@@ -248,13 +281,11 @@ class HomePage extends React.Component{
                     }
 
                 });
-        }
+            }
             
-        });
+        });*/
 
-        this.setState({
-            ads : returnads,
-        })
+      
     
 
     }

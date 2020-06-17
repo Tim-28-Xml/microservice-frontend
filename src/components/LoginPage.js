@@ -48,22 +48,40 @@ class LoginPage extends React.Component{
 
                 window.location.href = "https://localhost:3000/"
 
-            },
-            (resp) => { 
-                store.addNotification({
-                    title: "Error",
-                    message: "Password or username is incorrect!",
-                    type: "danger",
-                    insert: "top",
-                    container: "top-center",
-                    animationIn: ["animated", "fadeIn"],
-                    animationOut: ["animated", "fadeOut"],
-                    dismiss: {
-                        duration: 2000,
-                        pauseOnHover: true
-                      }
-                    
-                  })
+            })
+            .catch((error) => { 
+                console.log(error.response)
+                if(error.response.data !== ""){
+                    store.addNotification({
+                        title: "Error",
+                        message: error.response.data,
+                        type: "danger",
+                        insert: "top",
+                        container: "top-center",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 2000,
+                            pauseOnHover: true
+                        }
+                        
+                    })
+                } else {
+                    store.addNotification({
+                        title: "Error",
+                        message: "Username or password is incorrect!",
+                        type: "danger",
+                        insert: "top",
+                        container: "top-center",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 2000,
+                            pauseOnHover: true
+                        }
+                        
+                    })
+                }
              }
         );
 
