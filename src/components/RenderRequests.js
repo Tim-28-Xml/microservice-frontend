@@ -214,7 +214,7 @@ class RenderRequests extends React.Component{
                         {ad.carDTO.brand} {ad.carDTO.model}
                         </Card.Title>
 
-                        <Card.Text onClick={this.view.bind(this,request.id)} className='cardText' style={{padding:'3px'}} >
+                        <Card.Text onClick={this.view.bind(this,ad.id)} className='cardText' style={{padding:'3px'}} >
 
                             <div className="mainDivReq">
                                 <div className="firstDivReq">

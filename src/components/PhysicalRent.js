@@ -43,69 +43,21 @@ class PhysicalRent extends React.Component {
             headers: { 'Authorization': 'Bearer ' + token }
         };
 
-        this.getId();
+        this.getAds();
 
         this.state.minEndDate = this.addDays(this.state.startDate, 1);
         this.state.endDate = this.state.minEndDate;
 
     }
 
-    getId() {
-
-
-        let token = localStorage.getItem('token');
-        let self = this;
-
-        if (token !== null) {
-
-            const options = {
-                headers: { 'Authorization': 'Bearer ' + token }
-            };
-
-            axios.get(`${serviceConfig.baseURL}/authenticationservice/api/users/get-id`, options).then(
-                (response) => this.onGetId(response.data),
-                (response) => { }
-            );
-        }
-
-    }
-
-    onGetId(id) {
-        let token = localStorage.getItem('token');
-        const options = {
-            headers: { 'Authorization': 'Bearer ' + token }
-        };
-
-        this.state.userId = id;
-        this.getAds(id);
-    }
-
-    onErrorHandler(resp) {
-        store.addNotification({
-            title: "",
-            message: "Something went wrong!",
-            type: "danger",
-            insert: "top",
-            container: "top-center",
-            animationIn: ["animated", "fadeIn"],
-            animationOut: ["animated", "fadeOut"],
-            dismiss: {
-                duration: 2000,
-                pauseOnHover: true
-              },
-            
-          })
-
-    }
-
-    getAds(userId) {
+    getAds() {
         let token = localStorage.getItem('token');
 
         const options = {
             headers: { 'Authorization': 'Bearer ' + token }
         };
 
-        axios.get(`https://localhost:8443/adservice/api/ads/my-ads/${userId}`).then(
+        axios.get(`https://localhost:8443/adservice/api/ads/my-ads`, options).then(
             (resp) => {
                 console.log(resp.data)
                 this.setState({
