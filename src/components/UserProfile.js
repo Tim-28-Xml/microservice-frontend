@@ -19,12 +19,13 @@ class UserProfile extends React.Component{
 
     render(){
         return(
-            <div>
-                <h3 className="legendReqs">You can view your rent requests based on their status here.</h3>
-                
+            <div>  
                 <div className="renderReqs">
+                    <h3 className="legendReqs">You can view your rent requests based on their status here. You have 12h to pay online for 
+                     reserved requests.</h3>
                     <RenderRequests/>
-                </div>            
+                </div>
+       
             </div>
         )
     }

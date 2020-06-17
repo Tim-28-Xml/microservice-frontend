@@ -21,11 +21,62 @@ class RenderRequests extends React.Component{
     }
 
     componentDidMount(){
-        this.getPendingRequests();
+        this.getRequests();
+    }
+
+    pay(requestId){
+        let token = localStorage.getItem('token');
+        let req = JSON.stringify({ reqId: requestId })
+
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json',    
+                    }
+        };
+
+        axios.post(`${serviceConfig.baseURL}/rentrequestservice/api/pay`, req, options).then(
+            (resp) => { 
+                store.addNotification({
+                    title: "Successfully paid!",
+                    message: "This request is now moved to paid ones.",
+                    type: "success",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                    onRemoval: (id, removedBy) => {
+                        this.getRequests();
+                      }
+                    
+                  })
+            },
+            (resp) => {
+                store.addNotification({
+                    title: "Error",
+                    message: "Paying is unsuccessful!",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                    
+                  })
+            }
+        );
+
     }
 
 
-    getPendingRequests(){
+    getRequests(){ 
+
         let token = localStorage.getItem('token');
 
         const options = {
@@ -34,10 +85,11 @@ class RenderRequests extends React.Component{
 
         axios.get(`${serviceConfig.baseURL}/user-requests`, options).then(
             (resp) => {
-            
+
                 this.setState({
                     requests: resp.data
                 })
+
                 console.log(this.state.requests)
 
             },
@@ -60,10 +112,12 @@ class RenderRequests extends React.Component{
         );
     }
 
-    renderReqs(){
 
+
+    renderPendingReqs(){
+        
             return this.state.requests.map((request, index) => {
-                
+                if(request.requestStatus === "PENDING"){
                 return(
                     <Card key={request.id} className="cardContainerReqsAll" >
 
@@ -77,9 +131,77 @@ class RenderRequests extends React.Component{
                     </Card.Body>
                 </Card>
                 )
+                }
                 
             })    
         }
+
+        renderPaidReqs(){
+            
+                return this.state.requests.map((request, index) => {
+                    if(request.requestStatus === "PAID"){
+                    return(
+                        <Card key={request.id} className="cardContainerReqsAll" >
+    
+                        <Card.Body className = "cardBodyReqsUserAll">
+    
+                            <Card.Title className="cardTitleReq" style={{textAlign:"left"}}> Owner: {request.owner}
+                            </Card.Title>
+    
+                            {this.renderAdsFromReqs(request)}
+    
+                        </Card.Body>
+                    </Card>
+                    )
+                    }
+                    
+                })    
+            }
+
+            renderCancelledReqs(){
+                
+                    return this.state.requests.map((request, index) => {
+                        if(request.requestStatus === "CANCELED"){
+                        return(
+                            <Card key={request.id} className="cardContainerReqsAll" >
+        
+                            <Card.Body className = "cardBodyReqsUserAll">
+        
+                                <Card.Title className="cardTitleReq" style={{textAlign:"left"}}> Owner: {request.owner}
+                                </Card.Title>
+        
+                                {this.renderAdsFromReqs(request)}
+        
+                            </Card.Body>
+                        </Card>
+                        )
+                        }
+                        
+                    })    
+                }
+
+                
+            renderReservedReqs(){
+                
+                    return this.state.requests.map((request, index) => {
+                        if(request.requestStatus === "RESERVED"){
+                        return(
+                            <Card key={request.id} className="cardContainerReqsAll" >
+        
+                            <Card.Body className = "cardBodyReqsUserAll">
+        
+                                <Card.Title className="cardTitleReq" style={{textAlign:"left"}}> Owner: {request.owner}
+                                </Card.Title>
+        
+                                {this.renderAdsFromReqs(request)}
+                                <Button variant = "outline-dark" onClick={this.pay.bind(this,request.id)} style={{float: 'right', marginTop: "1%"}}>Pay now</Button>
+                            </Card.Body>
+                        </Card>
+                        )
+                        }
+                        
+                    })    
+                }
 
         renderAdsFromReqs(request){
             return request.ads.map((ad, index) => {
@@ -139,17 +261,17 @@ class RenderRequests extends React.Component{
                     </Col>
                     <Col sm={9}>
                     <Tab.Content>
-                        <Tab.Pane eventKey="first">
-                        {this.renderReqs()}
+                    <Tab.Pane eventKey="first">
+                        {this.renderReservedReqs()}
                         </Tab.Pane>
                         <Tab.Pane eventKey="second">
-                        {this.renderReqs()}
+                        {this.renderPendingReqs()}
                         </Tab.Pane>
                         <Tab.Pane eventKey="third">
-                        {this.renderReqs()}
+                        {this.renderPaidReqs()}
                         </Tab.Pane>
                         <Tab.Pane eventKey="fourth">
-                        {this.renderReqs()}
+                        {this.renderCancelledReqs()}
                         </Tab.Pane>
                     </Tab.Content>
                     </Col>
