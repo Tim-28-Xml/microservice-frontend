@@ -13,7 +13,7 @@ import moment from 'moment'
 import cart from '../icons/cart.svg'
 import RenderReviews from '../components/RenderReviews.js';
 import { store } from 'react-notifications-component';
-
+import AdCalender from './AdCalender';
 
 const localizer = momentLocalizer(moment)
 
@@ -33,7 +33,8 @@ class SingleAdPage extends React.Component {
             user_paid:[],
             contains: false,
 
-
+            show: false,
+            ad: {}
         }
 
 
@@ -45,7 +46,7 @@ class SingleAdPage extends React.Component {
         this.getAd();
         this.getRole();
         this.getReviews();
-        
+
     }
 
     getReviews(){
@@ -91,7 +92,8 @@ class SingleAdPage extends React.Component {
 
                 this.setState({
                     car: resp.data.carDTO,
-                    creator: resp.data.username
+                    creator: resp.data.username,
+                    ad: resp.data
                 })
             },
             (resp) => { alert('error add') }
@@ -172,7 +174,7 @@ class SingleAdPage extends React.Component {
     getUserPaid(){
 
         if(this.state.permissions.includes('ROLE_USER')){
-           
+
             let token = localStorage.getItem('token');
             let self = this;
 
@@ -183,15 +185,15 @@ class SingleAdPage extends React.Component {
                 };
 
             axios.get(`${serviceConfig.baseURL}/rentrequestservice/api/my-paid-finished`, options).then(
-                (response) => { 
-                    
-                    this.setState({ user_paid : response.data, }); 
-                
+                (response) => {
+
+                    this.setState({ user_paid : response.data, });
+
                     response.data.forEach(paid => {
-                   
+
                         paid.ads.forEach(ad => {
 
-                            
+
 
                             if(ad == this.props.match.params.id ){
 
@@ -200,11 +202,11 @@ class SingleAdPage extends React.Component {
                                         });
                                         return;
                     }
-                    
+
                 });
-                   
+
                });
-            
+
             },
                 (response) => { alert('error')  }
         );
@@ -240,6 +242,10 @@ class SingleAdPage extends React.Component {
         console.log('state');
         console.log(this.state);
 
+
+    render() {
+            let {show, ad} = this.state;
+
         return (
 
             <div>
@@ -250,7 +256,7 @@ class SingleAdPage extends React.Component {
                     <Card.Title style={{ padding: '10px', textAlign: 'center', fontSize: '30px' }}>
                     {
                         this.state.permissions.includes('ORDER') &&
-                        <img src={cart} className="imgCartAdView" title="Add to shopping cart" onClick={this.addToCart.bind(this)}></img>
+                        <img src={cart} className="imgCartAdView" title="Add to shopping cart" onClick={() => {this.setState({show:true})}}></img>
                     }
                     {this.state.car.brand} {this.state.car.model}
                 </Card.Title>
@@ -372,7 +378,7 @@ class SingleAdPage extends React.Component {
 
 
 
-
+                <AdCalender show={show} ad={ad} handleClose={() => this.setState({show:false})}/>
             </div>
         )
 
