@@ -15,6 +15,7 @@ import PhysicalRent from './components/PhysicalRent'
 import UserProfile from './components/UserProfile'
 import PendingRequests from './components/PendingRequestsAgent'
 import ManageReviews from './components/ManageReviews.js';
+import CreatePricelist from './components/CreatePricelist.js';
 
 class Routes extends React.Component {
 
@@ -87,6 +88,13 @@ class Routes extends React.Component {
                 <div>
                     <Header />
                     <PendingRequests/>
+                </div>
+            
+            } />
+            <Route path='/create-pricelist' render={props =>
+                <div>
+                    <Header />
+                    <CreatePricelist></CreatePricelist>
                 </div>
             
             } />

@@ -128,6 +128,7 @@ class Header extends React.Component{
                     <a className="createAd" href="https://localhost:3000/create-ad">Create Ad</a>
                     <a className="physical" href="https://localhost:3000/physical-rent">My ads</a>
                     <a className="reqs" href="https://localhost:3000/pending/requests">Pending requests</a>
+                    <a className="pricelist" href="https://localhost:3000/create-pricelist">Create pricelist</a>
                     <Button title="Logout" variant="outline-light" style={{margin:'1% 7%',height:'40px',width:'40px'}} onClick={this.logout}><img src={logout} style={{height:'30px',width:'30px',marginTop:'-1%'}}></img></Button>
 
 
