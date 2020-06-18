@@ -30,6 +30,8 @@ class SingleAdPage extends React.Component {
             myEventsList:[],
             permissions: [],
             reviews: [],
+            user_paid:[],
+            contains: false,
 
 
         }
@@ -43,6 +45,7 @@ class SingleAdPage extends React.Component {
         this.getAd();
         this.getRole();
         this.getReviews();
+        
     }
 
     getReviews(){
@@ -148,6 +151,8 @@ class SingleAdPage extends React.Component {
             isLoggedIn: true,
             permissions: permissons,
          })
+
+         this.getUserPaid();
     }
 
 
@@ -162,6 +167,50 @@ class SingleAdPage extends React.Component {
 
 
                             </Carousel.Item>*/
+    }
+
+    getUserPaid(){
+
+        if(this.state.permissions.includes('ROLE_USER')){
+           
+            let token = localStorage.getItem('token');
+            let self = this;
+
+            if(token !== null){
+
+                const options = {
+                    headers: { 'Authorization': 'Bearer ' + token}
+                };
+
+            axios.get(`${serviceConfig.baseURL}/rentrequestservice/api/my-paid-finished`, options).then(
+                (response) => { 
+                    
+                    this.setState({ user_paid : response.data, }); 
+                
+                    response.data.forEach(paid => {
+                   
+                        paid.ads.forEach(ad => {
+
+                            
+
+                            if(ad == this.props.match.params.id ){
+
+                                    this.setState({
+                                         contains: true,
+                                        });
+                                        return;
+                    }
+                    
+                });
+                   
+               });
+            
+            },
+                (response) => { alert('error')  }
+        );
+
+         }
+        }
     }
 
     addToCart(){
@@ -188,7 +237,8 @@ class SingleAdPage extends React.Component {
 
 
     render() {
-
+        console.log('state');
+        console.log(this.state);
 
         return (
 
@@ -298,6 +348,21 @@ class SingleAdPage extends React.Component {
                 <div style={{ marginTop: '10px', marginBottom: '10px', padding: '15px' }}>
                         <img src={comments} style={{ height: '50px', width: '50px' }}></img>
                         <h2>REVIEWS &amp; RATINGS</h2>
+
+                        { this.state.contains == true &&
+
+                            <div>
+                            <Card>
+                                <Card.Title style={{marginTop:'10px',marginLeft:'20px'}}>Leave a review</Card.Title>
+                                <Card.Body>
+                                    <input type="text" style={{width:'80%',height:'150px'}}></input>
+                                    <br/>
+                                    <Button variant="outline-dark" style={{marginTop:'10px'}}>Submit</Button>
+                                </Card.Body>
+                            </Card>
+                            </div>
+
+                        }
                         <div>
                             <RenderReviews reviews={this.state.reviews}/>
                         </div>
