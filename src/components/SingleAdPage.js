@@ -13,7 +13,7 @@ import moment from 'moment'
 import cart from '../icons/cart.svg'
 import RenderReviews from '../components/RenderReviews.js';
 import { store } from 'react-notifications-component';
-
+import AdCalender from './AdCalender';
 
 const localizer = momentLocalizer(moment)
 
@@ -31,7 +31,8 @@ class SingleAdPage extends React.Component {
             permissions: [],
             reviews: [],
 
-
+            show: false,
+            ad: {}
         }
 
 
@@ -88,7 +89,8 @@ class SingleAdPage extends React.Component {
 
                 this.setState({
                     car: resp.data.carDTO,
-                    creator: resp.data.username
+                    creator: resp.data.username,
+                    ad: resp.data
                 })
             },
             (resp) => { alert('error add') }
@@ -164,31 +166,10 @@ class SingleAdPage extends React.Component {
                             </Carousel.Item>*/
     }
 
-    addToCart(){
-        let token = localStorage.getItem('token');
-        let ad = JSON.stringify({ adId: this.props.match.params.id })
-
-        if(token !== null){
-
-            const options = {
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json',
-                },
-            };
-
-            axios.post(`${serviceConfig.baseURL}/adservice/shoppingcart`, ad, options).then(
-                    (response) => { console.log('success') },
-                    (response) => { console.log('error') }
-            );
-        }
-    }
-
-
 
 
     render() {
-
+            let {show, ad} = this.state;
 
         return (
 
@@ -200,7 +181,7 @@ class SingleAdPage extends React.Component {
                     <Card.Title style={{ padding: '10px', textAlign: 'center', fontSize: '30px' }}>
                     {
                         this.state.permissions.includes('ORDER') &&
-                        <img src={cart} className="imgCartAdView" title="Add to shopping cart" onClick={this.addToCart.bind(this)}></img>
+                        <img src={cart} className="imgCartAdView" title="Add to shopping cart" onClick={() => {this.setState({show:true})}}></img>
                     }
                     {this.state.car.brand} {this.state.car.model}
                 </Card.Title>
@@ -307,7 +288,7 @@ class SingleAdPage extends React.Component {
 
 
 
-
+                <AdCalender show={show} ad={ad} handleClose={() => this.setState({show:false})}/>                                        
             </div>
         )
 
