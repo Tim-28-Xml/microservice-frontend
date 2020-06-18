@@ -5,7 +5,7 @@ import '../css/RenderAd.css'
 import cart from '../icons/cart.svg'
 import {serviceConfig} from '../appSettings.js'
 import axios from 'axios'
-import { store } from 'react-notifications-component';
+import AdCalender from './AdCalender';
 
 
 class RenderAd extends React.Component{
@@ -14,6 +14,8 @@ class RenderAd extends React.Component{
 
         this.state = {
             permissions: [],
+            show: false,
+            cartAd: {}
         }
 
         this.renderAdCards = this.renderAdCards.bind(this);
@@ -21,60 +23,6 @@ class RenderAd extends React.Component{
 
       view(id){
         window.location.href= `https://localhost:3000/ad/${id}`
-    }
-
-    addToCart(id){
-        let token = localStorage.getItem('token');
-        let self = this;
-        let ad = JSON.stringify({ adId: id })
-
-        if(token !== null){
-  
-            const options = {
-                headers: { 
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json',
-                },
-            };
-
-            axios.post(`${serviceConfig.baseURL}/adservice/shoppingcart`, ad, options).then(
-                    (response) => 
-                    { 
-                        store.addNotification({
-                            title: "Added to your cart!",
-                            message: "View your shopping cart content by clicking on its icon.",
-                            type: "success",
-                            insert: "top",
-                            container: "top-center",
-                            animationIn: ["animated", "fadeIn"],
-                            animationOut: ["animated", "fadeOut"],
-                            dismiss: {
-                                duration: 2000,
-                                pauseOnHover: true
-                              }
-                            })
-
-                     },
-                    (response) => 
-                    { 
-                        console.log(response.response)
-                        store.addNotification({
-                            title: "Already in!",
-                            message: "You have already ordered this car. Check your shopping cart.",
-                            type: "danger",
-                            insert: "top",
-                            container: "top-center",
-                            animationIn: ["animated", "fadeIn"],
-                            animationOut: ["animated", "fadeOut"],
-                            dismiss: {
-                                duration: 2000,
-                                pauseOnHover: true
-                              }
-                            })
-
-                     }
-            );
-        }
     }
 
 
@@ -122,7 +70,6 @@ class RenderAd extends React.Component{
 
     renderAdCards() {
         return this.props.ads.map((ad, index) => {
-            console.log(ad);
             
             
             return (
@@ -132,7 +79,7 @@ class RenderAd extends React.Component{
 
                         <Card.Title className="cardTitle" style={{textAlign:"left"}}>{ad.carDTO.brand} {ad.carDTO.model}
                             {  this.state.permissions.includes("ORDER") && 
-                                <img src={cart} className="imgCart" title="Add to shopping cart" onClick={this.addToCart.bind(this,ad.id)}></img> 
+                                <img src={cart} className="imgCart" title="Add to shopping cart" onClick={() => {this.setState({show:true, cartAd:ad})}}></img> 
                             }
 
                         </Card.Title>
@@ -155,8 +102,6 @@ class RenderAd extends React.Component{
 
 
     checkPhoto(ad){
-
-        console.log(ad.carDTO.files);
         
 
         if(ad.carDTO.files.lenght == undefined){
@@ -181,10 +126,12 @@ class RenderAd extends React.Component{
 }
 
     render() {
-        console.log(this.state.permissions)
+        const {show, cartAd} = this.state;
+
         return (
             <div className="renderCardsAds">
                 {this.renderAdCards()}
+                <AdCalender show={show} ad={cartAd} handleClose={() => this.setState({show:false})}/>
             </div>
         )
 

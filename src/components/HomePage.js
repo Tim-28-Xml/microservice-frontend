@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button,Card,Jumbotron,Container,Form,InputGroup} from "react-bootstrap"
+import {Button,Card,Jumbotron,Container,Form,InputGroup,Badge} from "react-bootstrap"
 import axios from 'axios'
 import  '../css/HomePage.css'
 import RenderAd from './RenderAd.js'
@@ -14,6 +14,8 @@ import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import chroma from 'chroma-js';
 import { store } from 'react-notifications-component';
+import {serviceConfig} from '../appSettings.js'
+import review from '../icons/customer.svg';
 
 
 
@@ -41,6 +43,11 @@ class HomePage extends React.Component{
             selectedReturnTime:'',
             allads:[],
             allcities:[],
+            isLoggedIn: false,
+            roles: [],
+            unapproved_reviews:[],
+            unapproved_reviews_size: '',
+
 
         }
 
@@ -68,11 +75,15 @@ class HomePage extends React.Component{
           /*this.state.startDate=new Date(this.state.today.getFullYear(), this.state.today.getMonth(), (this.state.today.getDate() + 2),8,0,0,0); 
           this.state.selectedPickupTime = this.state.startDate;*/
           //this.state.endDate=new Date(this.state.selectedPickupTime.getFullYear(), this.state.selectedPickupTime.getMonth(), (this.state.selectedPickupTime.getDate() + 1),8,0,0,0);  
-
+         
+         
         }
 
       componentDidMount() {
-        this.getAds();
+
+        this.getRole();
+        this.getAds();       
+        
     }
 
 
@@ -120,7 +131,7 @@ class HomePage extends React.Component{
         );
     }
 
-    /*getRole(){
+    getRole(){
 
         let token = localStorage.getItem('token');
         let self = this;
@@ -137,7 +148,30 @@ class HomePage extends React.Component{
             );
         }
 
-    }*/
+    }
+
+    changeState(resp) {
+        
+
+        var permissons = [];
+
+        resp.data.forEach(element => {
+            permissons.push(element.authority);
+        });
+
+
+        this.setState({
+            isLoggedIn: true,
+            roles: permissons,
+         })
+
+         console.log('resp in change state');
+         console.log(this.state.roles.includes('ROLE_ADMIN'));
+
+         if(this.state.roles.includes('ROLE_ADMIN')){
+             this.checkReviews();
+         }
+    }
 
     clearFilters(){
         this.setState({
@@ -207,87 +241,6 @@ class HomePage extends React.Component{
         );
 
 
-
-        /*var returnads = [];
-
-        Date.prototype.addDays = function(days) {
-            this.setDate( this.getDate()  + days);
-            return this;
-          };
-        
-
-        var dateArray = [];
-        var currentDate = new Date(this.state.selectedPickupTime.getFullYear(),this.state.selectedPickupTime.getMonth(),this.state.selectedPickupTime.getDate());
-        var endDate = new Date(this.state.selectedReturnTime.getFullYear(),this.state.selectedReturnTime.getMonth(),this.state.selectedReturnTime.getDate());
-        while (currentDate <= endDate) {
-                           
-        dateArray.push((new Date(currentDate.getFullYear(),currentDate.getMonth(),currentDate.getDate()+1)).toISOString().substring(0,10));
-        currentDate = currentDate.addDays(1);
-        }
-
-        var acutalpickup = new Date (this.state.selectedPickupTime.getFullYear(),this.state.selectedPickupTime.getMonth(),this.state.selectedPickupTime.getDate()+1);
-        var acutalreturn = new Date (this.state.selectedReturnTime.getFullYear(),this.state.selectedReturnTime.getMonth(),this.state.selectedReturnTime.getDate()+1);
-   
-        
-    
-
-        this.state.allads.forEach(ad => {
-
-            
-            console.log('od selekta' +this.state.selectedCity);
-            console.log(this.state.cities);
-            
-
-
-            if(ad.city == this.state.selectedCity){
-
-                ad.rentDates.forEach(period => {
-                    
-                    var periodDateArray = [];
-
-                    period.dates.forEach(el => {
-
-                        periodDateArray.push(el.date);
-                        
-                    });
-
-                    
-
-                    console.log("datumi za "+ ad.carDTO.brand+ad.carDTO.model);                  
-                    console.log(periodDateArray);
-                    console.log(acutalpickup.toISOString().substring(0,10));
-
-
-                    if (periodDateArray.indexOf(acutalpickup.toISOString().substring(0,10),0) !== -1) {
-
-                        if(periodDateArray.indexOf(acutalreturn.toISOString().substring(0,10),0) !== -1) {
-
-                        
-
-                            dateArray.forEach(date => {
-                                
-                                if(periodDateArray.indexOf(date) == -1){
-                                
-                                    
-                                    return;
-                                }
-                                
-                            });
-                            
-                            
-                        returnads.push(ad);
-
-                        }
-                    }
-
-                });
-            }
-            
-        });*/
-
-      
-    
-
     }
 
     handleChangeSelect(e){
@@ -296,6 +249,55 @@ class HomePage extends React.Component{
         
 
         this.setState({ selectedCity: e.value });
+
+    }
+
+    checkReviews(){
+
+
+            let token = localStorage.getItem('token');
+            let self = this;
+  
+            const options = {
+                headers: { 'Authorization': 'Bearer ' + token}
+            };
+
+            axios.get(`${serviceConfig.baseURL}/reviewservice/api/review/all-unapproved`, options).then(
+                
+                (response) => { 
+
+                    console.log('response from unapproved ads');
+                    console.log(response.data);
+
+                    const totalProps = Object.keys(response.data).length
+
+                        this.setState({
+
+                            unapproved_reviews_size: totalProps,
+                            unapproved_reviews: response.data,
+                        });
+                    
+                    
+                },
+                (response) => {
+
+                    store.addNotification({
+                        title: "",
+                        message: "Error while loading unapproved ads!",
+                        type: "danger",
+                        insert: "top",
+                        container: "top-center",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 2000,
+                            pauseOnHover: true
+                          },
+                        
+                      })
+
+                 }
+        );
 
     }
 
@@ -318,7 +320,13 @@ class HomePage extends React.Component{
      
      }
 
+     goToReviewManagePage(){
+        window.location.href="https://localhost:3000/managereviews";
+    }
+
     render(){
+
+
 
         const customStyles = {
             option: (provided, state) => ({
@@ -344,16 +352,39 @@ class HomePage extends React.Component{
             }
           }
 
+          
+
    
 
         return(
             <div>
-                <Jumbotron className="jubmotron" style={{marginTop:"0px", height:"250px",width:"100%",backgroundColor:"white"}}>
-            
-                
-                
-                
-                </Jumbotron>
+                <Jumbotron className="jubmotron" style={{marginTop:"0px", height:"250px",width:"100%",backgroundColor:"white"}}></Jumbotron>
+                {
+
+                this.state.roles.includes('ROLE_ADMIN') && this.state.unapproved_reviews_size !== 0 &&
+                <div>
+                        <Card className="reviewCard">
+                            
+                        <Card.Title style={{cursor:'pointer'}} onClick={this.goToReviewManagePage.bind(this)} ><img src={review} style={{width:'40px',height:'40px'}}></img> &nbsp; You have <Badge variant="primary">{this.state.unapproved_reviews_size} new </Badge> &nbsp;
+                        {
+                            this.state.unapproved_reviews_size > 1 &&
+                            <label>reviews</label>
+                        
+                        } 
+                        
+                        {
+                            this.state.unapproved_reviews_size <= 1 &&
+                            <label>review</label>
+
+                        }
+                        &nbsp;
+                        to approve/decline</Card.Title>
+                        </Card>
+                   
+                </div>
+                }   
+
+
                 
                 <Card className="searchCard" inline>
                     <div inline>

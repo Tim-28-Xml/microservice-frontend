@@ -2,9 +2,11 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 22px;
     color: rgb(91, 92, 94);
-    margin: 2% 0 2% 2%;
+    margin: 2% 0 4% 10%;
 }
 
 .renderReqs{
-    margin: 2% 0 2% 10%;
+    margin: 2% 2% 2% 4%;
+    width: 70%;
 }
+
