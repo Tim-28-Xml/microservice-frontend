@@ -4,7 +4,7 @@ import axios from 'axios';
 import Header from '../components/Header.js';
 import car1 from '../icons/slika1.jpeg';
 import car2 from '../icons/slika2.jpeg';
-import comments from '../icons/review (1).svg'
+import comments from '../icons/rating.svg'
 import { serviceConfig } from '../appSettings.js'
 import '../css/SingleAdPage.css'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
@@ -55,7 +55,7 @@ class SingleAdPage extends React.Component {
             headers: { 'Authorization': 'Bearer ' + token }
         };
 
-        axios.get(`${serviceConfig.baseURL}/reviewservice/api/review/by-ad/${this.props.match.params.id}`, options).then(
+        axios.get(`${serviceConfig.baseURL}/reviewservice/api/review/by-ad-approved/${this.props.match.params.id}`, options).then(
             (resp) => {
 
                 console.log("REviews: ");
