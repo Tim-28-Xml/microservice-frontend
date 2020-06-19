@@ -7,8 +7,10 @@ import clock from '../icons/clock.svg';
 import user from '../icons/location.svg';
 import chat from '../icons/speech-bubble.svg';
 import title from '../icons/title.svg';
+import ad from '../icons/ad.svg';
 import {serviceConfig} from '../appSettings.js'
 import { store } from 'react-notifications-component';
+import ReactStars from "react-rating-stars-component";
 
 class ManageReviews extends React.Component{
     constructor(props){
@@ -180,6 +182,12 @@ class ManageReviews extends React.Component{
     }
 
 
+    goToAdPage(id){
+       
+        window.location.href= `https://localhost:3000/ad/${id}`
+    }
+
+
     renderAdCards() {
 
             console.log(this.state.unapproved_reviews);
@@ -196,16 +204,39 @@ class ManageReviews extends React.Component{
 
                         <img src={title} style={{height:'50px',width:'50px',marginTop:'-1%',padding:'5px'}}></img>  {review.title}
                         <br/>
-                        <img src={clock} style={{height:'30px',width:'30px',marginTop:'-1%',padding:'7px'}}></img>
+                        
+                        <ReactStars
+                                count={5}
+                                size={24}
+                                half={true}
+                                emptyIcon={<i className="far fa-star"></i>}
+                                halfIcon={<i className="fa fa-star-half-alt"></i>}
+                                fullIcon={<i className="fa fa-star"></i>}
+                                color2={"#ffd700"}
+                                edit={false}
+                                value={review.rating}
+                            />  
+                        
+
+                            
+                            
+                                <img src={ad} style={{height:'30px',width:'30px',marginTop:'-1%',padding:'5px'}}></img>
+                                &nbsp;
+                                   <label style={{cursor:'pointer'}} onClick={this.goToAdPage.bind(this,review.ad_id)} >Click here to see ad</label>
+                                
+                            
+                            <br/>
+
+                        <img src={clock} style={{height:'30px',width:'30px',marginTop:'-1%',padding:'6px'}}></img>
                                 &nbsp; {review.time.substring(11,review.time.lenght)} 
                                <br/>
-                               <img src={user} style={{height:'30px',width:'30px',marginTop:'-1%',padding:'7px'}}></img>
+                               <img src={user} style={{height:'30px',width:'30px',marginTop:'-1%',padding:'6px'}}></img>
                                &nbsp;
                                {review.creator}
                                <br/>
                                <div style={{marginTop:'5px'}}>
                                    
-                                   <img src={chat} style={{height:'30px',width:'30px',marginTop:'-1%',padding:'7px'}}></img>
+                                   <img src={chat} style={{height:'30px',width:'30px',marginTop:'-1%',padding:'6px'}}></img>
                                    &nbsp;
                                 {review.content}
                                 </div>  
