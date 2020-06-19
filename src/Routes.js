@@ -15,6 +15,8 @@ import PhysicalRent from './components/PhysicalRent'
 import UserProfile from './components/UserProfile'
 import PendingRequests from './components/PendingRequestsAgent'
 import Messages from './components/Messages'
+import ManageReviews from './components/ManageReviews.js';
+import CreatePricelist from './components/CreatePricelist.js';
 
 class Routes extends React.Component {
 
@@ -38,6 +40,7 @@ class Routes extends React.Component {
             <Route path="/register/user"  component={RegisterPageUser}></Route>
             <Route path="/registrationrole" component={RegistrationRolePage}></Route>
             <Route path="/register/agent" component={RegisterPageAgent}></Route>
+            <Route path="/managereviews" component={ManageReviews}></Route>
             <Route path='/profile/admin' render={props =>
                     <div>
                         <Header />
@@ -93,6 +96,13 @@ class Routes extends React.Component {
                 <div>
                     
                     <Messages/>
+                </div>
+                }
+                />
+            <Route path='/create-pricelist' render={props =>
+                <div>
+                    <Header />
+                    <CreatePricelist></CreatePricelist>
                 </div>
             
             } />

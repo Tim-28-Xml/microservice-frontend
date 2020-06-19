@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Button, Card } from "react-bootstrap";
+import { Modal, Button, Card, Form } from "react-bootstrap";
 import basketicon from '../icons/basket.svg'
 import { store } from 'react-notifications-component';
 import {serviceConfig} from '../appSettings.js'
@@ -44,9 +44,7 @@ class ShoppingBasket  extends React.Component{
 
             axios.get(`${serviceConfig.baseURL}/adservice/shoppingcart`, options).then(
                     (response) => {
-                        this.sortAdsByOwner(response.data);
-                        //console.log(this.state.ads) 
-                    },
+                        this.setState({ ads: response.data })},
                     (response) => { 
                         store.addNotification({
                             title: "Error",
@@ -136,9 +134,57 @@ class ShoppingBasket  extends React.Component{
     }
 
     createRequest(adId){
+        
+    }
+
+
+    view(id){
+        window.location.href= `https://localhost:3000/ad/${id}`
+    }
+
+    handleCheck(e){
+        let {name, checked} = e.target;
+
+        this.setState({[name]: checked});
+    }
+
+
+    handleSubmit(e, owner){
+        e.preventDefault();
+
+        let ownerAds = []
+
+        this.state.ads.forEach(ad => {
+            if(ad.username === owner)
+                ownerAds.push(ad);
+        })
+
+        let checkedAds = ownerAds.filter((ad) => this.state[ad.id])
+        let adsWithDates = []
+        checkedAds.forEach(ad => {
+            let username = localStorage.getItem('username');
+            let x = ad.cartAdDates.filter(d => d.username === username);
+            x.forEach(el => {
+                adsWithDates.push({
+                    ad_id: ad.id,
+                    start: el.dateRange.startDate,
+                    end : el.dateRange.endDate
+                })
+            })
+        })
+
+        let body = {
+            owner,
+            creationTime: new Date(),
+            adsWithDates
+        }   
+
+        this.sendReq(body)
+
+    }
+
+    sendReq(body){
         let token = localStorage.getItem('token');
-        let self = this;
-        let ad = JSON.stringify({ adId: adId })
 
         if(token !== null){
   
@@ -146,10 +192,10 @@ class ShoppingBasket  extends React.Component{
                 headers: { 
                     'Authorization': 'Bearer ' + token,
                     'Content-Type': 'application/json',
-                },
+                }
             };
 
-            axios.post(`${serviceConfig.baseURL}/rentrequest/api`, ad, options).then(
+            axios.post(`${serviceConfig.baseURL}/api/rentrequest`, body, options).then(
                     (response) => {
                         store.addNotification({
                             title: "Rent request is created!",
@@ -168,7 +214,7 @@ class ShoppingBasket  extends React.Component{
                             }
                             
                           })
-
+                          window.location.reload();
                         },
                     (response) => { 
                         store.addNotification({
@@ -190,63 +236,57 @@ class ShoppingBasket  extends React.Component{
         }
     }
 
-
-    view(id){
-        window.location.href= `https://localhost:3000/ad/${id}`
-    }
-
-/*
-    separateAds(){
+    renderCartAds(owner){
         if(this.state.ads !== null){
-            
-            var name = '',
-            var bundle = [],
-            var num = 0,
+            let adsToRender = this.state.ads.filter(ad => ad.username === owner);
 
+            return adsToRender.map((ad, index) => {
 
-            this.state.ads.forEach(element, i => {
-                if(i === 0){
-                    name = element.username;
-                    continue;
-                } else {
-                    if(name === element.username){
-                        bundle.push(element);
-                        num += 1;
-                    } else {
-                        
-                    }
-                }
+                let username = localStorage.getItem('username');
+                let dateInfo = ad.cartAdDates.filter(el => el.username === username);
                 
-
-            });
-        }
-    }
-*/
-
-    renderCartAds(){
-        if(this.state.ads !== null){
-
-            return this.state.ads.map((ad, index) => {
-
                 return(
-                    <Card key={ad.carDTO.id} className="cardContainerCart" >
+                    <Card key={ad.carDTO.id} className="cardContainerCart">
 
                     <Card.Body className = "cardBodyCart">
 
                         <Card.Title className="cardTitleCart" style={{textAlign:"center"}}>{ad.carDTO.brand} {ad.carDTO.model}
                         <button onClick={this.removeAd.bind(this,ad.id)} variant="outline-dark" className="removeBtnCart" title="Remove from cart" >x</button>
-                        </Card.Title>
-
-                        <Card.Text onClick={this.view.bind(this,ad.id)} className='cardText' style={{padding:'3px', cursor: 'pointer'}} >
-                            {ad.username}
-                            <Button onClick={this.createRequest.bind(this,ad.carDTO)} variant="outline-info"  style={{marginRight:"3%"}}>Create request</Button>                          
-                        </Card.Text>       
+                        </Card.Title>    
+                        {dateInfo[0].dateRange.startDate} - {dateInfo[0].dateRange.endDate}
                     </Card.Body>
+
+                    <Form.Group controlId="formBasicCheckbox">
+                            <Form.Check type="checkbox" label="Add" name={ad.id} onChange={(e) => this.handleCheck(e)}/>
+                    </Form.Group>
                 </Card>
                 )
                 
             })    
         }
+    }
+
+    renderAdDivs(){
+        let owners = [];
+        this.state.ads.forEach(ad => owners.push(ad.username));
+        owners = [...new Set(owners)];
+
+        return owners.map(o => 
+            <div className="modalBodyCart" style={{background: "rgba(142, 213, 250,0.1)",padding:'5px'}}>
+                <Form onSubmit={(e) => this.handleSubmit(e, o)}>
+                    <Card.Header>
+                        <h5>Owner: {o}</h5>
+                    </Card.Header>
+                    <div style={{margin: "2%"}}>             
+                        {this.renderCartAds(o)}
+                    </div>
+                    <Card.Text className='cardText' style={{padding:'3px', cursor: 'pointer'}} >
+                        <Button variant="outline-info" type="submit"  style={{marginRight:"3%"}}>Create request</Button>                          
+                    </Card.Text>      
+                </Form>
+                <hr/>
+            </div>
+        );
     }
 
 
@@ -265,18 +305,15 @@ class ShoppingBasket  extends React.Component{
                  aria-labelledby="contained-modal-title-vcenter"
                  centered = "true"
                  style={{textAlign:'center'}}
+                 scrollable
                 
                 >
-                    <Modal.Header style={{background: "rgba(142, 213, 250,0.1)",textAlign:'center'}}>
+                    <Modal.Header style={{background: "rgba(142, 213, 250,0.1)",textAlign:'center'}} closeButton>
                            <h1 style={{color:'#1C78C0'}}>Shopping basket</h1> 
                     </Modal.Header>
 
                    
-                <Modal.Body className="modalBodyCart" style={{background: "rgba(142, 213, 250,0.1)",padding:'5px'}}>
-                <div style={{margin: "2%"}}>             
-                    {this.renderCartAds()}
-                </div>   
-                </Modal.Body>
+                {this.renderAdDivs()}
 
 
                 </Modal>

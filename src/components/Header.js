@@ -165,6 +165,7 @@ class Header extends React.Component{
                     { this.state.msg !== 0 && 
                         <label className="msgnumber">{this.state.msg}</label>
                     }
+                    <a className="pricelist" href="https://localhost:3000/create-pricelist">Create pricelist</a>
                     <Button title="Logout" variant="outline-light" style={{margin:'1% 7%',height:'40px',width:'40px'}} onClick={this.logout}><img src={logout} style={{height:'30px',width:'30px',marginTop:'-1%'}}></img></Button>
 
 
