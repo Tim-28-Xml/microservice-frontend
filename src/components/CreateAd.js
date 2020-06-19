@@ -27,6 +27,7 @@ class CreateAd extends React.Component {
         this.handleSelectTransmission = this.handleSelectTransmission.bind(this);
         this.handleSelectFuel = this.handleSelectFuel.bind(this);
         this.handleSelectCarClass = this.handleSelectCarClass.bind(this);
+        this.handleSelectPricelist = this.handleSelectPricelist.bind(this);
         this.handleChangeStartDate = this.handleChangeStartDate.bind(this);
         this.handleChangeEndDate = this.handleChangeEndDate.bind(this);
         this.handleChangeStartDateAnother = this.handleChangeStartDateAnother.bind(this);
@@ -44,11 +45,13 @@ class CreateAd extends React.Component {
             fuel: '',
             transmission: '',
             carClass: '',
+            pricelist: '',
             carClassList: [],
             transmissionList: [],
             fuelList: [],
             brandList: [],
             modelList: [],
+            pricelists: [],
             startDate: new Date(),
             endDate: new Date(),
             dateStringStart: '',
@@ -105,6 +108,11 @@ class CreateAd extends React.Component {
 
         axios.get(`${serviceConfig.baseURL}/adservice/codebook/brands`, options).then(
             (resp) => { this.setState({ brandList: resp.data }) },
+            (resp) => this.onErrorHandler(resp),
+        );
+
+        axios.get(`${serviceConfig.baseURL}/pricelists/all`, options).then(
+            (resp) => this.successPricelist(resp),
             (resp) => this.onErrorHandler(resp),
         );
     }
@@ -182,6 +190,16 @@ class CreateAd extends React.Component {
         this.handleClose();
     }
 
+    successPricelist(resp) {
+        var i;
+        var array = [];
+        for(i = 0; i<resp.data.length; i++) {
+            array.push(resp.data[i].name);
+        }
+
+        this.setState({ pricelists: array })
+    }
+
 
     handleClose() {
         this.setState({ show: false });
@@ -231,6 +249,10 @@ class CreateAd extends React.Component {
 
     handleSelectFuel(e) {
         this.setState({ fuel: e.value });
+    }
+
+    handleSelectPricelist(e) {
+        this.setState({ pricelist: e.value });
     }
 
     handleChangeStartDate = date => {
@@ -575,6 +597,20 @@ class CreateAd extends React.Component {
                             options={
 
                                 this.state.carClassList.map((type, i) => {
+                                    return { value: type, label: type };
+                                })
+                            }
+                        />
+                        <br />
+                        <br />
+                        <label htmlFor="pricelist">Pricelist</label>
+                        <Select
+                            className="selectoptions"
+                            style={{ width: "70%", marginBottom: "10px" }}
+                            onChange={this.handleSelectPricelist}
+                            value={this.state.pricelist.value}
+                            options={
+                                this.state.pricelists.map((type, i) => {
                                     return { value: type, label: type };
                                 })
                             }

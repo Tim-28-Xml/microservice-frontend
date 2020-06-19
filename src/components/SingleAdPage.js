@@ -23,7 +23,7 @@ class SingleAdPage extends React.Component {
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeRating = this.handleChangeRating.bind(this);
-        
+
 
         this.state = {
 
@@ -80,7 +80,7 @@ class SingleAdPage extends React.Component {
 
                     sum = sum + review.rating;
                     size = size+1;
-                    
+
                 });
 
                 var adRating = sum/size;
@@ -192,7 +192,7 @@ class SingleAdPage extends React.Component {
                             </Carousel.Item>*/
     }
 
-    
+
 
     getUserPaid(){
 
@@ -227,7 +227,7 @@ class SingleAdPage extends React.Component {
                                         return;
                     }
 
-                
+
 
                });
 
@@ -241,25 +241,25 @@ class SingleAdPage extends React.Component {
             (response) => {
 
                 console.log('response from my reviews');
-                
+
                 response.data.forEach(element => {
 
                     if(element == this.props.match.params.id){
 
                         this.setState({ can_leave_review : false,
-                        }); 
+                        });
 
                     }else {
 
                         this.setState({ can_leave_review : true,
-                        }); 
+                        });
 
                     }
-                    
+
                 });
 
-                
-            
+
+
         },
             (response) => { alert('error WITH my reviews')  }
     );
@@ -295,7 +295,7 @@ class SingleAdPage extends React.Component {
         this.setState({...this.state, [e.target.name]: e.target.value});
     }
 
-    
+
 
 
 
@@ -313,14 +313,14 @@ class SingleAdPage extends React.Component {
         var time = d.substring(15,25);
 
         var obj = { ad_id: this.props.match.params.id ,
-                    title: this.state.title,content: this.state.content,rating: this.state.submited_rating          
+                    title: this.state.title,content: this.state.content,rating: this.state.submited_rating
         }
 
         console.log('obj');
         console.log(obj);
 
         axios.post(`${serviceConfig.baseURL}/reviewservice/api/review/submit-review`,obj , options).then(
-            (response) => { 
+            (response) => {
                 store.addNotification({
                 title: "",
                 message: "Your review was successfully added!Our admin has to review it first before it can be published.",
@@ -333,8 +333,8 @@ class SingleAdPage extends React.Component {
                     duration: 2000,
                     pauseOnHover: true
                   },
-                
-              }) 
+
+              })
               window.location.reload();
             },
             (response) => { console.log('error') }
@@ -342,27 +342,21 @@ class SingleAdPage extends React.Component {
 
     }
 
-    
+
     handleChangeRating(e){
 
-        
+
         this.setState({
 
             submited_rating : e,
-            
+
         });
     }
 
 
 
     render() {
-
-         
-      
-        console.log('state');
-        console.log(this.state);
-
-        let {show, ad} = this.state;
+            let {show, ad} = this.state;
 
         return (
 
@@ -484,7 +478,7 @@ class SingleAdPage extends React.Component {
                                 color2={"#ffd700"}
                                 edit={false}
                                 value={this.state.rating}
-                            />   
+                            />
 
                         </div>
 
