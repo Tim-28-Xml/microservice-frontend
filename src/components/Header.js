@@ -12,6 +12,7 @@ import house from '../icons/homepage.png'
 import logout from '../icons/logout (1).png'
 import user from '../icons/user (3).png'
 import register from '../icons/plus.png'
+import message from '../icons/mail.svg'
 
 class Header extends React.Component{
     constructor(props){
@@ -23,6 +24,8 @@ class Header extends React.Component{
 
             isLoggedIn: false,
             roles: [],
+            msg: 0,
+            read: false
 
         }
     }
@@ -30,6 +33,13 @@ class Header extends React.Component{
     componentDidMount(){
 
         this.getRole();
+        this.getMsg();
+    }
+
+    componentDidUpdate(){
+        if(this.props.read !== this.state.msg){
+            this.getMsg();
+        }
     }
 
     getRole(){
@@ -47,6 +57,25 @@ class Header extends React.Component{
             axios.get(`${serviceConfig.baseURL}/authenticationservice/api/auth/role`, options).then(
                     (response) => { self.changeState(response) },
                     (response) => { }
+            );
+    }
+
+    }
+
+
+    getMsg(){
+        let token = localStorage.getItem('token');
+        let self = this;
+
+        if(token !== null){
+
+            const options = {
+                headers: { 'Authorization': 'Bearer ' + token}
+            };
+
+            axios.get(`${serviceConfig.baseURL}/chatservice/api/new`, options).then(
+                    (response) => { this.setState({msg: response.data})},
+                    (response) => { alert("error") }
             );
     }
 
@@ -112,11 +141,15 @@ class Header extends React.Component{
                 {
                     this.state.roles.includes('ROLE_USER') &&
                     <div className="headerButtonsUser">
-                    <a title="Home" className="btnHeaderHome" href="https://localhost:3000/"><img src={house} style={{height:'30px',width:'30px',marginTop:'-5px'}}></img></a>
-                    <a style={{width:'120px',margin:'2%'}} href="https://localhost:3000/create-ad">Create Ad</a>
-                    <a style={{width:'120px',margin:'2%'}} href="https://localhost:3000/physical-rent">My ads</a>
+                    <a title="Home" className="btnHeaderHome" href="https://localhost:3000/"><img src={house} style={{height:'30px',width:'30px',marginTop:'-15px'}}></img></a>
+                    <a style={{width:'165px',margin:'2%'}} href="https://localhost:3000/create-ad">Create Ad</a>
+                    <a style={{width:'165px',margin:'2%'}} href="https://localhost:3000/physical-rent">My ads</a>
                     <ShoppingBasket/>
-                    <a title="Profile" href="https://localhost:3000/profile/user" style={{margin:'2.5% 5%'}}><img src={user} style={{height:'30px',width:'30px',marginTop:'-10px'}}></img></a>
+                    <a title="Profile" href="https://localhost:3000/profile/user" style={{margin:'2% 4%'}}><img src={user} style={{height:'30px',width:'30px',marginTop:'-10px'}}></img></a>
+                    <a title="Messages" href="https://localhost:3000/messages" style={{margin:'2% 4%'}}><img src={message} style={{height:'30px',width:'30px',marginTop:'-10px'}}></img></a>
+                    { this.state.msg !== 0 && 
+                        <label className="msgnumber">{this.state.msg}</label>
+                    }
                     <Button title="Logout" variant="outline-light"  style={{width:'60px',marginLeft:'4px'}} onClick={this.logout}><img src={logout} style={{height:'30px',width:'30px',marginTop:'-5px'}}></img></Button>
                     </div>
                 }
@@ -128,6 +161,10 @@ class Header extends React.Component{
                     <a className="createAd" href="https://localhost:3000/create-ad">Create Ad</a>
                     <a className="physical" href="https://localhost:3000/physical-rent">My ads</a>
                     <a className="reqs" href="https://localhost:3000/pending/requests">Pending requests</a>
+                    <a title="Messages" href="https://localhost:3000/messages" style={{margin:'2% 4%'}}><img src={message} style={{height:'30px',width:'30px',marginTop:'-10px'}}></img></a>
+                    { this.state.msg !== 0 && 
+                        <label className="msgnumber">{this.state.msg}</label>
+                    }
                     <Button title="Logout" variant="outline-light" style={{margin:'1% 7%',height:'40px',width:'40px'}} onClick={this.logout}><img src={logout} style={{height:'30px',width:'30px',marginTop:'-1%'}}></img></Button>
 
 

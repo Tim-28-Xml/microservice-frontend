@@ -1,0 +1,54 @@
+.messages{
+    display: flex;
+    flex-direction: row;
+}
+
+.btnsMsg, .contentMsg{
+    margin: 3% 5% 5% 8%;
+    display: flex;
+    flex-direction: column;
+}
+
+.newMsg{
+    background-color: transparent;
+    outline: none;
+    border: none;
+}
+
+.contentDiv{
+    margin-top: 18%;
+    padding: 3% 14% 8% 14%;
+    background-color: rgb(238, 238, 238);
+}
+
+.inboxTitle{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgb(54, 64, 75);
+    font-size: 50px;
+    font-weight: 100;
+    
+}
+
+.nameBtnMsg{
+    
+    cursor: pointer;
+    border: none;
+    border-bottom: 1px solid rgb(65, 74, 82);
+    font-size: 25px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgb(65, 74, 82);
+    padding: 2% 10%;
+    margin: 4% 5%;
+}
+
+
+.nameBtnMsg:hover{
+    color: rgb(43, 183, 226);
+    border-bottom: 1px solid rgb(43, 189, 226);
+}
+
+.chatLegend{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgb(78, 82, 83);
+}
+

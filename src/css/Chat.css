@@ -1,0 +1,54 @@
+.renderMsgs{
+    width: 750px;
+    background-color: rgb(236, 243, 255);
+    padding: 18px;
+    margin: 15px 7px;
+    max-height: 480px;
+    overflow-y: auto;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.msngr{
+    margin-top: -20px;
+}
+
+.senderMsgs{
+    margin-bottom: 20px;
+}
+
+.myMsgs{
+    margin-bottom: 20px;
+    
+}
+
+.contentMsg{
+    font-size: 23px;
+}
+
+.timeMsg{
+    font-size: 18px;
+}
+
+.chatusr{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 26px;
+    text-align: center;
+    color: rgb(97, 116, 151);
+}
+
+.textfieldmsg{
+    resize: none;
+    font-size: 17px;
+    margin-left: 10px;
+
+}
+
+.btnSendMsg{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    margin-top: 0px;
+    margin-left: 10px;
+}

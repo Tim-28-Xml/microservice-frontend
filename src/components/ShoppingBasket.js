@@ -44,8 +44,9 @@ class ShoppingBasket  extends React.Component{
 
             axios.get(`${serviceConfig.baseURL}/adservice/shoppingcart`, options).then(
                     (response) => {
-                        this.setState({ ads: response.data })
-                        console.log(this.state.ads) },
+                        this.sortAdsByOwner(response.data);
+                        //console.log(this.state.ads) 
+                    },
                     (response) => { 
                         store.addNotification({
                             title: "Error",
@@ -64,6 +65,23 @@ class ShoppingBasket  extends React.Component{
                      }
             );
         }
+    }
+
+    sortAdsByOwner(ads){
+        ads.sort(function(ad1, ad2){
+            var nameA = ad1.username.toUpperCase();
+            var nameB = ad2.username.toUpperCase(); 
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+
+            return 0;
+
+        })
+        this.setState({ ads: ads });
     }
 
 
@@ -177,10 +195,39 @@ class ShoppingBasket  extends React.Component{
         window.location.href= `https://localhost:3000/ad/${id}`
     }
 
+/*
+    separateAds(){
+        if(this.state.ads !== null){
+            
+            var name = '',
+            var bundle = [],
+            var num = 0,
+
+
+            this.state.ads.forEach(element, i => {
+                if(i === 0){
+                    name = element.username;
+                    continue;
+                } else {
+                    if(name === element.username){
+                        bundle.push(element);
+                        num += 1;
+                    } else {
+                        
+                    }
+                }
+                
+
+            });
+        }
+    }
+*/
+
     renderCartAds(){
         if(this.state.ads !== null){
+
             return this.state.ads.map((ad, index) => {
-                
+
                 return(
                     <Card key={ad.carDTO.id} className="cardContainerCart" >
 
@@ -191,6 +238,7 @@ class ShoppingBasket  extends React.Component{
                         </Card.Title>
 
                         <Card.Text onClick={this.view.bind(this,ad.id)} className='cardText' style={{padding:'3px', cursor: 'pointer'}} >
+                            {ad.username}
                             <Button onClick={this.createRequest.bind(this,ad.carDTO)} variant="outline-info"  style={{marginRight:"3%"}}>Create request</Button>                          
                         </Card.Text>       
                     </Card.Body>
