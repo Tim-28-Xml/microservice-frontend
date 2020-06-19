@@ -44,8 +44,7 @@ class ShoppingBasket  extends React.Component{
 
             axios.get(`${serviceConfig.baseURL}/adservice/shoppingcart`, options).then(
                     (response) => {
-                        this.setState({ ads: response.data })
-                        console.log(this.state.ads) },
+                        this.setState({ ads: response.data })},
                     (response) => { 
                         store.addNotification({
                             title: "Error",
@@ -118,9 +117,57 @@ class ShoppingBasket  extends React.Component{
     }
 
     createRequest(adId){
+        
+    }
+
+
+    view(id){
+        window.location.href= `https://localhost:3000/ad/${id}`
+    }
+
+    handleCheck(e){
+        let {name, checked} = e.target;
+
+        this.setState({[name]: checked});
+    }
+
+
+    handleSubmit(e, owner){
+        e.preventDefault();
+
+        let ownerAds = []
+
+        this.state.ads.forEach(ad => {
+            if(ad.username === owner)
+                ownerAds.push(ad);
+        })
+
+        let checkedAds = ownerAds.filter((ad) => this.state[ad.id])
+        let adsWithDates = []
+        checkedAds.forEach(ad => {
+            let username = localStorage.getItem('username');
+            let x = ad.cartAdDates.filter(d => d.username === username);
+            x.forEach(el => {
+                adsWithDates.push({
+                    ad_id: ad.id,
+                    start: el.dateRange.startDate,
+                    end : el.dateRange.endDate
+                })
+            })
+        })
+
+        let body = {
+            owner,
+            creationTime: new Date(),
+            adsWithDates
+        }   
+
+        this.sendReq(body)
+
+    }
+
+    sendReq(body){
         let token = localStorage.getItem('token');
-        let self = this;
-        let ad = JSON.stringify({ adId: adId })
 
         if(token !== null){
   
@@ -128,10 +175,10 @@ class ShoppingBasket  extends React.Component{
                 headers: { 
                     'Authorization': 'Bearer ' + token,
                     'Content-Type': 'application/json',
-                },
+                }
             };
 
-            axios.post(`${serviceConfig.baseURL}/rentrequest/api`, ad, options).then(
+            axios.post(`${serviceConfig.baseURL}/api/rentrequest`, body, options).then(
                     (response) => {
                         store.addNotification({
                             title: "Rent request is created!",
@@ -150,7 +197,7 @@ class ShoppingBasket  extends React.Component{
                             }
                             
                           })
-
+                          window.location.reload();
                         },
                     (response) => { 
                         store.addNotification({
@@ -172,11 +219,6 @@ class ShoppingBasket  extends React.Component{
         }
     }
 
-
-    view(id){
-        window.location.href= `https://localhost:3000/ad/${id}`
-    }
-
     renderCartAds(owner){
         if(this.state.ads !== null){
             let adsToRender = this.state.ads.filter(ad => ad.username === owner);
@@ -185,7 +227,6 @@ class ShoppingBasket  extends React.Component{
 
                 let username = localStorage.getItem('username');
                 let dateInfo = ad.cartAdDates.filter(el => el.username === username);
-                console.log(dateInfo)
                 
                 return(
                     <Card key={ad.carDTO.id} className="cardContainerCart">
@@ -197,6 +238,10 @@ class ShoppingBasket  extends React.Component{
                         </Card.Title>    
                         {dateInfo[0].dateRange.startDate} - {dateInfo[0].dateRange.endDate}
                     </Card.Body>
+
+                    <Form.Group controlId="formBasicCheckbox">
+                            <Form.Check type="checkbox" label="Add" name={ad.id} onChange={(e) => this.handleCheck(e)}/>
+                    </Form.Group>
                 </Card>
                 )
                 
@@ -211,7 +256,7 @@ class ShoppingBasket  extends React.Component{
 
         return owners.map(o => 
             <div className="modalBodyCart" style={{background: "rgba(142, 213, 250,0.1)",padding:'5px'}}>
-                <Form>
+                <Form onSubmit={(e) => this.handleSubmit(e, o)}>
                     <Card.Header>
                         <h5>Owner: {o}</h5>
                     </Card.Header>
@@ -246,7 +291,7 @@ class ShoppingBasket  extends React.Component{
                  scrollable
                 
                 >
-                    <Modal.Header style={{background: "rgba(142, 213, 250,0.1)",textAlign:'center'}}>
+                    <Modal.Header style={{background: "rgba(142, 213, 250,0.1)",textAlign:'center'}} closeButton>
                            <h1 style={{color:'#1C78C0'}}>Shopping basket</h1> 
                     </Modal.Header>
 
