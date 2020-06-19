@@ -14,13 +14,16 @@ import cart from '../icons/cart.svg'
 import RenderReviews from '../components/RenderReviews.js';
 import { store } from 'react-notifications-component';
 import AdCalender from './AdCalender';
-
+import ReactStars from "react-rating-stars-component";
 const localizer = momentLocalizer(moment)
 
 
 class SingleAdPage extends React.Component {
     constructor(props) {
         super(props);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleChangeRating = this.handleChangeRating.bind(this);
+        
 
         this.state = {
 
@@ -32,6 +35,12 @@ class SingleAdPage extends React.Component {
             reviews: [],
             user_paid:[],
             contains: false,
+            title:'',
+            content:'',
+            rating:'',
+            can_leave_review: false,
+            submited_rating:'',
+
 
             show: false,
             ad: {}
@@ -64,9 +73,21 @@ class SingleAdPage extends React.Component {
 
                 console.log("REviews: ");
                 console.log(resp.data);
+                var sum= 0;
+                var size=0;
+
+                resp.data.forEach(review => {
+
+                    sum = sum + review.rating;
+                    size = size+1;
+                    
+                });
+
+                var adRating = sum/size;
 
                 this.setState({
                     reviews : resp.data,
+                    rating : adRating,
                 })
 
             },
@@ -171,6 +192,8 @@ class SingleAdPage extends React.Component {
                             </Carousel.Item>*/
     }
 
+    
+
     getUserPaid(){
 
         if(this.state.permissions.includes('ROLE_USER')){
@@ -187,15 +210,16 @@ class SingleAdPage extends React.Component {
             axios.get(`${serviceConfig.baseURL}/rentrequestservice/api/my-paid-finished`, options).then(
                 (response) => {
 
+                    console.log('response from paid');
+                    console.log(response.data);
+
+
                     this.setState({ user_paid : response.data, });
 
                     response.data.forEach(paid => {
 
-                        paid.ads.forEach(ad => {
 
-
-
-                            if(ad == this.props.match.params.id ){
+                            if(paid.ad_id == this.props.match.params.id ){
 
                                     this.setState({
                                          contains: true,
@@ -203,13 +227,45 @@ class SingleAdPage extends React.Component {
                                         return;
                     }
 
-                });
+                
 
                });
 
             },
                 (response) => { alert('error')  }
         );
+
+
+
+        axios.get(`${serviceConfig.baseURL}/reviewservice/api/review/my-reviews`, options).then(
+            (response) => {
+
+                console.log('response from my reviews');
+                
+                response.data.forEach(element => {
+
+                    if(element == this.props.match.params.id){
+
+                        this.setState({ can_leave_review : false,
+                        }); 
+
+                    }else {
+
+                        this.setState({ can_leave_review : true,
+                        }); 
+
+                    }
+                    
+                });
+
+                
+            
+        },
+            (response) => { alert('error WITH my reviews')  }
+    );
+
+
+
 
          }
         }
@@ -235,16 +291,78 @@ class SingleAdPage extends React.Component {
         }
     }
 
+    handleChange(e) {
+        this.setState({...this.state, [e.target.name]: e.target.value});
+    }
+
+    
+
+
+
+    submitReview(){
+
+        let token = localStorage.getItem('token');
+        const options = {
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json',
+            },
+        };
+
+        var d = Date(Date.now());
+        var time = d.substring(15,25);
+
+        var obj = { ad_id: this.props.match.params.id ,
+                    title: this.state.title,content: this.state.content,rating: this.state.submited_rating          
+        }
+
+        console.log('obj');
+        console.log(obj);
+
+        axios.post(`${serviceConfig.baseURL}/reviewservice/api/review/submit-review`,obj , options).then(
+            (response) => { 
+                store.addNotification({
+                title: "",
+                message: "Your review was successfully added!Our admin has to review it first before it can be published.",
+                type: "success",
+                insert: "top",
+                container: "top-center",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 2000,
+                    pauseOnHover: true
+                  },
+                
+              }) 
+              window.location.reload();
+            },
+            (response) => { console.log('error') }
+    );
+
+    }
+
+    
+    handleChangeRating(e){
+
+        
+        this.setState({
+
+            submited_rating : e,
+            
+        });
+    }
 
 
 
     render() {
+
+         
+      
         console.log('state');
         console.log(this.state);
 
-
-    render() {
-            let {show, ad} = this.state;
+        let {show, ad} = this.state;
 
         return (
 
@@ -354,18 +472,47 @@ class SingleAdPage extends React.Component {
                 <div style={{ marginTop: '10px', marginBottom: '10px', padding: '15px' }}>
                         <img src={comments} style={{ height: '50px', width: '50px' }}></img>
                         <h2>REVIEWS &amp; RATINGS</h2>
+                        <div>
 
-                        { this.state.contains == true &&
+                            <ReactStars
+                                count={5}
+                                size={24}
+                                half={true}
+                                emptyIcon={<i className="far fa-star"></i>}
+                                halfIcon={<i className="fa fa-star-half-alt"></i>}
+                                fullIcon={<i className="fa fa-star"></i>}
+                                color2={"#ffd700"}
+                                edit={false}
+                                value={this.state.rating}
+                            />   
+
+                        </div>
+
+                        { (this.state.contains == true && this.state.can_leave_review == true) &&
 
                             <div>
                             <Card>
                                 <Card.Title style={{marginTop:'10px',marginLeft:'20px'}}>Leave a review</Card.Title>
                                 <Card.Body>
-                                    <input type="text" style={{width:'80%',height:'150px'}}></input>
+                                    <label>Rate us</label>
+                                    <ReactStars
+                                        count={5}
+                                        onChange={this.handleChangeRating}
+                                        name="rating"
+                                        size={24}
+                                        half={true}
+                                        emptyIcon={<i className="far fa-star"></i>}
+                                        halfIcon={<i className="fa fa-star-half-alt"></i>}
+                                        fullIcon={<i className="fa fa-star"></i>}
+                                        color2={"#ffd700"}
+                                    />
+                                    <input onChange={this.handleChange} name="title" placeholder="Title" type="text" style={{width:'80%',marginBottom:'2%'}}></input>
+                                    <input onChange={this.handleChange} name="content" placeholder="Enter your review here" type="text" style={{width:'80%',height:'150px'}}></input>
                                     <br/>
-                                    <Button variant="outline-dark" style={{marginTop:'10px'}}>Submit</Button>
+                                    <Button onClick={this.submitReview.bind(this)} variant="outline-dark" style={{marginTop:'10px'}}>Submit</Button>
                                 </Card.Body>
                             </Card>
+
                             </div>
 
                         }
