@@ -237,12 +237,6 @@ class SingleAdPage extends React.Component {
 
 
 
-
-    render() {
-        console.log('state');
-        console.log(this.state);
-
-
     render() {
             let {show, ad} = this.state;
 

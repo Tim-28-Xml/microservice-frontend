@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Button, Card } from "react-bootstrap";
+import { Modal, Button, Card, Form } from "react-bootstrap";
 import basketicon from '../icons/basket.svg'
 import { store } from 'react-notifications-component';
 import {serviceConfig} from '../appSettings.js'
@@ -177,28 +177,54 @@ class ShoppingBasket  extends React.Component{
         window.location.href= `https://localhost:3000/ad/${id}`
     }
 
-    renderCartAds(){
+    renderCartAds(owner){
         if(this.state.ads !== null){
-            return this.state.ads.map((ad, index) => {
+            let adsToRender = this.state.ads.filter(ad => ad.username === owner);
+
+            return adsToRender.map((ad, index) => {
+
+                let username = localStorage.getItem('username');
+                let dateInfo = ad.cartAdDates.filter(el => el.username === username);
+                console.log(dateInfo)
                 
                 return(
-                    <Card key={ad.carDTO.id} className="cardContainerCart" >
+                    <Card key={ad.carDTO.id} className="cardContainerCart">
 
                     <Card.Body className = "cardBodyCart">
 
                         <Card.Title className="cardTitleCart" style={{textAlign:"center"}}>{ad.carDTO.brand} {ad.carDTO.model}
                         <button onClick={this.removeAd.bind(this,ad.id)} variant="outline-dark" className="removeBtnCart" title="Remove from cart" >x</button>
-                        </Card.Title>
-
-                        <Card.Text onClick={this.view.bind(this,ad.id)} className='cardText' style={{padding:'3px', cursor: 'pointer'}} >
-                            <Button onClick={this.createRequest.bind(this,ad.carDTO)} variant="outline-info"  style={{marginRight:"3%"}}>Create request</Button>                          
-                        </Card.Text>       
+                        </Card.Title>    
+                        {dateInfo[0].dateRange.startDate} - {dateInfo[0].dateRange.endDate}
                     </Card.Body>
                 </Card>
                 )
                 
             })    
         }
+    }
+
+    renderAdDivs(){
+        let owners = [];
+        this.state.ads.forEach(ad => owners.push(ad.username));
+        owners = [...new Set(owners)];
+
+        return owners.map(o => 
+            <div className="modalBodyCart" style={{background: "rgba(142, 213, 250,0.1)",padding:'5px'}}>
+                <Form>
+                    <Card.Header>
+                        <h5>Owner: {o}</h5>
+                    </Card.Header>
+                    <div style={{margin: "2%"}}>             
+                        {this.renderCartAds(o)}
+                    </div>
+                    <Card.Text className='cardText' style={{padding:'3px', cursor: 'pointer'}} >
+                        <Button variant="outline-info" type="submit"  style={{marginRight:"3%"}}>Create request</Button>                          
+                    </Card.Text>      
+                </Form>
+                <hr/>
+            </div>
+        );
     }
 
 
@@ -217,6 +243,7 @@ class ShoppingBasket  extends React.Component{
                  aria-labelledby="contained-modal-title-vcenter"
                  centered = "true"
                  style={{textAlign:'center'}}
+                 scrollable
                 
                 >
                     <Modal.Header style={{background: "rgba(142, 213, 250,0.1)",textAlign:'center'}}>
@@ -224,11 +251,7 @@ class ShoppingBasket  extends React.Component{
                     </Modal.Header>
 
                    
-                <Modal.Body className="modalBodyCart" style={{background: "rgba(142, 213, 250,0.1)",padding:'5px'}}>
-                <div style={{margin: "2%"}}>             
-                    {this.renderCartAds()}
-                </div>   
-                </Modal.Body>
+                {this.renderAdDivs()}
 
 
                 </Modal>

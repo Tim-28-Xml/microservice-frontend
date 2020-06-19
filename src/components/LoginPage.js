@@ -41,6 +41,7 @@ class LoginPage extends React.Component{
 
                 let self = this;
                 localStorage.setItem('token', resp.data.accessToken)
+                localStorage.setItem('username', resp.data.username)
 
                 const options = {
                     headers: { 'token': resp.data.accessToken}
