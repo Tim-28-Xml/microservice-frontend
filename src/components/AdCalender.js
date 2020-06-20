@@ -113,6 +113,7 @@ const AdCalender = ({show, handleClose, ad}) => {
                     (response) => 
                     {   
                         handleClose()
+                        window.location.reload();
                         store.addNotification({
                             title: "Added to your cart!",
                             message: "View your shopping cart content by clicking on its icon.",
