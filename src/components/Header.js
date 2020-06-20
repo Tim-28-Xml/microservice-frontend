@@ -157,16 +157,17 @@ class Header extends React.Component{
                 {
                     this.state.roles.includes('ROLE_AGENT') &&
                     <div className="headerButtonsAgent">
-                    <a  title="Home" style={{margin:'2% 7%'}} href="https://localhost:3000/"><img src={house} style={{height:'30px',width:'30px',marginTop:'0px'}}></img></a>
+                    <a  title="Home" style={{margin:'2% 4%'}} href="https://localhost:3000/"><img src={house} style={{height:'30px',width:'30px',marginTop:'0px'}}></img></a>
                     <a className="createAd" href="https://localhost:3000/create-ad">Create Ad</a>
                     <a className="physical" href="https://localhost:3000/physical-rent">My ads</a>
                     <a className="reqs" href="https://localhost:3000/pending/requests">Pending requests</a>
-                    <a title="Messages" href="https://localhost:3000/messages" style={{margin:'2% 4%'}}><img src={message} style={{height:'30px',width:'30px',marginTop:'-10px'}}></img></a>
+                    
+                    <a className="pricelist" href="https://localhost:3000/create-pricelist">Create pricelist</a>
+                    <a title="Messages" href="https://localhost:3000/messages" style={{margin:'2.3% 0%'}}><img src={message} style={{height:'30px',width:'30px',marginTop:'-10px'}}></img></a>
                     { this.state.msg !== 0 && 
                         <label className="msgnumber">{this.state.msg}</label>
                     }
-                    <a className="pricelist" href="https://localhost:3000/create-pricelist">Create pricelist</a>
-                    <Button title="Logout" variant="outline-light" style={{margin:'1% 7%',height:'40px',width:'40px'}} onClick={this.logout}><img src={logout} style={{height:'30px',width:'30px',marginTop:'-1%'}}></img></Button>
+                    <Button title="Logout" variant="outline-light" style={{margin:'1% 3%',height:'40px',width:'40px'}} onClick={this.logout}><img src={logout} style={{height:'30px',width:'30px',marginTop:'-1%'}}></img></Button>
 
 
                     </div>
