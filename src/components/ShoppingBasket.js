@@ -152,9 +152,6 @@ class ShoppingBasket  extends React.Component{
     handleSubmit(e, owner){
         e.preventDefault();
 
-        if(checkedAds.length === 0)
-            return;
-
         let ownerAds = []
 
         this.state.ads.forEach(ad => {

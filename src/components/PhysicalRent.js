@@ -83,7 +83,9 @@ class PhysicalRent extends React.Component {
         );
     }
 
-    rentByCreator() {
+    rentByCreator(e) {
+        e.preventDefault();
+
         let token = localStorage.getItem('token');
 
         const options = {
@@ -92,7 +94,7 @@ class PhysicalRent extends React.Component {
 
         var obj = {startDate: this.state.startDate, endDate: this.state.endDate, id: this.state.id}
         console.log(obj)
-        axios.post(`https://localhost:8443/adservice/api/ads/rent-creator`, obj, options).then(
+        axios.post(`https://localhost:8443/rent-creator`, obj, options).then(
             (resp) => this.onSuccessHandler(resp),
             (resp) => { 
                 store.addNotification({
@@ -131,8 +133,8 @@ class PhysicalRent extends React.Component {
 
         console.log(resp.data);
 
-        this.setState({ redirect: this.state.redirect === false });
-        window.location.reload();
+      //  this.setState({ redirect: this.state.redirect === false });
+      //  window.location.reload();
         this.handleClose();
     }
 
@@ -235,7 +237,7 @@ class PhysicalRent extends React.Component {
                                         </div>
                                     </div>
                                     <hr />
-                                    <Button type="submit" variant="info" className="dugme1dr">Create</Button>
+                                    <Button type="submit" variant="info" className="dugme1dr" onSubmit={this.rentByCreator}>Create</Button>
                                     <Button className="dugmad" variant="secondary" onClick={this.handleClose}>Close</Button>
 
                                 </form>
