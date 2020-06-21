@@ -4,6 +4,7 @@ import ReactDatePicker from 'react-datepicker';
 import axios from 'axios';
 import { store } from 'react-notifications-component';
 import {serviceConfig} from '../appSettings.js'
+import { min } from 'moment';
 
 const AdCalender = ({show, handleClose, ad}) => {
     const [startDate, setStartDate] = useState(new Date());
@@ -15,9 +16,9 @@ const AdCalender = ({show, handleClose, ad}) => {
 
     useEffect(() => {
         if(ad.rentDates !== undefined){
+            setDisabled(ad.rentDates);
             setMin(ad.rentDates);
             setMax(ad.rentDates);
-            setDisabled(ad.rentDates);
         }
     }, [ad.rentDates]);
 
@@ -29,6 +30,14 @@ const AdCalender = ({show, handleClose, ad}) => {
         })
 
         let minDate = new Date(Math.min.apply(null, startDates));
+        
+        
+        if(disabledDates.includes(minDate)){
+            while(!disabledDates.includes(minDate)){
+                minDate = new Date(minDate.getDate() + 1);
+            }
+        }
+
         setStartDate(minDate);
         setEndDate(minDate);
         setMinDate(minDate)
@@ -113,6 +122,7 @@ const AdCalender = ({show, handleClose, ad}) => {
                     (response) => 
                     {   
                         handleClose()
+                        window.location.reload();
                         store.addNotification({
                             title: "Added to your cart!",
                             message: "View your shopping cart content by clicking on its icon.",
@@ -168,6 +178,7 @@ const AdCalender = ({show, handleClose, ad}) => {
                         maxDate={maxDate}
                         startDate={startDate}
                         endDate={endDate}
+                        dateFormat="dd/MM/yyyy"
                     />
                 </Col>
                 <Col>
@@ -181,6 +192,7 @@ const AdCalender = ({show, handleClose, ad}) => {
                         excludeDates={disabledDates}
                         startDate={startDate}
                         endDate={endDate}
+                        dateFormat="dd/MM/yyyy"
                     />
                 </Col>
             </Modal.Body>

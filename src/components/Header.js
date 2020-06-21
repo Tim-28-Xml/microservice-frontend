@@ -31,13 +31,12 @@ class Header extends React.Component{
     }
 
     componentDidMount(){
-
         this.getRole();
         this.getMsg();
     }
 
     componentDidUpdate(){
-        if(this.props.read !== this.state.msg){
+        if(this.props.read !== this.state.msg && this.props.read !== undefined){
             this.getMsg();
         }
     }

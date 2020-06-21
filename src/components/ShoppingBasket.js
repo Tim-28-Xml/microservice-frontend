@@ -160,6 +160,10 @@ class ShoppingBasket  extends React.Component{
         })
 
         let checkedAds = ownerAds.filter((ad) => this.state[ad.id])
+
+        if(checkedAds.length == 0)
+            return;
+
         let adsWithDates = []
         checkedAds.forEach(ad => {
             let username = localStorage.getItem('username');
@@ -251,7 +255,9 @@ class ShoppingBasket  extends React.Component{
                     <Card.Body className = "cardBodyCart">
 
                         <Card.Title className="cardTitleCart" style={{textAlign:"center"}}>{ad.carDTO.brand} {ad.carDTO.model}
-                        <button onClick={this.removeAd.bind(this,ad.id)} variant="outline-dark" className="removeBtnCart" title="Remove from cart" >x</button>
+                        <button onClick={this.removeAd.bind(this,ad.id)} className="removeBtnCart" title="Remove from cart" >x</button>
+                        <Button onClick={this.view.bind(this,ad.id)} variant="outline-info" style={{float: 'left'}} title="Ad info" >i</Button>
+
                         </Card.Title>    
                         {dateInfo[0].dateRange.startDate} - {dateInfo[0].dateRange.endDate}
                     </Card.Body>

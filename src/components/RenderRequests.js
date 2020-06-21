@@ -4,6 +4,8 @@ import axios from 'axios'
 import { store } from 'react-notifications-component';
 import {serviceConfig} from '../appSettings.js'
 import '../css/RenderRequests.css'
+import moment from 'moment';
+import SecureCancelModal from'./SecureCancelModal'
 
 class RenderRequests extends React.Component{
     constructor(props){
@@ -34,7 +36,7 @@ class RenderRequests extends React.Component{
                     }
         };
 
-        axios.post(`${serviceConfig.baseURL}/rentrequestservice/api/pay`, req, options).then(
+        axios.post(`${serviceConfig.baseURL}/pay`, req, options).then(
             (resp) => { 
                 store.addNotification({
                     title: "Successfully paid!",
@@ -117,6 +119,7 @@ class RenderRequests extends React.Component{
     renderPendingReqs(){
         
             return this.state.requests.map((request, index) => {
+                var createdTime = moment(request.creationTime).format("DD/MM/YYYY HH:MM")
                 if(request.requestStatus === "PENDING"){
                 return(
                     <Card key={request.id} className="cardContainerReqsAll" >
@@ -124,6 +127,8 @@ class RenderRequests extends React.Component{
                     <Card.Body className = "cardBodyReqsUserAll">
 
                         <Card.Title className="cardTitleReq" style={{textAlign:"left"}}> Owner: {request.owner}
+                        <br/>
+                        Creation time: {createdTime}
                         </Card.Title>
 
                         {this.renderAdsFromReqs(request)}
@@ -184,6 +189,7 @@ class RenderRequests extends React.Component{
             renderReservedReqs(){
                 
                     return this.state.requests.map((request, index) => {
+                        var reservedTime = moment(request.reservedTime).format("DD/MM/YYYY HH:MM")
                         if(request.requestStatus === "RESERVED"){
                         return(
                             <Card key={request.id} className="cardContainerReqsAll" >
@@ -191,10 +197,13 @@ class RenderRequests extends React.Component{
                             <Card.Body className = "cardBodyReqsUserAll">
         
                                 <Card.Title className="cardTitleReq" style={{textAlign:"left"}}> Owner: {request.owner}
+                                <br/>
+                                Time of approval: {reservedTime}
                                 </Card.Title>
         
                                 {this.renderAdsFromReqs(request)}
-                                <Button variant = "outline-dark" onClick={this.pay.bind(this,request.id)} style={{float: 'right', marginTop: "1%"}}>Pay now</Button>
+                                <Button variant = "outline-success" onClick={this.pay.bind(this,request.id)} >Pay now</Button>
+                                <SecureCancelModal request={request.id} />
                             </Card.Body>
                         </Card>
                         )
@@ -205,6 +214,8 @@ class RenderRequests extends React.Component{
 
         renderAdsFromReqs(request){
             return request.ads.map((ad, index) => {
+                var startTime = moment(ad.start).format("DD/MM/YYYY")
+                var endTime = moment(ad.end).format("DD/MM/YYYY")
                 return(
                     <Card key={request.id} className="cardContainerReqsUser" >
 
@@ -218,11 +229,15 @@ class RenderRequests extends React.Component{
 
                             <div className="mainDivReq">
                                 <div className="firstDivReq">
+                                    <label>Start date: </label>
+                                    <label>End date: </label>
                                     <label>City: </label>
                                     <label>Class: </label>
                                     <label>Fuel: </label>
                                 </div> 
                                 <div className="secondDivReq">
+                                    <label>{startTime}</label>
+                                    <label>{endTime}</label>
                                     <label> {ad.city} </label>
                                     <label>{ad.carDTO.carClass} </label>
                                     <label>{ad.carDTO.fuel} </label>
