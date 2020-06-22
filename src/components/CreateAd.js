@@ -111,7 +111,7 @@ class CreateAd extends React.Component {
             (resp) => this.onErrorHandler(resp),
         );
 
-        axios.get(`${serviceConfig.baseURL}/pricelists/all`, options).then(
+        axios.get(`${serviceConfig.baseURL}/adservice/api/pricelists/all`, options).then(
             (resp) => this.successPricelist(resp),
             (resp) => this.onErrorHandler(resp),
         );
