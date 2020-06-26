@@ -52,7 +52,7 @@ class LoginPage extends React.Component{
             })
             .catch((error) => { 
                 console.log(error.response)
-                if(error.response.data !== "" || typeof error.response.data !== 'string'){
+                if(error.response.data !== "" || typeof error.response.data !== 'string' || !(error.response.data instanceof String)){
                     store.addNotification({
                         title: "Error",
                         message: error.response.data,
