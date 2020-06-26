@@ -337,7 +337,22 @@ class SingleAdPage extends React.Component {
               })
               window.location.reload();
             },
-            (response) => { console.log('error') }
+            (response) => { 
+                store.addNotification({
+                    title: "",
+                    message: "You cannot create review!",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+    
+                  })
+             }
     );
 
     }
