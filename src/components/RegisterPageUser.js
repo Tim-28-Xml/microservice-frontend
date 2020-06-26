@@ -38,6 +38,26 @@ class RegisterPageUser extends React.Component{
     SendRegisterRequest(e) {
         e.preventDefault();
 
+        if(this.state.username.includes("<") || this.state.username.includes(">")) {
+            return alert("attack not supported :D");
+        }
+
+        if(this.state.email.includes("<") || this.state.email.includes(">")) {
+            return alert("attack not supported :D");
+        }
+
+        if(this.state.name.includes("<") || this.state.name.includes(">")) {
+            return alert("attack not supported :D");
+        }
+
+        if(this.state.lastname.includes("<") || this.state.lastname.includes(">")) {
+            return alert("attack not supported :D");
+        }
+
+
+
+
+
         if(this.state.password.length < 10){
 
             store.addNotification({
