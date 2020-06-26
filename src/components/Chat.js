@@ -150,7 +150,7 @@ class Chat extends React.Component{
                 (resp) => { 
                     store.addNotification({
                         title: "Error",
-                        message: "Something gone wrong!",
+                        message: "You do not have a permission to send a message!",
                         type: "danger",
                         insert: "top",
                         container: "top-center",

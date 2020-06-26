@@ -151,7 +151,7 @@ class CreateAd extends React.Component {
     onErrorHandler(resp) {
         store.addNotification({
             title: "",
-            message: "There is an error.",
+            message: "You do not have a permission to create an ad!",
             type: "danger",
             insert: "top",
             container: "top-center",
