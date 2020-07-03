@@ -88,6 +88,8 @@ class RenderAd extends React.Component{
                             {this.checkPhoto(ad)}
                         </Card>
                         <Card.Text onClick={this.view.bind(this,ad.id)} className='cardText' style={{padding:'3px', cursor: 'pointer'}} >
+                                daily price: &nbsp; {ad.pricelistDto.dailyPrice}€
+                                <br />
                                fuel: &nbsp; {ad.carDTO.fuel}
                                <br/>
                                 class: &nbsp; {ad.carDTO.carClass}

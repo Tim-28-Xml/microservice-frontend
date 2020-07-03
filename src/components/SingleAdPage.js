@@ -40,10 +40,11 @@ class SingleAdPage extends React.Component {
             rating:'',
             can_leave_review: false,
             submited_rating:'',
+            pricelist: [],
 
 
             show: false,
-            ad: {}
+            ad: []
         }
 
 
@@ -110,17 +111,22 @@ class SingleAdPage extends React.Component {
 
         axios.get(`${serviceConfig.baseURL}/adservice/api/ads/one/${this.props.match.params.id}`).then(
             (resp) => {
-
+                //console.log(resp.data)
                 this.setState({
+                    ad: resp.data,
+                    pricelist: resp.data.pricelistDto,
                     car: resp.data.carDTO,
                     creator: resp.data.username,
-                    ad: resp.data
+                    
+                    
                 })
+                console.log(this.state)
+                
             },
             (resp) => { alert('error add') }
         );
 
-        console.log(this.state);
+        
 
 
 
@@ -161,7 +167,7 @@ class SingleAdPage extends React.Component {
     }
 
     changeState(resp) {
-        console.log(resp);
+        //console.log(resp);
 
         var permissons = [];
 
@@ -404,7 +410,8 @@ class SingleAdPage extends React.Component {
                                         <p>Kilometers limit:</p>
                                         <p>Number of child seats:</p>
                                         <p>Owner:</p>
-                                        <p>Price</p>
+                                        <p>Daily price:</p>
+                                        <p>Extra km price:</p>
 
                                         {
                                             this.state.car.cdw &&
@@ -426,6 +433,14 @@ class SingleAdPage extends React.Component {
                                         <p style={{marginTop:'20px'}}>{this.state.car.kmLimit}</p>
                                         <p style={{marginTop:'43px'}}>{this.state.car.childSeats}</p>
                                         <p style={{marginTop:'20px'}}>{this.state.creator}</p>
+                                        <p style={{marginTop:'18px'}}>{this.state.pricelist.dailyPrice}€</p>
+                                        <p style={{marginTop:'17px'}}>{this.state.pricelist.pricePerExtraKm}€</p>
+                                        {
+                                            this.state.car.cdw &&
+                                            <p style={{marginTop:'30px'}}>{this.state.pricelist.cdwPrice}€</p>
+                                        }
+                                        
+
 
 
                                     </div>

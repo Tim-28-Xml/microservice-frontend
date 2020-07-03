@@ -44,7 +44,9 @@ class ShoppingBasket  extends React.Component{
 
             axios.get(`${serviceConfig.baseURL}/adservice/shoppingcart`, options).then(
                     (response) => {
-                        this.setState({ ads: response.data })},
+                        this.setState({ ads: response.data })
+                        console.log(this.state)},
+                        
                     (response) => { 
                         store.addNotification({
                             title: "Error",
@@ -81,7 +83,6 @@ class ShoppingBasket  extends React.Component{
         })
         this.setState({ ads: ads });
     }
-
 
     removeAd(adId){
         let token = localStorage.getItem('token');
@@ -240,6 +241,10 @@ class ShoppingBasket  extends React.Component{
         }
     }
 
+    
+
+
+
     renderCartAds(owner){
         if(this.state.ads !== null){
             let adsToRender = this.state.ads.filter(ad => ad.username === owner);
@@ -260,6 +265,7 @@ class ShoppingBasket  extends React.Component{
 
                         </Card.Title>    
                         {dateInfo[0].dateRange.startDate} - {dateInfo[0].dateRange.endDate}
+                        
                     </Card.Body>
 
                     <Form.Group controlId="formBasicCheckbox">
