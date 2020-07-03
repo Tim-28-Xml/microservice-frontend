@@ -84,6 +84,11 @@ renderPeopleSelect(){
 
 sendMessage(){
 
+    if(this.state.content.includes("<") || this.state.content.includes(">")) {
+        return alert("attack not supported :D");
+    }
+
+
     if(this.state.receiver === "" || this.state.content === ""){
         store.addNotification({
             title: "Cannot send!",

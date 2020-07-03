@@ -26,6 +26,11 @@ class CreatePricelist extends React.Component {
             headers: { 'Authorization': 'Bearer ' + token }
         };
 
+        if(this.state.name.includes("<") || this.state.name.includes(">")) {
+            return alert("attack not supported :D");
+        }
+
+
         console.log(this.state);
 
         axios.post(`${serviceConfig.baseURL}/adservice/api/pricelists/save`, this.state, options).then(

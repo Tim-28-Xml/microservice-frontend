@@ -96,6 +96,11 @@ class Chat extends React.Component{
         console.log(this.state.content)
         console.log(this.state.receiver)
 
+        if(this.state.content.includes("<") || this.state.content.includes(">")) {
+            return alert("attack not supported :D");
+        }
+
+
         if(this.props.username === "" || this.state.content === ""){
             store.addNotification({
                 title: "Cannot send!",

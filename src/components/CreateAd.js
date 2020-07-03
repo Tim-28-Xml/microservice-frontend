@@ -136,11 +136,11 @@ class CreateAd extends React.Component {
         const options = {
             headers: { 'Authorization': 'Bearer ' + token }
         };
-
-            console.log("objekat pred bekend");
             console.log(this.state);
             
-            
+        if(this.state.city.includes("<") || this.state.city.includes(">")) {
+            return alert("attack not supported :D");
+        }
 
         axios.post(`${serviceConfig.baseURL}/adservice/api/ads/save`, this.state, options).then(
             (resp) => this.onSuccessHandler(resp),
