@@ -174,6 +174,8 @@ class PendingRequestsAgent extends React.Component{
                     <Card.Title className="cardTitleReq" style={{textAlign:"left"}}> Creator: {request.creator}
                     <br/>
                         Creation time: {createdTime}
+                        <br />
+                        Price: {request.price}€
                     </Card.Title>
 
                     {this.renderAdsFromReqs(request)}
