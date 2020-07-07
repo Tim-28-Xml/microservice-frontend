@@ -249,7 +249,7 @@ class HomePage extends React.Component{
     filterAds(){
 
         if(this.state.selectedPickupTime === '' || this.state.selectedReturnTime === '' || this.state.selectedCity === ''){
-            console.log(this.state.selectedModel)
+            console.log(this.state.selectedBrand)
             store.addNotification({
                 title: "",
                 message: "You did not enter all required the fields!",
@@ -289,14 +289,10 @@ class HomePage extends React.Component{
             cdw: this.state.cdw,
 
         }
-
-        console.log(filterObject);
         
 
-        axios.post(`https://localhost:8443/adservice/api/ads/filter`,filterObject).then(
+        axios.post(`https://localhost:8443/adservice/api/ads/filter`, filterObject).then(
             (resp) => {
-
-                console.log(resp.data);
                 
 
                 this.setState({
@@ -489,14 +485,11 @@ class HomePage extends React.Component{
                             <Select 
                             onChange={this.handleChangeSelect}
                             styles={customStyles}
-                            selected={this.state.selectedCity}
-                            name="selectedCity"
-                            placeholder="Pickup location"
                             class="select"
                             options={
                                 this.state.filterParameters.cities.map((city, index) => {
                 
-                                return {id:city,value:city, label:city};
+                                return {name:"selectedCity", value:city, label:city};
                                 })
                             }
                             
@@ -561,13 +554,11 @@ class HomePage extends React.Component{
                             onChange={this.handleChangeSelect}
                             styles={customStyles}
                             selected={this.state.selectedBrand}
-                            name="selectedBrand"
-                            placeholder="Brand"
                             class="select"
                             options={
                                 this.state.filterParameters.brands.map((brand, index) => {
                 
-                                return {id:brand,value:brand, label:brand};
+                                return {name:"selectedBrand", value:brand, label:brand};
                                 })
                             }
                             
@@ -578,13 +569,11 @@ class HomePage extends React.Component{
                             onChange={this.handleChangeSelect}
                             styles={customStyles}
                             selected={this.state.selectedModel}
-                            name="selectedModel"
-                            placeholder="Model"
                             class="select"
                             options={
                                 this.state.filterParameters.models.map((model, index) => {
                 
-                                return {id:model,value:model, label:model};
+                                return {name:"selectedModel", value:model, label:model};
                                 })
                             }
                             
@@ -599,13 +588,11 @@ class HomePage extends React.Component{
                             onChange={this.handleChangeSelect}
                             styles={customStyles}
                             selected={this.state.selectedFuel}
-                            name="selectedFuel"
-                            placeholder="Fuel type"
                             class="select"
                             options={
                                 this.state.filterParameters.fuel.map((fuel, index) => {
                 
-                                return {id:fuel,value:fuel, label:fuel};
+                                return {name:"selectedFuel", value:fuel, label:fuel};
                                 })
                             }
                             
@@ -616,13 +603,11 @@ class HomePage extends React.Component{
                             onChange={this.handleChangeSelect}
                             styles={customStyles}
                             selected={this.state.selectedTransmission}
-                            name="selectedTransmission"
-                            placeholder="Transmission type"
                             class="select"
                             options={
                                 this.state.filterParameters.transmission.map((transmission, index) => {
                 
-                                return {id:transmission,value:transmission, label:transmission};
+                                return {name:"selectedTransmission", value:transmission, label:transmission};
                                 })
                             }
                             
@@ -633,13 +618,11 @@ class HomePage extends React.Component{
                             onChange={this.handleChangeSelect}
                             styles={customStyles}
                             selected={this.state.selectedCarClass}
-                            name="selectedCarClass"
-                            placeholder="Car class"
                             class="select"
                             options={
                                 this.state.filterParameters.carClass.map((carClass, index) => {
                 
-                                return {id:carClass,value:carClass, label:carClass};
+                                return {name:"selectedCarClass",value:carClass, label:carClass};
                                 })
                             }
                             
@@ -650,13 +633,11 @@ class HomePage extends React.Component{
                             onChange={this.handleChangeSelect}
                             styles={customStyles}
                             selected={this.state.selectedChildSeats}
-                            name="selectedChildSeats"
-                            placeholder="Child seats"
                             class="select"
                             options={
                                 this.state.filterParameters.childSeats.map((seat, index) => {
                 
-                                return {id:seat,value:seat, label:seat};
+                                return {name:"selectedChildSeats",value:seat, label:seat};
                                 })
                             }
                             
