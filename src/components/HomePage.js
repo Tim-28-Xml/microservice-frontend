@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button,Card,Jumbotron,Container,Form,InputGroup,Badge,Pagination} from "react-bootstrap"
+import {Button,Card,Jumbotron,Container,Form,InputGroup,Badge,Pagination, Dropdown, DropdownButton} from "react-bootstrap"
 import axios from 'axios'
 import  '../css/HomePage.css'
 import RenderAd from './RenderAd.js'
@@ -32,7 +32,7 @@ class HomePage extends React.Component{
         this.state = {
 
             today: new Date(),
-            startDate: new Date((new Date()).getFullYear(), (new Date()).getMonth(), ((new Date()).getDate() + 2),8,0,0,0),
+            startDate: new Date((new Date()).getFullYear(), (new Date()).getMonth(), ((new Date()).getDate() + 1),8,0,0,0),
             selectedPickupTime: new Date((new Date()).getFullYear(), (new Date()).getMonth(), ((new Date()).getDate() + 2),8,0,0,0),
             minTime: moment('08:00', 'HH:mm'),
             maxTime: moment('20:00', 'HH:mm'),
@@ -63,7 +63,10 @@ class HomePage extends React.Component{
             filterParameters: [],
             advancedHidden: true,
             pageNumber: 0,
-            totalPages: 0
+            totalPages: 0,
+            isFilter: false,
+            sort: 'price',
+            pageAll: true
 
         }
 
@@ -237,8 +240,8 @@ class HomePage extends React.Component{
             selectedChildSeats:'',
             plannedMileage: 0,
             cdw: false,
-                
-        })
+            pageAll: true 
+        }, this.getAds())
 
         
     }
@@ -249,7 +252,7 @@ class HomePage extends React.Component{
     filterAds(){
 
         if(this.state.selectedPickupTime === '' || this.state.selectedReturnTime === '' || this.state.selectedCity === ''){
-            console.log(this.state.selectedBrand)
+ 
             store.addNotification({
                 title: "",
                 message: "You did not enter all required the fields!",
@@ -284,12 +287,13 @@ class HomePage extends React.Component{
             maxPrice: this.state.selectedMaxPrice,
             minKm: this.state.selectedMinKm,
             maxKm: this.state.selectedMaxKm,
-            childSeats: this.state.childSeats,
+            childSeats: this.state.selectedChildSeats,
             plannedKm: this.state.plannedMileage,
             cdw: this.state.cdw,
+            sort: this.state.sort,
+            page: this.state.pageNumber
 
         }
-        
 
         axios.post(`https://localhost:8443/adservice/api/ads/filter`, filterObject).then(
             (resp) => {
@@ -297,8 +301,9 @@ class HomePage extends React.Component{
 
                 this.setState({
 
-                    ads : resp.data,
-
+                    ads : resp.data.content,
+                    totalPages: resp.data.totalPages,
+                    pageAll: false
                 });
                 
 
@@ -310,13 +315,17 @@ class HomePage extends React.Component{
     }
 
     handleChangeSelect(e){   
-        console.log(e)
+        
         if(e.target !== undefined)
             var {name, value} = e.target;
         else
             var {name, value} = e;
 
-        this.setState({ [name]: value });
+
+        if(name !== 'sort')
+            this.setState({ [name]: value });
+        else
+            this.setState({ [name]: value }, this.filterAds);
 
     }
 
@@ -395,8 +404,10 @@ class HomePage extends React.Component{
     changePage(e, num){
         if(num > this.state.totalPages - 1 || num < 0 || num === this.state.pageNumber)
             return
-
-        this.setState({pageNumber: num}, this.getAds);
+        if(this.state.pageAll)
+            this.setState({pageNumber: num}, this.getAds);
+        else 
+            this.setState({pageNumber: num}, this.filterAds);    
     }
 
     renderPagination(){
@@ -529,9 +540,11 @@ class HomePage extends React.Component{
                                     timeCaption="Time"
                                 />
                             </div>
-
-                            </div>
                             
+                            </div>
+                            <div style={{fontFamily: 'Calibri', fontSize: '19px', color: 'gray'}}>
+                                <label>You must enter city, start and end date of renting to filter cars.</label>
+                            </div>
                             
                             <div className="searchAdv">
                                 <h2 className="advancedFilters">Advanced filters</h2>
@@ -710,6 +723,14 @@ class HomePage extends React.Component{
                                 onChange={(e) => this.setState({ cdw: e.target.checked })}
                             style={{margin: '10px 10px'}} />
                             <label>Collision Damage Waiver</label>
+                        </div>
+                        <div>
+                            <label className="sortLabel" >Sort by: </label>
+                            <select className="selectSort" onChange={this.handleChangeSelect} name="sort" value={this.state.sort}>
+                                <option value="price">Price</option>
+                                <option value="km">Km</option>
+                                <option value="rating">Rating</option>
+                            </select>
                         </div>
 
                         </div>

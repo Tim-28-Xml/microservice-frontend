@@ -95,4 +95,18 @@
     
   }
 
+  .selectSort{
+      padding: 0.2% 1%;
+      margin-left: 3%;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      font-size: 19px;
+      color: rgb(92, 92, 92);
+  }
+
+  .sortLabel{
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      font-size: 19px;
+      margin: 6px 0 6px 16px;
+      color: rgb(92, 92, 92);
+  }
 
