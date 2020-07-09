@@ -15,12 +15,12 @@ import ReactStars from "react-rating-stars-component";
 class ManageReviews extends React.Component{
     constructor(props){
 
-        super(props);    
+        super(props);
 
         this.renderAdCards = this.renderAdCards.bind(this);
 
         this.state = {
-            
+
                    unapproved_reviews:[],
                    unapproved_reviwes_size:'',
         }
@@ -30,14 +30,14 @@ class ManageReviews extends React.Component{
 
         let token = localStorage.getItem('token');
             let self = this;
-  
+
             const options = {
                 headers: { 'Authorization': 'Bearer ' + token}
             };
 
             axios.get(`${serviceConfig.baseURL}/reviewservice/api/review/all-unapproved`, options).then(
-                
-                (response) => { 
+
+                (response) => {
 
                     console.log('response from unapproved ads');
                     console.log(response.data);
@@ -49,8 +49,8 @@ class ManageReviews extends React.Component{
                             unapproved_reviews_size: totalProps,
                             unapproved_reviews: response.data,
                         });
-                    
-                    
+
+
                 },
                 (response) => {
 
@@ -66,7 +66,7 @@ class ManageReviews extends React.Component{
                             duration: 2000,
                             pauseOnHover: true
                           },
-                        
+
                       })
 
                  }
@@ -75,16 +75,16 @@ class ManageReviews extends React.Component{
 
     declineReview(id){
 
-        
+
         let token = localStorage.getItem('token');
         let self = this;
 
         const options = {
             headers: { 'Authorization': 'Bearer ' + token}
         };
-     
+
          axios.delete(`${serviceConfig.baseURL}/reviewservice/api/review/decline/${id}`, options).then(
-            (response) => { 
+            (response) => {
 
                 store.addNotification({
                     title: "",
@@ -98,12 +98,12 @@ class ManageReviews extends React.Component{
                         duration: 2000,
                         pauseOnHover: true
                       },
-                    
+
                   });
 
-                window.location.reload();    
-                
-                
+                window.location.reload();
+
+
             },(response) => {
 
                 store.addNotification({
@@ -118,7 +118,7 @@ class ManageReviews extends React.Component{
                         duration: 2000,
                         pauseOnHover: true
                       },
-                    
+
                   })
 
              }
@@ -130,16 +130,16 @@ class ManageReviews extends React.Component{
 
     approveReview(r){
 
-        
+
         let token = localStorage.getItem('token');
         let self = this;
 
         const options = {
             headers: { 'Authorization': 'Bearer ' + token}
         };
-     
+
          axios.put(`${serviceConfig.baseURL}/reviewservice/api/review/approve`,r, options).then(
-            (response) => { 
+            (response) => {
 
                 store.addNotification({
                     title: "",
@@ -153,12 +153,12 @@ class ManageReviews extends React.Component{
                         duration: 2000,
                         pauseOnHover: true
                       },
-                    
+
                   });
 
-                window.location.reload();    
-                
-                
+                window.location.reload();
+
+
             },(response) => {
 
                 store.addNotification({
@@ -173,7 +173,7 @@ class ManageReviews extends React.Component{
                         duration: 2000,
                         pauseOnHover: true
                       },
-                    
+
                   })
 
              }
@@ -183,7 +183,7 @@ class ManageReviews extends React.Component{
 
 
     goToAdPage(id){
-       
+
         window.location.href= `https://localhost:3000/ad/${id}`
     }
 
@@ -191,12 +191,12 @@ class ManageReviews extends React.Component{
     renderAdCards() {
 
             console.log(this.state.unapproved_reviews);
-            
+
 
         return this.state.unapproved_reviews.map((review, index) => {
 
-            
-            
+
+
             return (
                 <Card key={review.id} className="cardContainer" >
 
@@ -204,7 +204,7 @@ class ManageReviews extends React.Component{
 
                         <img src={title} style={{height:'50px',width:'50px',marginTop:'-1%',padding:'5px'}}></img>  {review.title}
                         <br/>
-                        
+
                         <ReactStars
                                 count={5}
                                 size={24}
@@ -215,34 +215,34 @@ class ManageReviews extends React.Component{
                                 color2={"#ffd700"}
                                 edit={false}
                                 value={review.rating}
-                            />  
-                        
+                            />
 
-                            
-                            
+
+
+
                                 <img src={ad} style={{height:'30px',width:'30px',marginTop:'-1%',padding:'5px'}}></img>
                                 &nbsp;
                                    <label style={{cursor:'pointer'}} onClick={this.goToAdPage.bind(this,review.ad_id)} >Click here to see ad</label>
-                                
-                            
+
+
                             <br/>
 
                         <img src={clock} style={{height:'30px',width:'30px',marginTop:'-1%',padding:'6px'}}></img>
-                                &nbsp; {review.time.substring(11,review.time.lenght)} 
+                                &nbsp; {review.time.substring(11,review.time.lenght)}
                                <br/>
                                <img src={user} style={{height:'30px',width:'30px',marginTop:'-1%',padding:'6px'}}></img>
                                &nbsp;
                                {review.creator}
                                <br/>
                                <div style={{marginTop:'5px'}}>
-                                   
+
                                    <img src={chat} style={{height:'30px',width:'30px',marginTop:'-1%',padding:'6px'}}></img>
                                    &nbsp;
                                 {review.content}
-                                </div>  
+                                </div>
                                 <br/>
-                                <Button variant="outline-danger" onClick={this.declineReview.bind(this,review.id)} >Decline</Button>  
-                                <Button variant="outline-primary" onClick={this.approveReview.bind(this,review)} style={{marginLeft:'10%'}}>Accept</Button>  
+                                <Button variant="outline-danger" onClick={this.declineReview.bind(this,review.id)} >Decline</Button>
+                                <Button variant="outline-primary" onClick={this.approveReview.bind(this,review)} style={{marginLeft:'10%'}}>Accept</Button>
                     </Card.Body>
                 </Card>
             )
@@ -251,7 +251,7 @@ class ManageReviews extends React.Component{
 
 
     render() {
-        
+
         return (
             <div>
                 <Header/>
