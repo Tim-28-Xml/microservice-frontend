@@ -2,7 +2,7 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 22px;
     color: rgb(91, 92, 94);
-    margin: 2% 0 4% 10%;
+    margin: 2% 4% 4% 10%;
 }
 
 .renderReqs{
@@ -10,3 +10,19 @@
     width: 70%;
 }
 
+.renderAdditional{
+    margin: 2% 2% 2% 4%;
+    width: 30%;
+}
+
+.userProfileDiv{
+    display: flex;
+    flex-direction: row;
+}
+
+.additionalPay{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 22px;
+    color: rgb(91, 92, 94);
+    margin: 2% 2% 4% 0%;
+}
