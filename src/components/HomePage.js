@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button,Card,Jumbotron,Container,Form,InputGroup,Badge} from "react-bootstrap"
+import {Button,Card,Jumbotron,Container,Form,InputGroup,Badge,Pagination, Dropdown, DropdownButton} from "react-bootstrap"
 import axios from 'axios'
 import  '../css/HomePage.css'
 import RenderAd from './RenderAd.js'
@@ -16,7 +16,8 @@ import chroma from 'chroma-js';
 import { store } from 'react-notifications-component';
 import {serviceConfig} from '../appSettings.js'
 import review from '../icons/customer.svg';
-
+import downarrow from '../icons/down-arrow.svg'
+import uparrow from '../icons/up-arrow.svg'
 
 
 
@@ -31,23 +32,41 @@ class HomePage extends React.Component{
         this.state = {
 
             today: new Date(),
-            startDate: new Date((new Date()).getFullYear(), (new Date()).getMonth(), ((new Date()).getDate() + 2),8,0,0,0),
+            startDate: new Date((new Date()).getFullYear(), (new Date()).getMonth(), ((new Date()).getDate() + 1),8,0,0,0),
             selectedPickupTime: new Date((new Date()).getFullYear(), (new Date()).getMonth(), ((new Date()).getDate() + 2),8,0,0,0),
             minTime: moment('08:00', 'HH:mm'),
             maxTime: moment('20:00', 'HH:mm'),
             now:'',
             endDate:'',
             ads: [],
-            cities:[],
             selectedCity:'',
             selectedReturnTime:'',
+            selectedModel:'',
+            selectedBrand:'',
+            selectedTransmission:'',
+            selectedFuel:'',
+            selectedCarClass:'',
+            selectedMinPrice: 0,
+            selectedMaxPrice:1000,
+            selectedMinKm:0,
+            selectedMaxKm:1000,
+            selectedChildSeats:'',
+            plannedMileage: 0,
+            cdw: false,
+
             allads:[],
-            allcities:[],
             isLoggedIn: false,
             roles: [],
             unapproved_reviews:[],
             unapproved_reviews_size: '',
 
+            filterParameters: [],
+            advancedHidden: true,
+            pageNumber: 0,
+            totalPages: 0,
+            isFilter: false,
+            sort: 'price',
+            pageAll: true
 
         }
 
@@ -82,7 +101,8 @@ class HomePage extends React.Component{
       componentDidMount() {
 
         this.getRole();
-        this.getAds();       
+        this.getAds();
+        this.getFilterParameteres();       
         
     }
 
@@ -94,19 +114,20 @@ class HomePage extends React.Component{
             headers: { 'Authorization': 'Bearer ' + token }
         };
 
-        axios.get(`https://localhost:8443/adservice/api/ads/all`).then(
+        axios.get(`https://localhost:8443/adservice/api/ads/all/pageable?page=${this.state.pageNumber}`).then(
             (resp) => {
 
                 var cities = [];
 
-                resp.data.forEach(ad => {
+                resp.data.content.forEach(ad => {
                     cities.push(ad.city);
                 });
             
                 this.setState({
-                    ads: resp.data,
-                    allads: resp.data,
-                    cities: cities,
+                    ads: resp.data.content,
+                    allads: resp.data.content,
+                    cities,
+                    totalPages: resp.data.totalPages
                 })
 
                 
@@ -150,6 +171,33 @@ class HomePage extends React.Component{
 
     }
 
+    getFilterParameteres(){
+        let token = localStorage.getItem('token');
+        let self = this;
+
+
+  
+            const options = {
+                headers: { 'Authorization': 'Bearer ' + token}
+            };
+
+            axios.get(`https://localhost:8443/adservice/api/ads/filter/parameters`, options).then(
+                    (response) => { 
+                        this.setState({
+                            filterParameters: response.data,
+                            selectedMinPrice: response.data.minPrice,
+                            selectedMaxPrice: response.data.maxPrice,
+                            selectedMaxKm: response.data.maxKm,
+                            selectedMinKm: response.data.minKm
+                        })
+                        console.log(this.state.filterParameters);
+
+                     },
+                    (response) => {alert('Please log in.')}
+            );
+        
+    }
+
     changeState(resp) {
         
 
@@ -180,8 +228,20 @@ class HomePage extends React.Component{
             selectedPickupTime: new Date((new Date()).getFullYear(), (new Date()).getMonth(), ((new Date()).getDate() + 2),8,0,0,0),
             selectedReturnTime:'',   
             selectedCity:'',
-                
-        })
+            selectedModel:'',
+            selectedBrand:'',
+            selectedTransmission:'',
+            selectedFuel:'',
+            selectedCarClass:'',
+            selectedMinPrice: this.state.filterParameters.minPrice,
+            selectedMaxPrice: this.state.filterParameters.maxPrice,
+            selectedMinKm: this.state.filterParameters.minKm,
+            selectedMaxKm: this.state.filterParameters.maxKm,
+            selectedChildSeats:'',
+            plannedMileage: 0,
+            cdw: false,
+            pageAll: true 
+        }, this.getAds())
 
         
     }
@@ -191,10 +251,11 @@ class HomePage extends React.Component{
 
     filterAds(){
 
-        if(this.state.selectedPickupTime == '' || this.state.selectedReturnTime == '' || this.state.selectedCity == ''){
+        if(this.state.selectedPickupTime === '' || this.state.selectedReturnTime === '' || this.state.selectedCity === ''){
+ 
             store.addNotification({
                 title: "",
-                message: "You did not enter all the fields!",
+                message: "You did not enter all required the fields!",
                 type: "danger",
                 insert: "top",
                 container: "top-center",
@@ -216,23 +277,33 @@ class HomePage extends React.Component{
 
             startDate: acutalpickup.toISOString().substring(0,10),
             endDate: acutalreturn.toISOString().substring(0,10),
-            city: this.state.selectedCity
+            city: this.state.selectedCity,
+            model: this.state.selectedModel,
+            brand: this.state.selectedBrand,
+            transmission: this.state.selectedTransmission,
+            fuel: this.state.selectedFuel,
+            carClass: this.state.selectedCarClass,
+            minPrice: this.state.selectedMinPrice,
+            maxPrice: this.state.selectedMaxPrice,
+            minKm: this.state.selectedMinKm,
+            maxKm: this.state.selectedMaxKm,
+            childSeats: this.state.selectedChildSeats,
+            plannedKm: this.state.plannedMileage,
+            cdw: this.state.cdw,
+            sort: this.state.sort,
+            page: this.state.pageNumber
 
         }
 
-        console.log(filterObject);
-        
-
-        axios.post(`https://localhost:8443/adservice/api/ads/filter`,filterObject).then(
+        axios.post(`https://localhost:8443/adservice/api/ads/filter`, filterObject).then(
             (resp) => {
-
-                console.log(resp.data);
                 
 
                 this.setState({
 
-                    ads : resp.data,
-
+                    ads : resp.data.content,
+                    totalPages: resp.data.totalPages,
+                    pageAll: false
                 });
                 
 
@@ -243,12 +314,18 @@ class HomePage extends React.Component{
 
     }
 
-    handleChangeSelect(e){
-
-        console.log("e"+e.value);
+    handleChangeSelect(e){   
         
+        if(e.target !== undefined)
+            var {name, value} = e.target;
+        else
+            var {name, value} = e;
 
-        this.setState({ selectedCity: e.value });
+
+        if(name !== 'sort')
+            this.setState({ [name]: value });
+        else
+            this.setState({ [name]: value }, this.filterAds);
 
     }
 
@@ -324,6 +401,29 @@ class HomePage extends React.Component{
         window.location.href="https://localhost:3000/managereviews";
     }
 
+    changePage(e, num){
+        if(num > this.state.totalPages - 1 || num < 0 || num === this.state.pageNumber)
+            return
+        if(this.state.pageAll)
+            this.setState({pageNumber: num}, this.getAds);
+        else 
+            this.setState({pageNumber: num}, this.filterAds);    
+    }
+
+    renderPagination(){
+        let paginationElements = [];
+
+        for (let index = 0; index < this.state.totalPages; index++) {
+            if(index === this.state.pageNumber)
+                paginationElements.push(<Pagination.Item key={index} active>{index+1}</Pagination.Item>)
+            else
+                paginationElements.push(<Pagination.Item key={index} onClick={(e) => this.changePage(e, index)}>{index+1}</Pagination.Item>)
+                      
+        }
+
+        return paginationElements;
+    }
+
     render(){
 
 
@@ -386,25 +486,27 @@ class HomePage extends React.Component{
 
 
                 
-                <Card className="searchCard" inline>
-                    <div inline>
+                <Card className="searchCard" >
+                    <div >
                         <InputGroup>
-                    <Select 
-                    onChange={this.handleChangeSelect}
-                    styles={customStyles}
-                    selected={this.state.selectedCity}
-                    placeholder="Pickup location"
-                    class="select"
-                    options={
-                        this.state.cities.map((city, index) => {
-        
-                        return {id:city,value:city, label:city};
-                         })
-                       }
-                    >
+                        <div className="searchDivBig">
+                        <div className="searchFirst">
 
-
-                    </Select>
+                        { this.state.filterParameters.cities !== undefined && 
+                            <Select 
+                            onChange={this.handleChangeSelect}
+                            styles={customStyles}
+                            class="select"
+                            options={
+                                this.state.filterParameters.cities.map((city, index) => {
+                
+                                return {name:"selectedCity", value:city, label:city};
+                                })
+                            }
+                            
+                            />
+                        }
+                        
 
                     
                             <div style={{marginTop:'15px',marginLeft:'3%'}}>
@@ -438,16 +540,223 @@ class HomePage extends React.Component{
                                     timeCaption="Time"
                                 />
                             </div>
+                            
+                            </div>
+                            <div style={{fontFamily: 'Calibri', fontSize: '19px', color: 'gray'}}>
+                                <label>You must enter city, start and end date of renting to filter cars.</label>
+                            </div>
+                            
+                            <div className="searchAdv">
+                                <h2 className="advancedFilters">Advanced filters</h2>
+                                { this.state.advancedHidden &&
+                                    <img src={downarrow} style={{height: '20px', margin: '13px 0 0 10px', cursor: 'pointer'}} 
+                                    onClick={() => this.setState({ advancedHidden: false })} />
+                                }
+                                { !this.state.advancedHidden &&
+                                    <img src={uparrow} style={{height: '20px', margin: '13px 0 0 10px', cursor: 'pointer'}} 
+                                    onClick={() => this.setState({ advancedHidden: true })} />
+                                }
+                            </div>
+                            <div hidden = {this.state.advancedHidden} >
+                            
+                            <div className="searchSecond">
+                            
+                            { this.state.filterParameters.brands !== undefined && 
+                            <Select 
+                            
+                            onChange={this.handleChangeSelect}
+                            styles={customStyles}
+                            selected={this.state.selectedBrand}
+                            class="select"
+                            options={
+                                this.state.filterParameters.brands.map((brand, index) => {
+                
+                                return {name:"selectedBrand", value:brand, label:brand};
+                                })
+                            }
+                            
+                            />
+                        }
+                        { this.state.filterParameters.models !== undefined && 
+                            <Select 
+                            onChange={this.handleChangeSelect}
+                            styles={customStyles}
+                            selected={this.state.selectedModel}
+                            class="select"
+                            options={
+                                this.state.filterParameters.models.map((model, index) => {
+                
+                                return {name:"selectedModel", value:model, label:model};
+                                })
+                            }
+                            
+                            />
+                        }
+
+                        </div>
+                        <div className="searchThird">
+
+                        { this.state.filterParameters.fuel !== undefined && 
+                            <Select 
+                            onChange={this.handleChangeSelect}
+                            styles={customStyles}
+                            selected={this.state.selectedFuel}
+                            class="select"
+                            options={
+                                this.state.filterParameters.fuel.map((fuel, index) => {
+                
+                                return {name:"selectedFuel", value:fuel, label:fuel};
+                                })
+                            }
+                            
+                            />
+                        }
+                        { this.state.filterParameters.transmission !== undefined && 
+                            <Select 
+                            onChange={this.handleChangeSelect}
+                            styles={customStyles}
+                            selected={this.state.selectedTransmission}
+                            class="select"
+                            options={
+                                this.state.filterParameters.transmission.map((transmission, index) => {
+                
+                                return {name:"selectedTransmission", value:transmission, label:transmission};
+                                })
+                            }
+                            
+                            />
+                        }
+                        { this.state.filterParameters.carClass !== undefined && 
+                            <Select 
+                            onChange={this.handleChangeSelect}
+                            styles={customStyles}
+                            selected={this.state.selectedCarClass}
+                            class="select"
+                            options={
+                                this.state.filterParameters.carClass.map((carClass, index) => {
+                
+                                return {name:"selectedCarClass",value:carClass, label:carClass};
+                                })
+                            }
+                            
+                            />
+                        }
+                        { this.state.filterParameters.childSeats !== undefined && 
+                            <Select 
+                            onChange={this.handleChangeSelect}
+                            styles={customStyles}
+                            selected={this.state.selectedChildSeats}
+                            class="select"
+                            options={
+                                this.state.filterParameters.childSeats.map((seat, index) => {
+                
+                                return {name:"selectedChildSeats",value:seat, label:seat};
+                                })
+                            }
+                            
+                            />
+                        }
+
+                        </div>
+
+                        <div className="sliders">
+                        <div className="slidercontainer" >
+                        <label>Min price</label>
+                        <input type="range" className="slider"
+                            min={this.state.filterParameters.minPrice} 
+                            max={this.state.filterParameters.maxPrice} 
+                            value={this.state.selectedMinPrice}
+                            name="selectedMinPrice"
+                            onChange={this.handleChangeSelect}
+                        />
+                        <label>{this.state.selectedMinPrice}</label>
+                        </div>
+
+                        <div className="slidercontainer" >
+                        <label>Max price</label>
+                        <input type="range" className="slider"
+                            min={this.state.filterParameters.minPrice} 
+                            max={this.state.filterParameters.maxPrice} 
+                            name="selectedMaxPrice"
+                            value={this.state.selectedMaxPrice}
+                            onChange={this.handleChangeSelect}
+                        />
+                        <label>{this.state.selectedMaxPrice}</label>
+                        </div>
+
+                        </div>
+
+                        <div className="sliders">
+                        <div className="slidercontainer" >
+                        <label>Min km</label>
+                        <input type="range" className="slider"
+                            min={this.state.filterParameters.minKm} 
+                            max={this.state.filterParameters.maxKm}
+                            name="selectedMinKm"
+                            value={this.state.selectedMinKm}
+                            onChange={this.handleChangeSelect}
+                        />
+                        <label>{this.state.selectedMinKm}</label> 
+                        </div>
+
+                        <div className="slidercontainer" >
+                        <label>Max km</label>
+                        <input type="range" className="slider"
+                            min={this.state.filterParameters.minKm} 
+                            max={this.state.filterParameters.maxKm} 
+                            name="selectedMaxKm"
+                            value={this.state.selectedMaxKm}
+                            onChange={this.handleChangeSelect}
+                        />
+                        <label>{this.state.selectedMaxKm}</label>
+                        </div>
+                        </div>
+
+                        <div>
+                            <label style={{margin: '10px'}}>Planned mileage: </label>
+                            <input type="number" name="plannedMileage" onChange={this.handleChangeSelect} style={{margin: '3px'}} />
+                            <label style={{margin: '10px 50px 10px 0px'}}>km</label>
+                            </div>
+                            <div>
+
+                            <input type="checkbox"
+                                onChange={(e) => this.setState({ cdw: e.target.checked })}
+                            style={{margin: '10px 10px'}} />
+                            <label>Collision Damage Waiver</label>
+                        </div>
+                        <div>
+                            <label className="sortLabel" >Sort by: </label>
+                            <select className="selectSort" onChange={this.handleChangeSelect} name="sort" value={this.state.sort}>
+                                <option value="price">Price</option>
+                                <option value="km">Km</option>
+                                <option value="rating">Rating</option>
+                            </select>
+                        </div>
+
+                        </div>
+                        <div className="searchBtns">
 
                             <Button variant="outline-primary" style={{marginLeft:'2%',marginTop:'13px',height:'30px',width:'60px',padding:'2px'}} 
                             onClick={this.filterAds.bind(this)}>Find</Button>
                             <Button onClick={this.clearFilters.bind(this)} variant="outline-danger" style={{marginLeft:'2%',marginTop:'13px',height:'30px',width:'100px',padding:'2px'}}>Clear filters</Button>
-
+                        </div>
+                        </div>
                     </InputGroup>
                     </div>
                 </Card>
+
+
                 <Card className="backgroundCard">
                 <RenderAd ads={this.state.ads}/>
+                
+                <Pagination>
+                    <Pagination.First onClick={(e) => this.changePage(e, 0)}/>
+                    <Pagination.Prev onClick={(e) => this.changePage(e, this.state.pageNumber - 1)}/>
+                        {this.renderPagination()}
+                    <Pagination.Next  onClick={(e) => this.changePage(e, this.state.pageNumber + 1)}/>
+                    <Pagination.Last  onClick={(e) => this.changePage(e, this.state.totalPages - 1)}/>
+                </Pagination>
+
                 </Card>
 
             </div>

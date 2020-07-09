@@ -44,7 +44,9 @@ class ShoppingBasket  extends React.Component{
 
             axios.get(`${serviceConfig.baseURL}/adservice/shoppingcart`, options).then(
                     (response) => {
-                        this.setState({ ads: response.data })},
+                        this.setState({ ads: response.data })
+                        console.log(this.state)},
+                        
                     (response) => { 
                         store.addNotification({
                             title: "Error",
@@ -81,7 +83,6 @@ class ShoppingBasket  extends React.Component{
         })
         this.setState({ ads: ads });
     }
-
 
     removeAd(adId){
         let token = localStorage.getItem('token');
@@ -142,10 +143,25 @@ class ShoppingBasket  extends React.Component{
         window.location.href= `https://localhost:3000/ad/${id}`
     }
 
-    handleCheck(e){
+    handleCheck(e, start, end, prices, owner, cdw){
         let {name, checked} = e.target;
+        let priceDiff = 0;
+        let totalPrice = isNaN(this.state[owner]) ? 0 : this.state[owner]
 
-        this.setState({[name]: checked});
+        let daysNr =  Math.floor((new Date(end) - new Date(start)) / (1000*60*60*24)) + 1
+        
+        priceDiff = daysNr * prices.dailyPrice;
+
+        if(cdw)
+            priceDiff += prices.cdwPrice;
+
+        
+        if(checked)
+            totalPrice += priceDiff
+        else
+            totalPrice -= priceDiff
+            
+        this.setState({[name]: checked, [owner]: totalPrice});
     }
 
 
@@ -153,6 +169,7 @@ class ShoppingBasket  extends React.Component{
         e.preventDefault();
 
         let ownerAds = []
+        let price = this.state[owner]
 
         this.state.ads.forEach(ad => {
             if(ad.username === owner)
@@ -180,7 +197,8 @@ class ShoppingBasket  extends React.Component{
         let body = {
             owner,
             creationTime: new Date(),
-            adsWithDates
+            adsWithDates,
+            price
         }   
 
         this.sendReq(body)
@@ -240,6 +258,10 @@ class ShoppingBasket  extends React.Component{
         }
     }
 
+    
+
+
+
     renderCartAds(owner){
         if(this.state.ads !== null){
             let adsToRender = this.state.ads.filter(ad => ad.username === owner);
@@ -248,6 +270,8 @@ class ShoppingBasket  extends React.Component{
 
                 let username = localStorage.getItem('username');
                 let dateInfo = ad.cartAdDates.filter(el => el.username === username);
+                let startDate = dateInfo[0].dateRange.startDate
+                let endDate = dateInfo[0].dateRange.endDate
                 
                 return(
                     <Card key={ad.carDTO.id} className="cardContainerCart">
@@ -259,11 +283,16 @@ class ShoppingBasket  extends React.Component{
                         <Button onClick={this.view.bind(this,ad.id)} variant="outline-info" style={{float: 'left'}} title="Ad info" >i</Button>
 
                         </Card.Title>    
-                        {dateInfo[0].dateRange.startDate} - {dateInfo[0].dateRange.endDate}
+                        {startDate} - {endDate}
+                        <br/>
+                        Price per day: {ad.pricelistDto.dailyPrice}
+                        <br/>
+                        {ad.carDTO.cdw && <span>Collision damage waiver: {ad.pricelistDto.cdwPrice}</span>}
+                        
                     </Card.Body>
 
                     <Form.Group controlId="formBasicCheckbox">
-                            <Form.Check type="checkbox" label="Add" name={ad.id} onChange={(e) => this.handleCheck(e)}/>
+                            <Form.Check type="checkbox" label="Add" name={ad.id} onChange={(e) => this.handleCheck(e, startDate, endDate, ad.pricelistDto, owner, ad.carDTO.cdw)}/>
                     </Form.Group>
                 </Card>
                 )
@@ -286,6 +315,11 @@ class ShoppingBasket  extends React.Component{
                     <div style={{margin: "2%"}}>             
                         {this.renderCartAds(o)}
                     </div>
+                    { this.state[o] !== 0 &&
+                    <Card.Header>
+                        Total price : {this.state[o]}
+                    </Card.Header>
+                    }
                     <Card.Text className='cardText' style={{padding:'3px', cursor: 'pointer'}} >
                         <Button variant="outline-info" type="submit"  style={{marginRight:"3%"}}>Create request</Button>                          
                     </Card.Text>      

@@ -138,14 +138,14 @@
 .headerButtonsUser{
     display: flex;
     flex-direction: row;
-    margin-left: 16%;
+    margin-left: 7%;
     margin-top: 0.2%;
 }
 
 .headerButtonsAgent{
     display: flex;
     flex-direction: row;
-    margin-left: 7.3%;
+    margin-left: 6%;
     margin-top: -0.4%;
 }
 
@@ -202,6 +202,21 @@
     height: 82%;
     width: 178px;
 }
+
+.pricelistUser{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 19px;
+    font-weight: 350;
+    color: #1C78C0;
+    background-color: transparent;
+    box-shadow: none;
+    outline: none;
+    border: none;
+    margin-top: 0px;
+    height: 82%;
+    width: 220px;
+}
+
 
 .msgnumber{
     margin: 0% 2% 0 -5%;

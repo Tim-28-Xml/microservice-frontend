@@ -96,6 +96,11 @@ class Chat extends React.Component{
         console.log(this.state.content)
         console.log(this.state.receiver)
 
+        if(this.state.content.includes("<") || this.state.content.includes(">")) {
+            return alert("attack not supported :D");
+        }
+
+
         if(this.props.username === "" || this.state.content === ""){
             store.addNotification({
                 title: "Cannot send!",
@@ -145,7 +150,7 @@ class Chat extends React.Component{
                 (resp) => { 
                     store.addNotification({
                         title: "Error",
-                        message: "Something gone wrong!",
+                        message: "You do not have a permission to send a message!",
                         type: "danger",
                         insert: "top",
                         container: "top-center",

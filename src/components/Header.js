@@ -141,11 +141,12 @@ class Header extends React.Component{
                     this.state.roles.includes('ROLE_USER') &&
                     <div className="headerButtonsUser">
                     <a title="Home" className="btnHeaderHome" href="https://localhost:3000/"><img src={house} style={{height:'30px',width:'30px',marginTop:'-15px'}}></img></a>
-                    <a style={{width:'165px',margin:'2%'}} href="https://localhost:3000/create-ad">Create Ad</a>
-                    <a style={{width:'165px',margin:'2%'}} href="https://localhost:3000/physical-rent">My ads</a>
+                    <a style={{width:'144px',margin:'1% 0%'}} className="createAd" href="https://localhost:3000/create-ad">Create Ad</a>
+                    <a style={{width:'110px',margin:'1% 0%'}} className="createAd" href="https://localhost:3000/physical-rent">My ads</a>
+                    <a className="pricelistUser" style={{margin:'1% 0%'}} href="https://localhost:3000/create-pricelist">Create pricelist</a>
                     <ShoppingBasket/>
-                    <a title="Profile" href="https://localhost:3000/profile/user" style={{margin:'2% 4%'}}><img src={user} style={{height:'30px',width:'30px',marginTop:'-10px'}}></img></a>
-                    <a title="Messages" href="https://localhost:3000/messages" style={{margin:'2% 4%'}}><img src={message} style={{height:'30px',width:'30px',marginTop:'-10px'}}></img></a>
+                    <a title="Profile" href="https://localhost:3000/profile/user" style={{margin:'1.4% 3%'}}><img src={user} style={{height:'30px',width:'30px',marginTop:'-10px'}}></img></a>
+                    <a title="Messages" href="https://localhost:3000/messages" style={{margin:'1.4% 3%'}}><img src={message} style={{height:'30px',width:'30px',marginTop:'-10px'}}></img></a>
                     { this.state.msg !== 0 && 
                         <label className="msgnumber">{this.state.msg}</label>
                     }

@@ -129,6 +129,8 @@ class RenderRequests extends React.Component{
                         <Card.Title className="cardTitleReq" style={{textAlign:"left"}}> Owner: {request.owner}
                         <br/>
                         Creation time: {createdTime}
+                        <br/>
+                        Price: {request.price}€
                         </Card.Title>
 
                         {this.renderAdsFromReqs(request)}
@@ -151,6 +153,8 @@ class RenderRequests extends React.Component{
                         <Card.Body className = "cardBodyReqsUserAll">
     
                             <Card.Title className="cardTitleReq" style={{textAlign:"left"}}> Owner: {request.owner}
+                            <br />
+                            Price: {request.price}€
                             </Card.Title>
     
                             {this.renderAdsFromReqs(request)}
@@ -173,6 +177,8 @@ class RenderRequests extends React.Component{
                             <Card.Body className = "cardBodyReqsUserAll">
         
                                 <Card.Title className="cardTitleReq" style={{textAlign:"left"}}> Owner: {request.owner}
+                                <br />
+                                Price: {request.price}€
                                 </Card.Title>
         
                                 {this.renderAdsFromReqs(request)}
@@ -199,6 +205,8 @@ class RenderRequests extends React.Component{
                                 <Card.Title className="cardTitleReq" style={{textAlign:"left"}}> Owner: {request.owner}
                                 <br/>
                                 Time of approval: {reservedTime}
+                                <br/>
+                                Price: {request.price}€
                                 </Card.Title>
         
                                 {this.renderAdsFromReqs(request)}

@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios'
+import {serviceConfig} from '../appSettings.js'
+import { store } from 'react-notifications-component'
 
 class CreatePricelist extends React.Component {
     constructor(props) {
@@ -24,10 +26,33 @@ class CreatePricelist extends React.Component {
             headers: { 'Authorization': 'Bearer ' + token }
         };
 
+        if(this.state.name.includes("<") || this.state.name.includes(">")) {
+            return alert("attack not supported :D");
+        }
+
+
         console.log(this.state);
 
-        axios.post(`https://localhost:8443/api/pricelists/save`, this.state, options).then(
-            (resp) => {alert("success")},
+        axios.post(`${serviceConfig.baseURL}/adservice/api/pricelists/save`, this.state, options).then(
+            (resp) => {
+                store.addNotification({
+                    title: "Success!",
+                    message: "Pricelist is added.",
+                    type: "success",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                      onRemoval: (id, removedBy) => {
+                        window.
+                      location.href = "https://localhost:3000/"
+                      }
+                    })
+            },
             (resp) => { alert("error")
              }
         );

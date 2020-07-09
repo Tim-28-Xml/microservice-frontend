@@ -111,7 +111,7 @@ class CreateAd extends React.Component {
             (resp) => this.onErrorHandler(resp),
         );
 
-        axios.get(`${serviceConfig.baseURL}/pricelists/all`, options).then(
+        axios.get(`${serviceConfig.baseURL}/adservice/api/pricelists/all`, options).then(
             (resp) => this.successPricelist(resp),
             (resp) => this.onErrorHandler(resp),
         );
@@ -136,11 +136,11 @@ class CreateAd extends React.Component {
         const options = {
             headers: { 'Authorization': 'Bearer ' + token }
         };
-
-            console.log("objekat pred bekend");
             console.log(this.state);
             
-            
+        if(this.state.city.includes("<") || this.state.city.includes(">")) {
+            return alert("attack not supported :D");
+        }
 
         axios.post(`${serviceConfig.baseURL}/adservice/api/ads/save`, this.state, options).then(
             (resp) => this.onSuccessHandler(resp),
@@ -151,7 +151,7 @@ class CreateAd extends React.Component {
     onErrorHandler(resp) {
         store.addNotification({
             title: "",
-            message: "There is an error.",
+            message: "You do not have a permission to create an ad!",
             type: "danger",
             insert: "top",
             container: "top-center",
