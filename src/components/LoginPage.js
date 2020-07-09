@@ -16,9 +16,9 @@ class LoginPage extends React.Component{
         this.handleClose = this.handleClose.bind(this);
 
         this.state = {
-            
+
             username: '',
-            password: '',          
+            password: '',
         }
     }
 
@@ -34,10 +34,10 @@ class LoginPage extends React.Component{
         const options = {
             headers: {'Access-Control-Allow-Origin':'*'}
         };
-        
+
 
         axios.post(`${serviceConfig.baseURL}/authenticationservice/api/auth/login`,this.state).then(
-            (resp) => { 
+            (resp) => {
 
                 let self = this;
                 localStorage.setItem('token', resp.data.accessToken)
@@ -50,7 +50,7 @@ class LoginPage extends React.Component{
                 window.location.href = "https://localhost:3000/"
 
             })
-            .catch((error) => { 
+            .catch((error) => {
                 console.log(error.response)
                 if(error.response.data !== ""){
                     store.addNotification({
@@ -65,9 +65,9 @@ class LoginPage extends React.Component{
                             duration: 2000,
                             pauseOnHover: true
                         }
-                        
+
                     })
-                } else {
+                } else if(error.response == undefined) {
                     store.addNotification({
                         title: "Error",
                         message: "Username or password is incorrect!",
@@ -80,7 +80,7 @@ class LoginPage extends React.Component{
                             duration: 2000,
                             pauseOnHover: true
                         }
-                        
+
                     })
                 }
              }
@@ -120,18 +120,18 @@ class LoginPage extends React.Component{
                         <Form.Control type="password" style={{background: "rgb(244, 245, 249)"}} placeholder="Enter password" id="password" name="password" onChange={this.handleChange} />
                     </Form.Group>
 
-                    
+
                 <Button variant="outline-secondary" style={{float: "right", margin: "2% 32% 1% 0", width: "15%"}} onClick={this.handleClose}>
                     Close
                 </Button>
 
                 <Button variant="outline-primary" type="submit" style={{ margin: "2% 1% 1% 32%"}}>
                     Log in
-                </Button> 
+                </Button>
 
 
                 </Form>
-                
+
                 </Card.Body>
                 </Card>
             </div>
