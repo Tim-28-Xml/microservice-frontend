@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios'
-import {serviceConfig} from '../appSettings.js'
+import Pricelists from './Pricelists'
+import { serviceConfig } from '../appSettings.js'
 import { store } from 'react-notifications-component'
 
 class CreatePricelist extends React.Component {
@@ -26,7 +27,7 @@ class CreatePricelist extends React.Component {
             headers: { 'Authorization': 'Bearer ' + token }
         };
 
-        if(this.state.name.includes("<") || this.state.name.includes(">")) {
+        if (this.state.name.includes("<") || this.state.name.includes(">")) {
             return alert("attack not supported :D");
         }
 
@@ -46,15 +47,16 @@ class CreatePricelist extends React.Component {
                     dismiss: {
                         duration: 2000,
                         pauseOnHover: true
-                      },
-                      onRemoval: (id, removedBy) => {
+                    },
+                    onRemoval: (id, removedBy) => {
                         window.
-                      location.href = "https://localhost:3000/"
-                      }
-                    })
+                            location.href = "https://localhost:3000/"
+                    }
+                })
             },
-            (resp) => { alert("error")
-             }
+            (resp) => {
+                alert("error")
+            }
         );
     }
 
@@ -65,8 +67,10 @@ class CreatePricelist extends React.Component {
     render() {
         console.log(this.state);
         return (
-            <div style={{ width: "25%", marginLeft: "35%", height: "50%", padding: "50px" }}> 
-                 <form onSubmit={this.createPricelist} id="createAdForm">
+            <div>
+            <Pricelists/>
+            <div style={{ width: "25%", marginLeft: "35%", height: "50%", padding: "50px" }}>
+                <form onSubmit={this.createPricelist} id="createAdForm">
                     <div className="form-group">
                         <label htmlFor="name">Name</label>
                         <input type="text"
@@ -98,7 +102,7 @@ class CreatePricelist extends React.Component {
                             required
                         />
                         <br />
-                        <br/>
+                        <br />
                         <label htmlFor="pricePerExtraKm">Price if km limit is crossed</label>
                         <input type="number"
                             className="form-control form-control-sm"
@@ -114,6 +118,7 @@ class CreatePricelist extends React.Component {
                     <button type="submit" className="submitAd">Create</button>
                     <button className="closeModal" onClick={this.handleClose}>Close</button>
                 </form>
+            </div>
             </div>
         )
     }
