@@ -52,22 +52,7 @@ class LoginPage extends React.Component{
             })
             .catch((error) => {
                 console.log(error.response)
-                if(error.response.data !== "" || typeof error.response.data !== 'string' || !(error.response.data instanceof String)){
-                    store.addNotification({
-                        title: "Error",
-                        message: error.response.data,
-                        type: "danger",
-                        insert: "top",
-                        container: "top-center",
-                        animationIn: ["animated", "fadeIn"],
-                        animationOut: ["animated", "fadeOut"],
-                        dismiss: {
-                            duration: 2000,
-                            pauseOnHover: true
-                        }
-
-                    })
-                } else if(error.response == undefined) {
+                
                     store.addNotification({
                         title: "Error",
                         message: "Username or password is incorrect!",
@@ -82,9 +67,7 @@ class LoginPage extends React.Component{
                         }
 
                     })
-                }
-             }
-        );
+                });
 
     }
 
