@@ -46,7 +46,7 @@ class RegisterPageUser extends React.Component{
             return alert("attack not supported :D");
         }
 
-        if(this.state.name.includes("<") || this.state.name.includes(">")) {
+        if(this.state.firstname.includes("<") || this.state.firstname.includes(">")) {
             return alert("attack not supported :D");
         }
 
