@@ -17,6 +17,7 @@ import PendingRequests from './components/PendingRequestsAgent'
 import Messages from './components/Messages'
 import ManageReviews from './components/ManageReviews.js';
 import CreatePricelist from './components/CreatePricelist.js';
+import MyAds from './components/MyAds.js'
 
 class Routes extends React.Component {
 
@@ -103,6 +104,13 @@ class Routes extends React.Component {
                 <div>
                     <Header />
                     <CreatePricelist></CreatePricelist>
+                </div>
+            
+            } />
+             <Route path='/my-ads' render={props =>
+                <div>
+                    <Header />
+                    <MyAds/>
                 </div>
             
             } />

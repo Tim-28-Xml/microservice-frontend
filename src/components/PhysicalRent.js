@@ -23,6 +23,7 @@ class PhysicalRent extends React.Component {
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
         this.rentByCreator = this.rentByCreator.bind(this);
         this.addDays = this.addDays.bind(this);
+        this.deleteAd = this.deleteAd.bind(this);
 
         this.state = {
             userId: 0,
@@ -35,6 +36,54 @@ class PhysicalRent extends React.Component {
             id: 0
         }
 
+    }
+
+    deleteAd(ad) {
+        let token = localStorage.getItem('token');
+
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token }
+        };
+
+        console.log(this.state);
+
+        axios.post(`${serviceConfig.baseURL}/adservice/api/ads/delete`, ad, options).then(
+            (resp) => {
+                store.addNotification({
+                    title: "Success!",
+                    message: "Advertisment is deleted.",
+                    type: "success",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                    },
+                    onRemoval: (id, removedBy) => {
+                        window.
+                            location.href = "https://localhost:3000/"
+                    }
+                })
+            },
+            (resp) => {
+                store.addNotification({
+                    title: "Error",
+                    message: "Ad has rent requests!",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                    
+                  })
+            }
+        );
     }
 
     componentDidMount() {
@@ -197,6 +246,7 @@ class PhysicalRent extends React.Component {
                                 transmission: &nbsp; {ad.carDTO.transmission}
                         </Card.Text>
                         <button onClick={this.handleShow}>Physical rent</button>
+                        <button className="deleteAd" variant="outline-danger" onClick={this.deleteAd.bind(this, ad)} >Delete</button>
                         <Modal
                             show={this.state.show}
                             onHide={this.handleClose}

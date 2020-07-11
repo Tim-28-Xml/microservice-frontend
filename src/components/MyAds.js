@@ -1,23 +1,18 @@
 import React from 'react';
-import axios from 'axios'
 import {serviceConfig} from '../appSettings.js'
-import { store } from 'react-notifications-component'
+import axios from 'axios'
 import { Modal, Button, Card } from "react-bootstrap";
 import 'react-table-6/react-table.css';
 import matchSorter from 'match-sorter';
-import '../css/Pricelists.css'
+import { store } from 'react-notifications-component'
 var ReactTable = require('react-table-6').default;
 
-class Pricelists extends React.Component {
-
+class MyAds extends React.Component {
     constructor(props) {
         super(props);
 
-        this.deletePricelist = this.deletePricelist.bind(this);
-
         this.state = {
-            pricelists : [],
-
+            ad : [],
         }
     }
 
@@ -28,7 +23,7 @@ class Pricelists extends React.Component {
             headers: { 'Authorization': 'Bearer ' + token }
         };
 
-        axios.get(`${serviceConfig.baseURL}/adservice/api/pricelists/all`,options).then(
+        axios.get(`${serviceConfig.baseURL}/adservice/api/ads/my-ads`,options).then(
             (resp) => this.onSuccessHandler(resp),
             (resp) => this.onErrorHandler(resp)
         );
@@ -41,7 +36,7 @@ class Pricelists extends React.Component {
             temp.push(resp.data[i]);
         }
         this.setState({
-            pricelists: temp
+            ads: temp
         });
 
     }
@@ -50,22 +45,20 @@ class Pricelists extends React.Component {
         alert("errorrr");
     }
 
-    deletePricelist(pricelist) {
+    deleteAd(ad) {
         let token = localStorage.getItem('token');
 
         const options = {
             headers: { 'Authorization': 'Bearer ' + token }
         };
 
-        console.log(pricelist);
-
         console.log(this.state);
 
-        axios.post(`${serviceConfig.baseURL}/adservice/api/pricelists/delete`, pricelist, options).then(
+        axios.post(`${serviceConfig.baseURL}/adservice/api/ads/delete`, ad, options).then(
             (resp) => {
                 store.addNotification({
                     title: "Success!",
-                    message: "Pricelist is added.",
+                    message: "Advertisment is deleted.",
                     type: "success",
                     insert: "top",
                     container: "top-center",
@@ -82,43 +75,28 @@ class Pricelists extends React.Component {
                 })
             },
             (resp) => {
-                store.addNotification({
-                    title: "Error",
-                    message: "Pricelists is connected to some ads!",
-                    type: "danger",
-                    insert: "top",
-                    container: "top-center",
-                    animationIn: ["animated", "fadeIn"],
-                    animationOut: ["animated", "fadeOut"],
-                    dismiss: {
-                        duration: 2000,
-                        pauseOnHover: true
-                      },
-                    
-                  })
+                alert("error")
             }
         );
     }
 
     render() {
 
-        const pricelists = [];
+        const ads = [];
 
-        for (var i = 0; i < this.state.pricelists.length; i++) {
+        for (var i = 0; i < this.state.ads.length; i++) {
 
-            const name = this.state.pricelists[i].name;
-            const cdw = this.state.pricelists[i].cdwPrice;
-            const daily = this.state.pricelists[i].dailyPrice;
-            const perkm = this.state.pricelists[i].pricePerExtraKm;
+            const price = this.state.ads[i].price;
+            const km = this.state.ads[i].km;
+            const id = this.state.ads[i].id;
 
 
             { 
-                pricelists.push(
+                ads.push(
                 { 
-                    name: name, 
-                    cdw: cdw, 
-                    daily: daily, 
-                    perkm: perkm
+                    price: price, 
+                    km: km,
+                    id: id
                 }
                             ); 
             }
@@ -128,40 +106,32 @@ class Pricelists extends React.Component {
         const columns = [
 
             {
-                accessor: "name",
-                Header: "Name",
-                Cell: ({ row }) => (<Button className="deletePricelist" variant="outline-danger" onClick={this.deletePricelist.bind(this, row)} >Delete {row.name}</Button>),
+                accessor: "id",
+                Header: "Id",
+                Cell: ({ row }) => (<Button className="deleteAd" variant="outline-danger" onClick={this.deleteAd.bind(this, row)} >Delete {row.id}</Button>),
                 filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, { keys: ["name"] }),
+                    matchSorter(rows, filter.value, { keys: ["id"] }),
                 filterAll: true
             },
             {
-                accessor: "cdw",
-                Header: "Collision price",
+                accessor: "price",
+                Header: "Price",
                 filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, { keys: ["cdw"] }),
+                    matchSorter(rows, filter.value, { keys: ["price"] }),
                 filterAll: true
             },
             {
-                accessor: "daily",
-                Header: "Daily price",
+                accessor: "km",
+                Header: "Kilometers",
                 filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, { keys: ["daily"] }),
+                    matchSorter(rows, filter.value, { keys: ["km"] }),
                 filterAll: true
-            },
-            {
-                accessor: "perkm",
-                Header: "Price per extra",
-                filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, { keys: ["perkm"] }),
-                filterAll: true
-                
             }
         ];
 
         return (
             <div>
-                <ReactTable className="pricelistTable" data={pricelists} columns={columns}
+                <ReactTable className="adsTable" data={ads} columns={columns}
                     minRows={0}
                     showPagination={false}
                     filterable
@@ -175,5 +145,5 @@ class Pricelists extends React.Component {
         )
 
     }
+} export default MyAds;
 
-} export default Pricelists;
