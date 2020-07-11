@@ -4,7 +4,8 @@ import {serviceConfig} from '../appSettings.js'
 import { store } from 'react-notifications-component'
 import { Modal, Button, Card } from "react-bootstrap";
 import 'react-table-6/react-table.css';
-import matchSorter from 'match-sorter'
+import matchSorter from 'match-sorter';
+import '../css/Pricelists.css'
 var ReactTable = require('react-table-6').default;
 
 class Pricelists extends React.Component {
@@ -55,6 +56,8 @@ class Pricelists extends React.Component {
         const options = {
             headers: { 'Authorization': 'Bearer ' + token }
         };
+
+        console.log(pricelist);
 
         console.log(this.state);
 
@@ -114,7 +117,7 @@ class Pricelists extends React.Component {
             {
                 accessor: "name",
                 Header: "Name",
-                Cell: ({ row }) => (<Button className="deleteDoctor" variant="outline-danger" onClick={this.deletePricelist.bind(this, row)} >Delete</Button>),
+                Cell: ({ row }) => (<Button className="deletePricelist" variant="outline-danger" onClick={this.deletePricelist.bind(this, row)} >Delete {row.name}</Button>),
                 filterMethod: (filter, rows) =>
                     matchSorter(rows, filter.value, { keys: ["name"] }),
                 filterAll: true
@@ -134,10 +137,10 @@ class Pricelists extends React.Component {
                 filterAll: true
             },
             {
-                accessor: "perKm",
+                accessor: "perkm",
                 Header: "Price per extra",
                 filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, { keys: ["perKm"] }),
+                    matchSorter(rows, filter.value, { keys: ["perkm"] }),
                 filterAll: true
                 
             }
@@ -145,7 +148,7 @@ class Pricelists extends React.Component {
 
         return (
             <div>
-                <ReactTable data={pricelists} columns={columns}
+                <ReactTable className="pricelistTable" data={pricelists} columns={columns}
                     minRows={0}
                     showPagination={false}
                     filterable
