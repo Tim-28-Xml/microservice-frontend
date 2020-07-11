@@ -5,6 +5,7 @@ import '../css/AdminProfile.css'
 import {BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
 import { Button, Table, Tab, Tabs } from 'react-bootstrap';
 import ManagePermissions from './ManagePermissions'
+import UserInfo from './UserInfo';
 import { store } from 'react-notifications-component'
 
 class AdminProfile extends React.Component{
@@ -19,6 +20,7 @@ class AdminProfile extends React.Component{
             endUsers: [],
             agents: [],
             requests: [],
+            loggedInUser:{},
 
             
         }
@@ -28,6 +30,7 @@ class AdminProfile extends React.Component{
         this.getEndUsers();
         this.getAgents();
         this.getRequests();
+        this.getLoggedInUser();
     }
 
     getEndUsers(){
@@ -46,6 +49,26 @@ class AdminProfile extends React.Component{
              },
             (resp) => { alert('error') }
         );
+    }
+
+    getLoggedInUser(){
+
+        let token = localStorage.getItem('token');
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token}
+        };
+        
+        axios.get(`${serviceConfig.baseURL}/authenticationservice/api/auth/user`,options).then(
+            (resp) => { 
+
+                this.setState({
+                    loggedInUser : resp.data,
+                })
+
+             },
+            (resp) => { alert('error logged in user') }
+        );
+
     }
 
     getAgents(){
@@ -357,6 +380,10 @@ class AdminProfile extends React.Component{
                             </table>
                     </div>
                     </div>
+                    </Tab>
+                    <Tab>
+                        <h2>My info</h2>
+                        <UserInfo loggedInUser={this.state.loggedInUser}/>
                     </Tab>
 
                 </Tabs>
